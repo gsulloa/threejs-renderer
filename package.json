@@ -8,7 +8,8 @@
     "react-scripts": "2.0.4",
     "three": "^0.97.0",
     "three-addons": "^1.2.0",
-    "three-obj-mtl-loader": "^1.0.3"
+    "three-obj-mtl-loader": "^1.0.3",
+    "three-orbit-controls": "^82.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

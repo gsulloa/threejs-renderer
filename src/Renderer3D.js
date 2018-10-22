@@ -1,17 +1,22 @@
 import * as THREE  from "three"
 import { OBJLoader, MTLLoader } from "three-obj-mtl-loader"
-
 class Renderer3D {
   constructor({
     container,
   }) {
     this.mouseX = 0
     this.mouseY = 0
-    this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 2000 );
-    this.camera.position.z = 250;
+    this.camera = new THREE.PerspectiveCamera(
+      50,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      2000
+    );
+    this.camera.position.z = 600;
+
     // scene
     this.scene = new THREE.Scene();
-    const ambientLight = new THREE.AmbientLight( 0xcccccc, 1 );
+    const ambientLight = new THREE.AmbientLight( 0xffffff, 0.8 );
     this.scene.add( ambientLight );
     this.scene.add( this.camera );
     // model
@@ -30,7 +35,7 @@ class Renderer3D {
         .setMaterials( materials )
         .setPath( 'models/obj/abdomen/' )
         .load( 'ToraxAbdomen2.obj', ( object ) => {
-          object.position.y = - 95;
+          object.position.y = 0;
           this.scene.add( object );
           }, onProgress, onError );
       });
@@ -52,8 +57,7 @@ class Renderer3D {
   //
   animate = () => {
     requestAnimationFrame( this.animate );
-    this.renderer.render( this.scene, this.camera );
-    console.log(this)
+    this.renderer.render( this.scene, this.camera );    
   }
 }
 
