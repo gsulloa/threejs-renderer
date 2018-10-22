@@ -14,6 +14,7 @@ class Renderer3D {
     );
     this.camera.position.z = 600;
 
+
     // scene
     this.scene = new THREE.Scene();
     const ambientLight = new THREE.AmbientLight( 0xffffff, 0.8 );
@@ -77,13 +78,14 @@ class Renderer3D {
                 'XYZ'
             ));
             this.object.quaternion.multiplyQuaternions(deltaRotationQuaternion, this.object.quaternion);
+
+            console.log(this.camera.position, this.object.rotation)
       } else if (isMoving) {
         const deltaMove = {
           x: e.offsetX-previousMousePosition.x,
           y: e.offsetY-previousMousePosition.y
         }
-        console.log(deltaMove)
-        this.camera.position.x += deltaMove.x
+        this.camera.position.x -= deltaMove.x
         this.camera.position.y += deltaMove.y
       }
       previousMousePosition = {
@@ -104,14 +106,18 @@ class Renderer3D {
   onWindowResize = () =>  {
     this.windowHalfX = window.innerWidth / 2;
     this.windowHalfY = window.innerHeight / 2;
-    this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize( window.innerWidth, window.innerHeight );
   }
   //
   animate = () => {
     requestAnimationFrame( this.animate );
-    this.renderer.render( this.scene, this.camera );    
+    this.renderer.render( this.scene, this.camera );   
+  }
+
+  resetControls = () => {
+    this.object.rotation.set(-1.516631, 0.088158, 0.234383311, "XYZ")
+
+    this.camera.position.set(44,124,580)
   }
 }
 

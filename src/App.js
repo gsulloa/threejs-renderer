@@ -6,19 +6,28 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.render3d = createRef()
+    this.renderer = {}
   }
   
   componentDidMount() {
-    const renderer = new Renderer3D({
+    this.renderer = new Renderer3D({
       container: this.render3d.current,
     })
-    renderer.animate()
+    this.renderer.animate()
+  }
+  
+  reset = () => {
+    this.renderer.resetControls()
+    console.log("reset")
   }
 
   render() {
     console.log("render")
     return (
-      <div ref={this.render3d}></div>
+      <div>
+        <div ref={this.render3d}></div>
+        <button onClick={this.reset}>Reset</button>
+      </div>
     );
   }
 }
