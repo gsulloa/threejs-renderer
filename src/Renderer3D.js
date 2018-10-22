@@ -39,8 +39,6 @@ class Renderer3D {
     this.renderer.setPixelRatio( window.devicePixelRatio );
     this.renderer.setSize( window.innerWidth, window.innerHeight );
     container.appendChild( this.renderer.domElement );
-    this.onWindowResize()
-    document.addEventListener( 'mousemove', this.onDocumentMouseMove, false );
     //
     window.addEventListener( 'resize', this.onWindowResize, false );
   }
@@ -51,16 +49,9 @@ class Renderer3D {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize( window.innerWidth, window.innerHeight );
   }
-  onDocumentMouseMove = ( event ) => {
-    this.mouseX = ( event.clientX - this.windowHalfX ) / 2;
-    this.mouseY = ( event.clientY - this.windowHalfY ) / 2;
-  }
   //
   animate = () => {
     requestAnimationFrame( this.animate );
-    this.camera.position.x += ( this.mouseX - this.camera.position.x ) * .05;
-    this.camera.position.y += ( - this.mouseY - this.camera.position.y ) * .05;
-    this.camera.lookAt( this.scene.position );
     this.renderer.render( this.scene, this.camera );
     console.log(this)
   }
