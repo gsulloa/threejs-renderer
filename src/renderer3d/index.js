@@ -4,6 +4,10 @@ import ObjectController from "./objectController";
 class Renderer3D {
   constructor({
     container,
+    initial: {
+      position,
+      rotation
+    } = {}
   }) {
     this.mouseX = 0
     this.mouseY = 0
@@ -45,16 +49,8 @@ class Renderer3D {
             object: this.object,
             domElement: this.renderer.domElement,
             initial: {
-              position: {
-                x: 44,
-                y: 124,
-                z: 580,
-              },
-              rotation: {
-                x: -1.516631,
-                y: 0.088158,
-                z: 0.234383311,
-              }
+              position,
+              rotation,
             }
           })
           }, onProgress, onError );
@@ -84,7 +80,16 @@ class Renderer3D {
   }
 
   getCurrentPosition = () => {
-    console.log(this.objectController.currentPosition())
+    return this.objectController.currentPosition()
+  }
+
+  setNewInitialPosition = ({ rotation, position }) => {
+    this.objectController.updateInitial({ rotation, position })
+  }
+
+  setCurrentAsInitial = () => {
+    const { rotation, position } = this.getCurrentPosition()
+    this.setNewInitialPosition({ rotation, position })
   }
 
   

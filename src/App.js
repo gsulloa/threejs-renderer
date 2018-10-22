@@ -12,16 +12,27 @@ class App extends Component {
   componentDidMount() {
     this.renderer = new Renderer3D({
       container: this.render3d.current,
+      initial: {
+        position: {
+          x: 44,
+          y: 124,
+          z: 580,
+        },
+        rotation: {
+          x: -1.516631,
+          y: 0.088158,
+          z: 0.234383311,
+        }
+      }
     })
     this.renderer.animate()
   }
   
   reset = () => {
     this.renderer.resetControls()
-    console.log("reset")
   }
-  getPosition = () => {
-    this.renderer.getCurrentPosition()
+  setCurrentAsInitial = () => {
+    this.renderer.setCurrentAsInitial()
   }
 
   render() {
@@ -30,7 +41,7 @@ class App extends Component {
       <div>
         <div ref={this.render3d}></div>
         <button onClick={this.reset}>Reset</button>
-        <button onClick={this.getPosition}>GetPosition</button>
+        <button onClick={this.setCurrentAsInitial}>ChangeInitial</button>
       </div>
     );
   }

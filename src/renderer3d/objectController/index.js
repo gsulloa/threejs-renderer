@@ -24,10 +24,19 @@ class ObjectController {
   }
 
   currentPosition = () => {
-    console.log(this.object.rotation, this.camera.position)
+    const { rotation } = this.object
+    const { position } = this.camera
     return {
-      rotation: this.object.rotation,
-      position: this.camera.position,
+      rotation: {
+        x: rotation.x,
+        y: rotation.y,
+        z: rotation.z,
+      },
+      position: {
+        x: position.x,
+        y: position.y,
+        z: position.z
+      },
     }
   }
   controlOption = undefined
@@ -112,6 +121,10 @@ class ObjectController {
 
   resetControls = () => {
     this.look(this.initial)
+  }
+
+  updateInitial = ({ rotation, position }) => {
+    this.initial = { rotation, position}
   }
 }
 
