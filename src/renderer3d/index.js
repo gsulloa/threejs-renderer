@@ -1,5 +1,5 @@
 import * as THREE  from "three"
-import { OBJLoader, MTLLoader } from "three-obj-mtl-loader"
+import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 class Renderer3D {
   constructor({
@@ -10,7 +10,7 @@ class Renderer3D {
   }) {
     this.prepareEnvironment({ camera, ambientLight })
 
-    this.loadModels({ initial })
+    this.loadModel({ initial })
 
     this.render({ container })
     
@@ -39,33 +39,13 @@ class Renderer3D {
     this.scene.add(this.camera)
   }
 
-  loadModels = async ({ initial: {
+  loadModel = async ({
+    initial: {
       position = { x: 0, y: 0, z: 0 },
       rotation = { x: 0, y: 0, z: 0 },
-    } = {}}) => {
-    const loadMTL = () => new Promise((resolve, reject) => {
-      new MTLLoader()
-        .setPath( 'models/obj/abdomen/' )
-        .load( 'ToraxAbdomen2.mtl', ( materials ) => {
-          materials.preload()
-          resolve(materials)
-        }, () => {}, reject)
-      })
-    const loadOBJ = materials => new Promise((resolve, reject) => {
-      new OBJLoader()
-      .setMaterials(materials)
-      .setPath('models/obj/abdomen/')
-      .load('ToraxAbdomen2.obj', (object) => {
-        resolve(object)
-      }, function ( xhr ) {
-        if ( xhr.lengthComputable ) {
-          const percentComplete = xhr.loaded / xhr.total * 100
-          console.log( Math.round( percentComplete, 2 ) + '% downloaded' )
-        }
-      }, () => reject("An error occurred loading de model") )
-    })
-    const materials = await loadMTL()
-    const object = await loadOBJ(materials)
+    } = {}
+  }) => {
+    const object = await new ModelLoader().load()
     this.object = object
     object.position.y = 0
     
