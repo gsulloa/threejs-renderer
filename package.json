@@ -6,7 +6,9 @@
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-scripts": "2.0.4",
-    "three": "^0.97.0"
+    "three": "^0.97.0",
+    "three-addons": "^1.2.0",
+    "three-obj-mtl-loader": "^1.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
