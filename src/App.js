@@ -20,6 +20,9 @@ class App extends Component {
     this.renderer.resetControls()
     console.log("reset")
   }
+  getPosition = () => {
+    this.renderer.getCurrentPosition()
+  }
 
   render() {
     console.log("render")
@@ -27,6 +30,7 @@ class App extends Component {
       <div>
         <div ref={this.render3d}></div>
         <button onClick={this.reset}>Reset</button>
+        <button onClick={this.getPosition}>GetPosition</button>
       </div>
     );
   }

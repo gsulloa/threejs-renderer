@@ -40,7 +40,23 @@ class Renderer3D {
           this.object = object
           object.position.y = 0;
           this.scene.add( object );
-          new ObjectController({ camera: this.camera, object: this.object, domElement: this.renderer.domElement })
+          this.objectController = new ObjectController({
+            camera: this.camera,
+            object: this.object,
+            domElement: this.renderer.domElement,
+            initial: {
+              position: {
+                x: 44,
+                y: 124,
+                z: 580,
+              },
+              rotation: {
+                x: -1.516631,
+                y: 0.088158,
+                z: 0.234383311,
+              }
+            }
+          })
           }, onProgress, onError );
       });
     //
@@ -64,10 +80,14 @@ class Renderer3D {
   }
 
   resetControls = () => {
-    this.object.rotation.set(-1.516631, 0.088158, 0.234383311, "XYZ")
-
-    this.camera.position.set(44,124,580)
+    this.objectController.resetControls()
   }
+
+  getCurrentPosition = () => {
+    console.log(this.objectController.currentPosition())
+  }
+
+  
 }
 
 export default Renderer3D

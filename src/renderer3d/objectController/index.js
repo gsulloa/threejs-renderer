@@ -22,18 +22,35 @@ class ObjectController {
   static set previousMousePosition({ x = 0, y = 0 } = {}) {
     this.mousePosition = { x, y }
   }
+
+  currentPosition = () => {
+    console.log(this.object.rotation, this.camera.position)
+    return {
+      rotation: this.object.rotation,
+      position: this.camera.position,
+    }
+  }
   controlOption = undefined
   constructor({
     camera,
     object,
     domElement,
+    initial: {
+      rotation,
+      position,
+    } = {}
   } = {}) {
     domElement.addEventListener("mousedown", this.handleMouseDown)
-    domElement.addEventListener("mousemove", e => this.handleMouseMove({ e, object, camera }))
+    domElement.addEventListener("mousemove", this.handleMouseMove)
     domElement.addEventListener("mouseup", () => { this.controlOption = undefined })
     domElement.addEventListener("mousewheel", e => {
       camera.position.z += Math.sign(e.deltaY) * 20
     })
+
+    this.initial = { rotation, position }
+    this.camera = camera
+    this.object = object
+    this.resetControls()
   }
 
   deltaMove({ offsetX: currentX, offsetY: currentY }) {
@@ -57,10 +74,10 @@ class ObjectController {
     }
   }
 
-  handleMouseMove = ({ e, object, camera }) => {
+  handleMouseMove = e => {
     if (this.controlOption) {
-      console.log(this)
       const deltaMove = this.deltaMove(e)
+      const { object, camera } = this
       switch (this.controlOption) {
         case CONTROL_OPTIONS.DRAGGING: {
           const deltaRotationQuaternion = new THREE.Quaternion()
@@ -86,6 +103,15 @@ class ObjectController {
       x: e.offsetX,
       y: e.offsetY
     };
+  }
+
+  look = ({ position, rotation }) => {
+    this.object.rotation.set(rotation.x, rotation.y, rotation.z, "XYZ")
+    this.camera.position.set(position.x, position.y, position.z)
+  }
+
+  resetControls = () => {
+    this.look(this.initial)
   }
 }
 
