@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 
-import Renderer3D from "./Renderer3D"
+import Renderer3D from "./renderer3d"
  
 class App extends Component {
   constructor(props) {
