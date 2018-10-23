@@ -49,18 +49,31 @@ class ObjectController {
       position,
     } = {}
   } = {}) {
-    domElement.addEventListener("mousedown", this.handleMouseDown)
-    domElement.addEventListener("mousemove", this.handleMouseMove)
-    domElement.addEventListener("mouseup", () => { this.controlOption = undefined })
-    domElement.addEventListener("mousewheel", e => {
-      camera.position.z += Math.sign(e.deltaY) * 20
-    })
+    
+    this.mouseEventListener({ domElement, camera })
+    this.touchEventListener({ domElement, camera })
 
     this.initial = { rotation, position }
     this.camera = camera
     this.object = object
     this.resetControls()
   }
+
+  mouseEventListener = ({ domElement, camera }) => {
+    domElement.addEventListener("mousedown", this.handleMouseDown)
+    domElement.addEventListener("mousemove", this.handleMouseMove)
+    domElement.addEventListener("mouseup", () => { this.controlOption = undefined })
+    domElement.addEventListener("mousewheel", e => {
+      e.preventDefault()
+      this.zoomObject({ value: e.deltaY, camera })
+    })
+  }
+
+  touchEventListener = ({ domElement }) => {
+    domElement.addEventListener("touchstart", this.handleTouchStart)
+    domElement.addEventListener("touchmove", this.handleTouchMove)
+  }
+
 
   deltaMove({ offsetX: currentX, offsetY: currentY }) {
     const { x: previousX, y: previousY } = this.previousMousePosition
@@ -69,6 +82,8 @@ class ObjectController {
       y: currentY - previousY
     }
   }
+
+  /* MOUSE HANDLERS */
 
   handleMouseDown =  (e) => {
     switch (e.button) {
@@ -89,19 +104,11 @@ class ObjectController {
       const { object, camera } = this
       switch (this.controlOption) {
         case CONTROL_OPTIONS.DRAGGING: {
-          const deltaRotationQuaternion = new THREE.Quaternion()
-          .setFromEuler(new THREE.Euler(
-              toRadians(deltaMove.y * 0.5),
-              toRadians(deltaMove.x * 0.5),
-              0,
-              'XYZ'
-          ));
-          object.quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion);
+          this.rotateObject({ deltaMove, object })
           break
         }
         case CONTROL_OPTIONS.MOVING: {
-          camera.position.x -= deltaMove.x
-          camera.position.y += deltaMove.y
+          this.moveCamera({ deltaMove, camera })
           break
         }
         default:
@@ -112,6 +119,67 @@ class ObjectController {
       x: e.offsetX,
       y: e.offsetY
     };
+  }
+
+  /* TOUCH HANDLERS */
+
+  handleTouchStart = e => {
+    const touch = e.touches[0]
+    this.previousMousePosition = { x: touch.clientX, y: touch.clientY }
+    switch (e.touches.length) {
+      case 1:
+        this.controlOption = CONTROL_OPTIONS.DRAGGING
+        break
+      case 2:
+        this.controlOption = CONTROL_OPTIONS.MOVING
+        break
+      default:
+        break;
+    }
+  }
+
+  handleTouchMove = e => {
+    const { object, camera } = this
+    switch (this.controlOption) {
+      case CONTROL_OPTIONS.DRAGGING: {
+        e.preventDefault()
+        const touch = e.touches[0]
+        const touchPosition = { offsetX: touch.clientX, offsetY: touch.clientY }
+        const deltaMove = this.deltaMove(touchPosition)
+        this.rotateObject({ deltaMove, object })
+        this.previousMousePosition = { x: touch.clientX, y: touch.clientY }
+        break
+      }
+      case CONTROL_OPTIONS.MOVING: {
+        e.preventDefault()
+        const touch = e.touches[0]
+        const touchPosition = { offsetX: touch.clientX, offsetY: touch.clientY }
+        const deltaMove = this.deltaMove(touchPosition)
+        this.moveCamera({ deltaMove, camera })
+        this.previousMousePosition = { x: touch.clientX, y: touch.clientY }
+        break
+      }
+      default: 
+        break
+    }
+  }
+
+  rotateObject({ deltaMove, object }){
+    const deltaRotationQuaternion = new THREE.Quaternion()
+    .setFromEuler(new THREE.Euler(
+        toRadians(deltaMove.y * 0.5),
+        toRadians(deltaMove.x * 0.5),
+        0,
+        'XYZ'
+    ));
+    object.quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion);
+  }
+  moveCamera({ deltaMove, camera }) {
+    camera.position.x -= deltaMove.x
+    camera.position.y += deltaMove.y
+  }
+  zoomObject({ value, camera }) {
+    camera.position.z += Math.sign(value) * 20
   }
 
   look = ({ position, rotation }) => {
