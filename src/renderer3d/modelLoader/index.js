@@ -1,3 +1,4 @@
+import { Box3, Object3D } from "three"
 import { OBJLoader, MTLLoader } from "three-obj-mtl-loader"
 
 class ModelLoader {
@@ -19,7 +20,15 @@ class ModelLoader {
       .setMaterials(materials)
       .setPath('models/obj/abdomen/')
       .load('ToraxAbdomen2.obj', (object) => {
-        resolve(object)
+        const { max, min } = new Box3().setFromObject(object)
+        const middleY = (max.y - min.y) / 2
+        const middleZ = (max.z - min.z) / 2
+        const pivot = new Object3D();
+        object.position.y = middleY
+        object.position.z = -middleZ
+        pivot.add( object );
+        debugger
+        resolve(pivot)
       }, function ( xhr ) {
         if ( xhr.lengthComputable ) {
           const percentComplete = xhr.loaded / xhr.total * 100

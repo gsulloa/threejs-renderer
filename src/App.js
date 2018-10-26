@@ -14,8 +14,8 @@ class App extends Component {
       container: this.render3d.current,
       initial: {
         position: {
-          x: 44,
-          y: 124,
+          x: 17,
+          y: 13,
           z: 580,
         },
         rotation: {

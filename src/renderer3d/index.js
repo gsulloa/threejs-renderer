@@ -97,6 +97,7 @@ class Renderer3D {
   setCurrentAsInitial = () => {
     const { rotation, position } = this.getCurrentPosition()
     this.setNewInitialPosition({ rotation, position })
+    console.log(position)
   }
 
   
