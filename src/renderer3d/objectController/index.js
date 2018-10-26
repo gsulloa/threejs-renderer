@@ -58,6 +58,7 @@ class ObjectController {
     this.camera = camera
     this.object = object
     this.scene = scene
+    this.domElement = domElement
     this.spheres = []
     this.resetControls()
   }
@@ -127,9 +128,8 @@ class ObjectController {
 
   handleMouseClick = e => {
     try {
-      const vector = new THREE.Vector2((e.clientX / window.innerWidth) * 2-1, -(e.clientY / window.innerHeight) * 2 + 1);
-      console.log(vector)
-      const { camera, object, scene } = this
+      const vector = new THREE.Vector2((e.offsetX / this.domElement.width) * 2-1, -(e.offsetY / this.domElement.height) * 2 + 1);
+      const { camera, object } = this
       const raycaster = new THREE.Raycaster()
       raycaster.setFromCamera(vector, camera)
       const radius = 3
@@ -140,10 +140,9 @@ class ObjectController {
       if (intersects.length) {
         const [intersect] = intersects
         const { point, object } = intersect
-        console.log(point, object.position)
         const circle = new THREE.Mesh( geometry, material )
-        circle.position.copy(intersect.point).add(intersect.object.position)
-        scene.add( circle );
+        circle.position.copy(object.worldToLocal(point))
+        object.add( circle );
         this.spheres.push(circle)
       }
     } catch (e) {
@@ -194,7 +193,7 @@ class ObjectController {
     }
   }
 
-  rotateObject({ deltaMove, object, spheres }){
+  rotateObject({ deltaMove, object }){
     const deltaRotationQuaternion = new THREE.Quaternion()
     .setFromEuler(new THREE.Euler(
         toRadians(deltaMove.y * 0.5),
@@ -203,14 +202,6 @@ class ObjectController {
         'XYZ'
     ));
     object.quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion);
-
-    for(const sphere of spheres) {
-      const vector = sphere.position
-        .applyAxisAngle(new THREE.Vector3(1,0,0), toRadians(deltaMove.y * 0.5))
-        .applyAxisAngle(new THREE.Vector3(0,1,0), toRadians(deltaMove.x * 0.5))
-      sphere.position.copy(vector)
-      
-    }
   }
   moveCamera({ deltaMove, camera }) {
     camera.position.x -= deltaMove.x
