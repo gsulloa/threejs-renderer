@@ -52,6 +52,7 @@ class Renderer3D {
     this.scene.add(object)
     this.objectController = new ObjectController({
       camera: this.camera,
+      scene: this.scene,
       object: this.object,
       domElement: this.renderer.domElement,
       initial: {

@@ -43,6 +43,7 @@ class ObjectController {
   constructor({
     camera,
     object,
+    scene,
     domElement,
     initial: {
       rotation,
@@ -56,6 +57,8 @@ class ObjectController {
     this.initial = { rotation, position }
     this.camera = camera
     this.object = object
+    this.scene = scene
+    this.spheres = []
     this.resetControls()
   }
 
@@ -67,6 +70,7 @@ class ObjectController {
       e.preventDefault()
       this.zoomObject({ value: e.deltaY, camera })
     })
+    domElement.addEventListener("click", this.handleMouseClick)
   }
 
   touchEventListener = ({ domElement }) => {
@@ -101,10 +105,10 @@ class ObjectController {
   handleMouseMove = e => {
     if (this.controlOption) {
       const deltaMove = this.deltaMove(e)
-      const { object, camera } = this
+      const { object, camera, spheres } = this
       switch (this.controlOption) {
         case CONTROL_OPTIONS.DRAGGING: {
-          this.rotateObject({ deltaMove, object })
+          this.rotateObject({ deltaMove, object, spheres })
           break
         }
         case CONTROL_OPTIONS.MOVING: {
@@ -119,6 +123,32 @@ class ObjectController {
       x: e.offsetX,
       y: e.offsetY
     };
+  }
+
+  handleMouseClick = e => {
+    try {
+      const vector = new THREE.Vector2((e.clientX / window.innerWidth) * 2-1, -(e.clientY / window.innerHeight) * 2 + 1);
+      console.log(vector)
+      const { camera, object, scene } = this
+      const raycaster = new THREE.Raycaster()
+      raycaster.setFromCamera(vector, camera)
+      const radius = 3
+      const segments = 32
+      const material =  new THREE.MeshBasicMaterial({ color: 0x00ffff })
+      const geometry = new THREE.SphereGeometry(radius, segments, segments);
+      const intersects = raycaster.intersectObjects(object.children)
+      if (intersects.length) {
+        const [intersect] = intersects
+        const { point, object } = intersect
+        console.log(point, object.position)
+        const circle = new THREE.Mesh( geometry, material )
+        circle.position.copy(intersect.point).add(intersect.object.position)
+        scene.add( circle );
+        this.spheres.push(circle)
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   /* TOUCH HANDLERS */
@@ -164,7 +194,7 @@ class ObjectController {
     }
   }
 
-  rotateObject({ deltaMove, object }){
+  rotateObject({ deltaMove, object, spheres }){
     const deltaRotationQuaternion = new THREE.Quaternion()
     .setFromEuler(new THREE.Euler(
         toRadians(deltaMove.y * 0.5),
@@ -173,6 +203,14 @@ class ObjectController {
         'XYZ'
     ));
     object.quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion);
+
+    for(const sphere of spheres) {
+      const vector = sphere.position
+        .applyAxisAngle(new THREE.Vector3(1,0,0), toRadians(deltaMove.y * 0.5))
+        .applyAxisAngle(new THREE.Vector3(0,1,0), toRadians(deltaMove.x * 0.5))
+      sphere.position.copy(vector)
+      
+    }
   }
   moveCamera({ deltaMove, camera }) {
     camera.position.x -= deltaMove.x
