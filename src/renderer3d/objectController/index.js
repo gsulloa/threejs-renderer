@@ -127,26 +127,20 @@ class ObjectController {
   }
 
   handleMouseClick = e => {
-    try {
-      const vector = new THREE.Vector2((e.offsetX / this.domElement.width) * 2-1, -(e.offsetY / this.domElement.height) * 2 + 1);
-      const { camera, object } = this
-      const raycaster = new THREE.Raycaster()
-      raycaster.setFromCamera(vector, camera)
-      const radius = 3
-      const segments = 32
-      const material =  new THREE.MeshBasicMaterial({ color: 0x00ffff })
-      const geometry = new THREE.SphereGeometry(radius, segments, segments);
-      const intersects = raycaster.intersectObjects(object.children)
-      if (intersects.length) {
-        const [intersect] = intersects
-        const { point, object } = intersect
-        const circle = new THREE.Mesh( geometry, material )
-        circle.position.copy(object.worldToLocal(point))
-        object.add( circle );
-        this.spheres.push(circle)
-      }
-    } catch (e) {
-      console.error(e)
+    const radius = 3
+    const segments = 32
+    const material =  new THREE.MeshBasicMaterial({ color: "#fae" })
+    const geometry = new THREE.SphereGeometry(radius, segments, segments);
+    const position = this.getPositionInObject({
+      offsetX: e.offsetX,
+      offsetY: e.offsetY,
+      domElementHeight: this.domElement.height,
+      domElementWidth: this.domElement.width 
+    })
+    if (position) {
+      const circle = new THREE.Mesh( geometry, material )
+      circle.position.copy(position)
+      this.object.add(circle)
     }
   }
 
@@ -222,6 +216,24 @@ class ObjectController {
 
   updateInitial = ({ rotation, position }) => {
     this.initial = { rotation, position}
+  }
+
+  getPositionInObject = ({ offsetX, offsetY, domElementWidth, domElementHeight }) => {
+    try {
+      const vector = new THREE.Vector2((offsetX / domElementWidth) * 2-1, -(offsetY / domElementHeight) * 2 + 1);
+      const { camera, object } = this
+      const raycaster = new THREE.Raycaster()
+      raycaster.setFromCamera(vector, camera)
+      const intersects = raycaster.intersectObjects(object.children)
+      
+      if (intersects.length) {
+        const [intersect] = intersects
+        const { point, object } = intersect
+        return object.worldToLocal(point)
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
 }
 
