@@ -27,7 +27,6 @@ class ModelLoader {
         object.position.y = middleY
         object.position.z = -middleZ
         pivot.add( object );
-        debugger
         resolve(pivot)
       }, function ( xhr ) {
         if ( xhr.lengthComputable ) {

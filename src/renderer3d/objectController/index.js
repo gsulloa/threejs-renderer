@@ -57,6 +57,7 @@ class ObjectController {
     this.initial = { rotation, position }
     this.camera = camera
     this.object = object
+    this.model = object.children[0]
     this.scene = scene
     this.domElement = domElement
     this.spheres = []
@@ -140,7 +141,7 @@ class ObjectController {
     if (position) {
       const circle = new THREE.Mesh( geometry, material )
       circle.position.copy(position)
-      this.object.add(circle)
+      this.model.add(circle)
     }
   }
 
@@ -221,10 +222,10 @@ class ObjectController {
   getPositionInObject = ({ offsetX, offsetY, domElementWidth, domElementHeight }) => {
     try {
       const vector = new THREE.Vector2((offsetX / domElementWidth) * 2-1, -(offsetY / domElementHeight) * 2 + 1);
-      const { camera, object } = this
+      const { camera, model } = this
       const raycaster = new THREE.Raycaster()
       raycaster.setFromCamera(vector, camera)
-      const intersects = raycaster.intersectObjects(object.children)
+      const intersects = raycaster.intersectObjects(model.children)
       
       if (intersects.length) {
         const [intersect] = intersects
