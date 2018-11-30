@@ -72,7 +72,6 @@ class ObjectController {
       e.preventDefault()
       this.zoomObject({ value: e.deltaY, camera })
     })
-    domElement.addEventListener("click", this.handleMouseClick)
   }
 
   touchEventListener = ({ domElement }) => {
@@ -127,24 +126,6 @@ class ObjectController {
     };
   }
 
-  handleMouseClick = e => {
-    const radius = 3
-    const segments = 32
-    const material =  new THREE.MeshBasicMaterial({ color: "#fae" })
-    const geometry = new THREE.SphereGeometry(radius, segments, segments);
-    const position = this.getPositionInObject({
-      offsetX: e.offsetX,
-      offsetY: e.offsetY,
-      domElementHeight: this.domElement.height,
-      domElementWidth: this.domElement.width 
-    })
-    if (position) {
-      const circle = new THREE.Mesh( geometry, material )
-      circle.position.copy(position)
-      this.model.add(circle)
-    }
-  }
-
   /* TOUCH HANDLERS */
 
   handleTouchStart = e => {
@@ -190,12 +171,12 @@ class ObjectController {
 
   rotateObject({ deltaMove, object }){
     const deltaRotationQuaternion = new THREE.Quaternion()
-    .setFromEuler(new THREE.Euler(
-        toRadians(deltaMove.y * 0.5),
-        toRadians(deltaMove.x * 0.5),
-        0,
-        'XYZ'
-    ));
+      .setFromEuler(new THREE.Euler(
+          toRadians(deltaMove.y * 0.5),
+          toRadians(deltaMove.x * 0.5),
+          0,
+          'XYZ'
+      ));
     object.quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion);
   }
   moveCamera({ deltaMove, camera }) {
