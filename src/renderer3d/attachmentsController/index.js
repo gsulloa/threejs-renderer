@@ -2,20 +2,26 @@ import * as THREE  from "three"
 
 class AttachmentsController {
 
-  constructor({ model, attachments = [] } = {}) {
+  constructor({ model, attachments, initialAttachments = [] } = {}) {
     this.model = model
-    this.attachments = []
-    attachments.forEach(attachment => {
+    this.attachments = attachments
+    initialAttachments.forEach(attachment => {
       this.addSphere(attachment.position)
     })
   }
 
   addAttachment = ({ position, model }) => {
     if (position && model) {
-      model.position.copy(position)
-      this.model.add(model)
-      this.attachments.push(model)
-      console.log(this.model.children)
+      const transparentModel = new THREE.Mesh()
+      transparentModel.visible = false
+      transparentModel.position.copy(position)
+      this.model.add(transparentModel)
+      
+      const worldPosition = new THREE.Vector3()
+        .add(this.model.localToWorld(position))
+      model.position.copy(worldPosition)
+      model.reference = transparentModel
+      this.attachments.add(model)
     }
   }
   addSphere = position => {
@@ -24,7 +30,6 @@ class AttachmentsController {
     const material =  new THREE.MeshBasicMaterial({ color: "#fae" })
     const geometry = new THREE.CircleGeometry(radius, segments, segments);
     const sphere = new THREE.Mesh( geometry, material )
-    sphere.name = "attachment"
     this.addAttachment({ position, model: sphere })
   }
 }

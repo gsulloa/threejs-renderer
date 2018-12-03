@@ -55,6 +55,14 @@ class Renderer3D {
     object.position.y = 0
     
     this.scene.add(object)
+
+    this.attachments = new THREE.Group()
+    this.scene.add(this.attachments)
+    this.attachmentsController = new AttachmentsController({
+      model: this.object.children[0],
+      attachments: this.attachments,
+    })
+
     this.objectController = new ObjectController({
       camera: this.camera,
       scene: this.scene,
@@ -63,9 +71,9 @@ class Renderer3D {
       initial: {
         position,
         rotation,
-      }
+      },
+      attachments: this.attachments
     })
-    this.attachmentsController = new AttachmentsController({ model: this.object.children[0] })
     this.renderer.domElement.addEventListener("click", this.handleMouseClick)
   }
 

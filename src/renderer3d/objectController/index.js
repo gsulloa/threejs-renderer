@@ -48,7 +48,8 @@ class ObjectController {
     initial: {
       rotation,
       position,
-    } = {}
+    } = {},
+    attachments,
   } = {}) {
     
     this.mouseEventListener({ domElement, camera })
@@ -61,6 +62,7 @@ class ObjectController {
     this.scene = scene
     this.domElement = domElement
     this.spheres = []
+    this.attachments = attachments
     this.resetControls()
   }
 
@@ -169,15 +171,24 @@ class ObjectController {
     }
   }
 
-  rotateObject({ deltaMove, object }){
+  rotateObject = ({ deltaMove, object }) => {
     const deltaRotationQuaternion = new THREE.Quaternion()
       .setFromEuler(new THREE.Euler(
-          toRadians(deltaMove.y * 0.5),
-          toRadians(deltaMove.x * 0.5),
+          toRadians(deltaMove.y * 0.25),
+          toRadians(deltaMove.x * 0.25),
           0,
           'XYZ'
       ));
     object.quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion);
+    const { object: { children: [{ children: [model] }]} } = this
+    this.attachments
+      .children
+      .forEach(attachment => {
+        const worldPosition = new THREE.Vector3().copy(attachment.reference.position)
+        model.localToWorld(worldPosition)
+        attachment.position.copy(worldPosition)
+      })
+    
   }
   moveCamera({ deltaMove, camera }) {
     camera.position.x -= deltaMove.x
