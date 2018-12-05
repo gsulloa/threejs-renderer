@@ -1,16 +1,57 @@
 import { Box3, Object3D } from "three"
 import { OBJLoader, MTLLoader } from "three-obj-mtl-loader"
+import JSZip from "jszip"
+import axios from "axios"
 
 class ModelLoader {
   async load() {
-    const materials = await this.loadMTL()
+    const file = await axios('https://s3.us-east-2.amazonaws.com/idea-files-s3/1507768649217', {
+      responseType: "blob",
+      onDownloadProgress: ({ loaded, total}) => console.log((loaded / total)*100),
+    })
+    const { data: blob } = file
+    const { files } = await new JSZip().loadAsync(blob, { type: "blob" })
+    const readContent = (name, file)  =>{
+      const doti = name.lastIndexOf(".")
+      if (doti === -1) throw new Error(`file ${name} without extension`)
+      const ext = name.substring(doti + 1)
+  
+      if (ext === "mtl" || ext === "obj") {
+        return file.async("text").then(content => ({
+          name,
+          blob: new Blob([content], { type: "text/plain" }),
+          ext,
+        }))
+      } else {
+        return file
+          .async("uint8array")
+          .then(content => ({ name, blob: new Blob([content]), ext }))
+      }
+    }
+    const promiseReadeableFiles = await Promise.all(
+      Object.entries(files).map(([name, zipObject]) => readContent(name, zipObject)
+    ))
+    const readableFiles = promiseReadeableFiles.reduce((all, file) => {
+      if (file.ext !== "mtl" && file.ext !== "obj") {
+        all.textureFiles = { ...all.textureFiles, [file.name]: file.blob}
+        all.texturePaths = { ...all.texturePaths, [file.name]: URL.createObjectURL(file.blob)}
+      } else {
+        all[file.ext] = URL.createObjectURL(file.blob)
+      }
+      return all
+    }, {})
+
+    console.log(readableFiles)
+
+    const materials = await this.loadMTL(readableFiles.mtl)
     const object = await this.loadOBJ({ materials })
     return object
   }
-  loadMTL = () => new Promise((resolve, reject) => {
+  loadMTL = (mtl) => new Promise((resolve, reject) => {
     new MTLLoader()
       .setPath( 'models/obj/abdomen/' )
       .load( 'ToraxAbdomen2.mtl', ( materials ) => {
+        // .load(mtl, materials => {
         materials.preload()
         resolve(materials)
       }, () => {}, reject)
