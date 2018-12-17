@@ -1,4 +1,5 @@
 import * as THREE  from "three"
+import * as TWEEN from "@tweenjs/tween.js"
 import { toRadians } from "../utils/radiansDegreesConverter"
 
 const CONTROL_OPTIONS = {
@@ -204,10 +205,30 @@ class ObjectController {
     camera.position.z += Math.sign(value) * 20
   }
 
-  look = ({ position, rotation }) => {
-    this.object.rotation.setFromVector3(new THREE.Vector3(rotation.x, rotation.y, rotation.z))
-    this.camera.position.set(position.x, position.y, position.z)
-    this.uptadeAttachmentsPosition()
+  look = ({ position: newPosition, rotation: newRotation }) => {
+    this.moveCamera({ newPosition })
+    this.rotateObjectTo({ newRotation })
+  }
+  moveCamera = ({ newPosition }) => {
+    const positionCoords = new THREE.Vector3().copy(this.camera.position)
+    new TWEEN.Tween(positionCoords)
+      .to(newPosition, 1000)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onUpdate(({ x, y, z }) => {
+        this.camera.position.set(x, y, z)
+      })
+      .start()
+  }
+  rotateObjectTo = ({ newRotation }) => {
+    const rotationCords = new THREE.Vector3().copy(this.object.rotation)
+    new TWEEN.Tween(rotationCords)
+      .to(newRotation, 1000)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onUpdate(vector => {
+        this.object.rotation.setFromVector3(vector)
+        this.uptadeAttachmentsPosition()
+      })
+      .start()
   }
 
   resetControls = () => {

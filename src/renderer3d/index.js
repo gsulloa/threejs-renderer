@@ -1,4 +1,5 @@
 import * as THREE  from "three"
+import * as TWEEN from "@tweenjs/tween.js"
 import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController";
@@ -90,9 +91,10 @@ class Renderer3D {
     
   }
   
-  animate = () => {
+  animate = (time) => {
     requestAnimationFrame( this.animate )
     this.renderer.render( this.scene, this.camera )   
+    TWEEN.update(time)
   }
 
   
