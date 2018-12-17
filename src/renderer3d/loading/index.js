@@ -1,29 +1,41 @@
 import React, { PureComponent } from "react"
-import * as THREE from "three"
+import styled from "styled-components"
+
+const Overlay = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
+  display: flex
+`
+const LoadingBar = styled.div`
+  width: 25em;
+  height: 1em;
+  border-radius: 0.25em;
+  background-color: black;
+  border: 1px solid grey;
+  display: inline-flex;
+`
+
+const ProgressBar = styled.span`
+  height: inherit;
+  border-radius: inherit;
+  width: ${props => props.width ? props.width : "1%"}
+  background-color: ${props => props.backgroundColor ? props.backgroundColor : "#75b800"}
+`
+
+const Title = styled.h2`
+  color: #fff;
+`
 
 /*  TODO: use styled-components */
 const styles = {
-  overlay: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    flexFlow: "column nowrap",
-    display: "flex"
-  },
 
   loadingBar: {
-    width: "25em",
-    height: "1em",
-    borderRadius: "0.25em",
-    backgroundColor: "black",
-    border: "1px solid grey",
-    display: "inline-flex",
   },
   progress: {
-    height: "inherit",
-    borderRadius: "inherit",
   }
 }
 
@@ -69,7 +81,8 @@ class Loading extends PureComponent {
   onError = function ( e ) { 
     console.error( e ); 
     this.setState({
-      backgroundColor: 'red'
+      backgroundColor: 'red',
+      title: "Error!"
     })
   }
 
@@ -83,16 +96,12 @@ class Loading extends PureComponent {
     const { percentComplete, showLoading, backgroundColor, title } = this.state
     if (!showLoading) return null
     return (
-      <div style={styles.overlay}>
-        <h2 style={{ color: "white" }}>{title}</h2>
-        <div style={styles.loadingBar}>
-            <span style={{
-              width: `${percentComplete}%`,
-              backgroundColor,
-              ...styles.progress,
-            }}></span>
-        </div>
-      </div>
+      <Overlay>
+        <Title>{title}</Title>
+        <LoadingBar style={styles.loadingBar}>
+          <ProgressBar width={`${percentComplete}%`} backgroundColor={backgroundColor}/>
+        </LoadingBar>
+      </Overlay>
     )
   }
 }
