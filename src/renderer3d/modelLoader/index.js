@@ -8,9 +8,9 @@ class ModelLoader {
     this.loading = loading
   }
 
-  async load() {
+  async load({ url }) {
     this.loading.onStart({ title: "Cargando..." })
-    const files = await this.getFiles()
+    const files = await this.getFiles({ url })
     const groupedFiles = files.reduce((all, file) => {
       if (file.ext !== "mtl" && file.ext !== "obj") {
         all.textureFiles = { ...all.textureFiles, [file.name]: file.content}
@@ -26,8 +26,8 @@ class ModelLoader {
     return pivotObject
   }
 
-  async getFiles() {
-    const file = await axios('https://s3.us-east-2.amazonaws.com/idea-files-s3/1507768649217', {
+  async getFiles({ url }) {
+    const file = await axios(url, {
       responseType: "blob",
       onDownloadProgress: this.loading.onProgress,
     })

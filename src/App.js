@@ -4,15 +4,19 @@ import Loading from "./renderer3d/loading"
 import Renderer3D from "./renderer3d"
  
 class App extends Component {
+  state = {
+    url: 'https://s3.us-east-2.amazonaws.com/idea-files-s3/1505152540576'
+  }
   constructor(props) {
     super(props)
     this.render3d = createRef()
     this.loading = createRef()
     this.renderer = {}
   }
-  
-  componentDidMount() {
+
+  loadModel = () => {
     this.renderer = new Renderer3D({
+      modelUrl: this.state.url,
       loading: this.loading.current,
       container: this.render3d.current,
       initial: {
@@ -39,9 +43,12 @@ class App extends Component {
   }
 
   render() {
-    console.log("render")
+    console.log(this.state)
     return (
       <div>
+        <form onSubmit={e => { e.preventDefault();this.loadModel() }}>
+          <input value={this.state.url} onChange={({ target: { value: url }}) => this.setState({ url })} />
+        </form>
         <div ref={this.render3d}>
           <Loading ref={this.loading}/>
         </div>
