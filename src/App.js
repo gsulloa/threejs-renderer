@@ -5,7 +5,7 @@ import Renderer3D from "./renderer3d"
  
 class App extends Component {
   state = {
-    url: 'https://s3.us-east-2.amazonaws.com/idea-files-s3/1505152540576'
+    url: 'https://s3.us-east-2.amazonaws.com/idea-files-s3/1508165679197'
   }
   constructor(props) {
     super(props)

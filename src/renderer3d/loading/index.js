@@ -30,15 +30,6 @@ const Title = styled.h2`
   color: #fff;
 `
 
-/*  TODO: use styled-components */
-const styles = {
-
-  loadingBar: {
-  },
-  progress: {
-  }
-}
-
 class Loading extends PureComponent {
   static defaultProps = {
     last: true,
@@ -98,7 +89,7 @@ class Loading extends PureComponent {
     return (
       <Overlay>
         <Title>{title}</Title>
-        <LoadingBar style={styles.loadingBar}>
+        <LoadingBar>
           <ProgressBar width={`${percentComplete}%`} backgroundColor={backgroundColor}/>
         </LoadingBar>
       </Overlay>
