@@ -2,12 +2,19 @@ import { Box3, Object3D } from "three"
 import { OBJLoader, MTLLoader } from "three-obj-mtl-loader"
 import JSZip from "jszip"
 import axios from "axios"
+import initLoadingManager from "./loadingManager";
 
 class ModelLoader {
+  constructor({ loadingContainers }) {
+    this.loadingManager = initLoadingManager(loadingContainers)
+  }
   async load() {
+    this.loadingManager.onStart()
     const file = await axios('https://s3.us-east-2.amazonaws.com/idea-files-s3/1507768649217', {
       responseType: "blob",
-      onDownloadProgress: ({ loaded, total}) => console.log((loaded / total)*100),
+      onDownloadProgress: ({ loaded, total}) => {
+        this.loadingManager.onProgress(null, loaded, total)
+      },
     })
     const { data: blob } = file
     const { files } = await new JSZip().loadAsync(blob, { type: "blob" })
@@ -45,6 +52,8 @@ class ModelLoader {
 
     const materials = await this.loadMTL(readableFiles.mtl)
     const object = await this.loadOBJ({ materials })
+
+    this.loadingManager.onLoad()
     return object
   }
   loadMTL = (mtl) => new Promise((resolve, reject) => {
@@ -69,12 +78,7 @@ class ModelLoader {
         object.position.z = -middleZ
         pivot.add( object );
         resolve(pivot)
-      }, function ( xhr ) {
-        if ( xhr.lengthComputable ) {
-          const percentComplete = xhr.loaded / xhr.total * 100
-          console.log( Math.round( percentComplete, 2 ) + '% downloaded' )
-        }
-      }, () => reject("An error occurred loading de model") )
+      }, () => {}, () => reject("An error occurred loading de model") )
   })
 }
 
