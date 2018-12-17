@@ -9,7 +9,7 @@ class ModelLoader {
   }
 
   async load() {
-    this.loading.onStart()
+    this.loading.onStart({ title: "Cargando..." })
     const files = await this.getFiles()
     const groupedFiles = files.reduce((all, file) => {
       if (file.ext !== "mtl" && file.ext !== "obj") {

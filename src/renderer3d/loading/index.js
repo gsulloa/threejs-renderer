@@ -30,7 +30,6 @@ const styles = {
 class Loading extends PureComponent {
   static defaultProps = {
     last: true,
-    title: "Downloading..."
   }
   state = {
     percentComplete: 1,
@@ -53,7 +52,8 @@ class Loading extends PureComponent {
 
   }
 
-  onStart = () => {
+  onStart = ({ title = "Downloading..." } = {}) => {
+    this.setState({ title })
     if (this.frameID !== null) return;
     this.animateBar();
   };
@@ -80,8 +80,7 @@ class Loading extends PureComponent {
   }
 
   render() {
-    const { percentComplete, showLoading, backgroundColor } = this.state
-    const { title } = this.props
+    const { percentComplete, showLoading, backgroundColor, title } = this.state
     if (!showLoading) return null
     return (
       <div style={styles.overlay}>
