@@ -3,7 +3,7 @@ import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 class Renderer3D {
   constructor({
-    loadingContainers,
+    loading,
     container,
     initial = {},
     camera = {},
@@ -11,7 +11,7 @@ class Renderer3D {
   }) {
     this.prepareEnvironment({ camera, ambientLight })
 
-    this.loadModel({ initial, loadingContainers })
+    this.loadModel({ initial, loading })
 
     this.render({ container })
     
@@ -45,9 +45,9 @@ class Renderer3D {
       position = { x: 0, y: 0, z: 0 },
       rotation = { x: 0, y: 0, z: 0 },
     } = {},
-    loadingContainers,
+    loading,
   }) => {
-    const object = await new ModelLoader({ loadingContainers }).load()
+    const object = await new ModelLoader({ loading }).load()
     this.object = object
     object.position.y = 0
     

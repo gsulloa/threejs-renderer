@@ -1,22 +1,19 @@
 import React, { Component, createRef } from 'react';
 
+import Loading from "./renderer3d/loading"
 import Renderer3D from "./renderer3d"
  
 class App extends Component {
   constructor(props) {
     super(props)
     this.render3d = createRef()
-    this.loadingOverlay = createRef()
-    this.progress = createRef()
+    this.loading = createRef()
     this.renderer = {}
   }
   
   componentDidMount() {
     this.renderer = new Renderer3D({
-      loadingContainers: {
-        overlay: this.loadingOverlay.current,
-        progress: this.progress.current,
-      },
+      loading: this.loading.current,
       container: this.render3d.current,
       initial: {
         position: {
@@ -46,12 +43,7 @@ class App extends Component {
     return (
       <div>
         <div ref={this.render3d}>
-
-          <div ref={this.loadingOverlay} id="loading-overlay">
-            <div id="loading-bar">
-                <span ref={this.progress} id="progress"></span>
-            </div>
-          </div>
+          <Loading ref={this.loading}/>
         </div>
         <button onClick={this.reset}>Reset</button>
         <button onClick={this.setCurrentAsInitial}>ChangeInitial</button>

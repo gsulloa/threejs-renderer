@@ -1,20 +1,17 @@
-import { Box3, Object3D } from "three"
+import { Box3, Object3D, Loader } from "three"
 import { OBJLoader, MTLLoader } from "three-obj-mtl-loader"
 import JSZip from "jszip"
 import axios from "axios"
-import initLoadingManager from "./loadingManager";
 
 class ModelLoader {
-  constructor({ loadingContainers }) {
-    this.loadingManager = initLoadingManager(loadingContainers)
+  constructor({ loading }) {
+    this.loading = loading
   }
   async load() {
-    this.loadingManager.onStart()
+    this.loading.onStart()
     const file = await axios('https://s3.us-east-2.amazonaws.com/idea-files-s3/1507768649217', {
       responseType: "blob",
-      onDownloadProgress: ({ loaded, total}) => {
-        this.loadingManager.onProgress(null, loaded, total)
-      },
+      onDownloadProgress: this.loading.onProgress,
     })
     const { data: blob } = file
     const { files } = await new JSZip().loadAsync(blob, { type: "blob" })
@@ -50,10 +47,10 @@ class ModelLoader {
 
     console.log(readableFiles)
 
-    const materials = await this.loadMTL(readableFiles.mtl)
+    const materials = await this.loadMTL({ mtl: readableFiles.mtl, texturePaths: readableFiles.texturePaths })
     const object = await this.loadOBJ({ materials })
 
-    this.loadingManager.onLoad()
+    this.loading.onLoad()
     return object
   }
   loadMTL = (mtl) => new Promise((resolve, reject) => {
