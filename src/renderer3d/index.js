@@ -5,14 +5,16 @@ import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController";
 class Renderer3D {
   constructor({
+    modelUrl,
+    loading,
     container,
     initial = {},
     camera = {},
-    ambientLight = {}
+    ambientLight = {},
   }) {
     this.prepareEnvironment({ camera, ambientLight })
 
-    this.loadModel({ initial })
+    this.loadModel({ initial, loading, url: modelUrl })
 
     this.render({ container })
 
@@ -46,12 +48,14 @@ class Renderer3D {
   }
 
   loadModel = async ({
+    url,
     initial: {
       position = { x: 0, y: 0, z: 0 },
       rotation = { x: 0, y: 0, z: 0 },
-    } = {}
+    } = {},
+    loading,
   }) => {
-    const object = await new ModelLoader().load()
+    const object = await new ModelLoader({ loading }).load({ url })
     this.object = object
     object.position.y = 0
     
