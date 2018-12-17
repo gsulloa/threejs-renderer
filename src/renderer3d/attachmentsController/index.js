@@ -12,7 +12,6 @@ class AttachmentsController {
 
   addAttachment = ({ position, model }) => {
     if (position && model) {
-      console.log(position)
       let { x, y, z } = position
       const transparentModel = new THREE.Mesh()
       transparentModel.visible = false

@@ -55,7 +55,6 @@ class Renderer3D {
     object.position.y = 0
     
     this.scene.add(object)
-
     this.attachments = new THREE.Group()
     this.scene.add(this.attachments)
     this.attachmentsController = new AttachmentsController({
@@ -81,12 +80,14 @@ class Renderer3D {
     this.renderer.setPixelRatio( window.devicePixelRatio )
     this.renderer.setSize( window.innerWidth, window.innerHeight )
     container.appendChild( this.renderer.domElement )
+    
   }
 
   onWindowResize = () =>  {
     this.windowHalfX = window.innerWidth / 2
     this.windowHalfY = window.innerHeight / 2
     this.camera.updateProjectionMatrix()
+    
   }
   
   animate = () => {

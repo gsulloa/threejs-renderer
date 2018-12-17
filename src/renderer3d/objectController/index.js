@@ -171,24 +171,30 @@ class ObjectController {
     }
   }
 
-  rotateObject = ({ deltaMove, object }) => {
+  rotateObject = ({ deltaMove, object, delta = 0.25 } = {}) => {
     const deltaRotationQuaternion = new THREE.Quaternion()
       .setFromEuler(new THREE.Euler(
-          toRadians(deltaMove.y * 0.25),
-          toRadians(deltaMove.x * 0.25),
+          toRadians(deltaMove.y * delta),
+          toRadians(deltaMove.x * delta),
           0,
           'XYZ'
       ));
     object.quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion);
+    this.uptadeAttachmentsPosition()
+  }
+  uptadeAttachmentsPosition = () => {
     const { object: { children: [{ children: [model] }]} } = this
-    this.attachments
+    const positions = this.attachments
       .children
-      .forEach(attachment => {
-        const worldPosition = new THREE.Vector3().copy(attachment.reference.position)
-        model.localToWorld(worldPosition)
-        attachment.position.copy(worldPosition)
+      .map(attachment => {
+        return model.localToWorld(
+          new THREE.Vector3().copy(attachment.reference.position)
+        )
       })
-    
+      this.attachments.children.forEach((attachment, i) => {
+        attachment.position.copy(positions[i])
+      })
+
   }
   moveCamera({ deltaMove, camera }) {
     camera.position.x -= deltaMove.x
@@ -199,8 +205,9 @@ class ObjectController {
   }
 
   look = ({ position, rotation }) => {
-    this.object.rotation.set(rotation.x, rotation.y, rotation.z, "XYZ")
+    this.object.rotation.setFromVector3(new THREE.Vector3(rotation.x, rotation.y, rotation.z))
     this.camera.position.set(position.x, position.y, position.z)
+    this.uptadeAttachmentsPosition()
   }
 
   resetControls = () => {
