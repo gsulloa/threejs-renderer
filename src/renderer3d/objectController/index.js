@@ -1,5 +1,7 @@
 import * as THREE  from "three"
+import * as TWEEN from "@tweenjs/tween.js"
 import { toRadians } from "../utils/radiansDegreesConverter"
+import { useShortDistance } from "../utils/radiansNormalize";
 
 const CONTROL_OPTIONS = {
   DRAGGING: 1,
@@ -48,7 +50,8 @@ class ObjectController {
     initial: {
       rotation,
       position,
-    } = {}
+    } = {},
+    attachments,
   } = {}) {
     
     this.mouseEventListener({ domElement, camera })
@@ -61,6 +64,7 @@ class ObjectController {
     this.scene = scene
     this.domElement = domElement
     this.spheres = []
+    this.attachments = attachments
     this.resetControls()
   }
 
@@ -72,7 +76,6 @@ class ObjectController {
       e.preventDefault()
       this.zoomObject({ value: e.deltaY, camera })
     })
-    domElement.addEventListener("click", this.handleMouseClick)
   }
 
   touchEventListener = ({ domElement }) => {
@@ -127,24 +130,6 @@ class ObjectController {
     };
   }
 
-  handleMouseClick = e => {
-    const radius = 3
-    const segments = 32
-    const material =  new THREE.MeshBasicMaterial({ color: "#fae" })
-    const geometry = new THREE.SphereGeometry(radius, segments, segments);
-    const position = this.getPositionInObject({
-      offsetX: e.offsetX,
-      offsetY: e.offsetY,
-      domElementHeight: this.domElement.height,
-      domElementWidth: this.domElement.width 
-    })
-    if (position) {
-      const circle = new THREE.Mesh( geometry, material )
-      circle.position.copy(position)
-      this.model.add(circle)
-    }
-  }
-
   /* TOUCH HANDLERS */
 
   handleTouchStart = e => {
@@ -188,15 +173,30 @@ class ObjectController {
     }
   }
 
-  rotateObject({ deltaMove, object }){
+  rotateObject = ({ deltaMove, object, delta = 0.25 } = {}) => {
     const deltaRotationQuaternion = new THREE.Quaternion()
-    .setFromEuler(new THREE.Euler(
-        toRadians(deltaMove.y * 0.5),
-        toRadians(deltaMove.x * 0.5),
-        0,
-        'XYZ'
-    ));
+      .setFromEuler(new THREE.Euler(
+          toRadians(deltaMove.y * delta),
+          toRadians(deltaMove.x * delta),
+          0,
+          'XYZ'
+      ));
     object.quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion);
+    this.uptadeAttachmentsPosition()
+  }
+  uptadeAttachmentsPosition = () => {
+    const { object: { children: [{ children: [model] }]} } = this
+    const positions = this.attachments
+      .children
+      .map(attachment => {
+        return model.localToWorld(
+          new THREE.Vector3().copy(attachment.reference.position)
+        )
+      })
+      this.attachments.children.forEach((attachment, i) => {
+        attachment.position.copy(positions[i])
+      })
+
   }
   moveCamera({ deltaMove, camera }) {
     camera.position.x -= deltaMove.x
@@ -206,9 +206,34 @@ class ObjectController {
     camera.position.z += Math.sign(value) * 20
   }
 
-  look = ({ position, rotation }) => {
-    this.object.rotation.set(rotation.x, rotation.y, rotation.z, "XYZ")
-    this.camera.position.set(position.x, position.y, position.z)
+  look = ({ position: newPosition, rotation: newRotation }) => {
+    this.smoothMoveCamera({ newPosition })
+    this.smoothRotateObjectTo({ newRotation })
+  }
+  smoothMoveCamera = ({ newPosition }) => {
+    const positionCoords = new THREE.Vector3().copy(this.camera.position)
+    new TWEEN.Tween(positionCoords)
+      .to(newPosition, 1000)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onUpdate(({ x, y, z }) => {
+        this.camera.position.set(x, y, z)
+      })
+      .start()
+  }
+  smoothRotateObjectTo = ({ newRotation: coords }) => {
+    const rotationCords = new THREE.Vector3().copy(this.object.rotation)
+    const shortDistanceCords = Object.entries(coords).reduce((newCoords, [coord, val]) => {
+      newCoords[coord] = useShortDistance(rotationCords[coord], val)
+      return newCoords
+    }, {})
+    new TWEEN.Tween(rotationCords)
+      .to(shortDistanceCords, 1000)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onUpdate(vector => {
+        this.object.rotation.setFromVector3(vector)
+        this.uptadeAttachmentsPosition()
+      })
+      .start()
   }
 
   resetControls = () => {
@@ -216,7 +241,7 @@ class ObjectController {
   }
 
   updateInitial = ({ rotation, position }) => {
-    this.initial = { rotation, position}
+    this.initial = { rotation, position }
   }
 
   getPositionInObject = ({ offsetX, offsetY, domElementWidth, domElementHeight }) => {

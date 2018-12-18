@@ -1,6 +1,10 @@
 import * as THREE  from "three"
+import * as TWEEN from "@tweenjs/tween.js"
 import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
+import AttachmentsController from "./attachmentsController";
+const ADD_ATTACHMENT = "ADD_ATTACHMENT"
+const SELECT_ATTACHMENT = "SELECT_ATTACHMENT"
 class Renderer3D {
   constructor({
     modelUrl,
@@ -10,11 +14,17 @@ class Renderer3D {
     camera = {},
     ambientLight = {},
   }) {
+    this.state = {
+      click: SELECT_ATTACHMENT
+    }
+
     this.prepareEnvironment({ camera, ambientLight })
 
     this.loadModel({ initial, loading, url: modelUrl })
 
     this.render({ container })
+
+
     
     window.addEventListener( 'resize', this.onWindowResize, false )
   }
@@ -39,6 +49,8 @@ class Renderer3D {
     const ambientLight = new THREE.AmbientLight(color, intensity)
     this.scene.add(ambientLight)
     this.scene.add(this.camera)
+
+    this.renderer = new THREE.WebGLRenderer()
   }
 
   loadModel = async ({
@@ -54,6 +66,15 @@ class Renderer3D {
     object.position.y = 0
     
     this.scene.add(object)
+    this.attachments = new THREE.Group()
+    this.scene.add(this.attachments)
+    this.attachmentsController = new AttachmentsController({
+      model: this.object.children[0],
+      attachments: this.attachments,
+      camera: this.camera,
+      domElement: this.renderer.domElement,
+    })
+
     this.objectController = new ObjectController({
       camera: this.camera,
       scene: this.scene,
@@ -62,26 +83,62 @@ class Renderer3D {
       initial: {
         position,
         rotation,
-      }
+      },
+      attachments: this.attachments
     })
+    this.renderer.domElement.addEventListener("click", this.handleMouseClick)
   }
 
   render = ({ container }) => {
-    this.renderer = new THREE.WebGLRenderer()
     this.renderer.setPixelRatio( window.devicePixelRatio )
     this.renderer.setSize( window.innerWidth, window.innerHeight )
     container.appendChild( this.renderer.domElement )
+    
   }
 
   onWindowResize = () =>  {
     this.windowHalfX = window.innerWidth / 2
     this.windowHalfY = window.innerHeight / 2
     this.camera.updateProjectionMatrix()
+    
   }
   
-  animate = () => {
+  animate = (time) => {
     requestAnimationFrame( this.animate )
     this.renderer.render( this.scene, this.camera )   
+    TWEEN.update(time)
+  }
+
+  
+  handleMouseClick = e => {
+    switch (this.state.click) {
+      case ADD_ATTACHMENT: {
+        const position = this.objectController.getPositionInObject({
+          offsetX: e.offsetX,
+          offsetY: e.offsetY,
+          domElementHeight: this.renderer.domElement.height,
+          domElementWidth: this.renderer.domElement.width 
+        })
+        this.attachmentsController.addSphere(position)
+        break;
+      }
+      case SELECT_ATTACHMENT: {
+        const { hovered, selectAttachment } = this.attachmentsController
+        if (hovered) {
+          selectAttachment({ object: hovered })
+          const { data: { screenPosition } } = hovered
+          if (screenPosition) {
+            this.objectController.look(screenPosition)
+          } else {
+            this.resetControls()
+          }
+        }
+        break;
+      }
+      default:
+        console.error(`Unexpected case "${this.state.click}"`)
+        break;
+    }
   }
 
   /* Controls */
@@ -101,7 +158,6 @@ class Renderer3D {
   setCurrentAsInitial = () => {
     const { rotation, position } = this.getCurrentPosition()
     this.setNewInitialPosition({ rotation, position })
-    console.log(position)
   }
 
   
