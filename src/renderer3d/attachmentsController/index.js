@@ -80,10 +80,8 @@ class AttachmentsController {
       this.setHoveredToDefault()
       if (intersects.length) {
         const [{ object }] = intersects
-        if (selected !== object) {
-          object.material = HOVERED_MATERIAL
-          this.hovered = object
-        }
+        if (selected !== object) object.material = HOVERED_MATERIAL
+        this.hovered = object
       }
     } catch (e) {
       console.error(e)
@@ -91,7 +89,7 @@ class AttachmentsController {
   }
 
   setHoveredToDefault = () => {
-    if (this.hovered) {
+    if (this.hovered && this.hovered !== this.selected) {
       this.hovered.material = DEFAULT_MATERIAL
       this.hovered = undefined
     }
@@ -99,9 +97,15 @@ class AttachmentsController {
 
   selectAttachment = ({ object }) => {
     if (this.selected) this.selected.material = DEFAULT_MATERIAL
-    this.hovered = undefined
-    object.material = SELECTED_MATERIAL
-    this.selected = object
+    if (this.selected !== object) {
+      this.hovered = undefined
+      object.material = SELECTED_MATERIAL
+      this.selected = object
+      return true
+    } else {
+      this.selected = undefined
+      return false
+    }
   }
 }
 

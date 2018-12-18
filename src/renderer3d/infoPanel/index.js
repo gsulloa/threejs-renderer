@@ -31,6 +31,13 @@ class InfoPanel extends PureComponent {
       content
     }))
   }
+  hidePanel = () => {
+    this.setState(() => ({
+      show: false,
+      title: "",
+      content: ""
+    }))
+  }
   render() {
     console.log(this.state)
     const { show, title, content } = this.state

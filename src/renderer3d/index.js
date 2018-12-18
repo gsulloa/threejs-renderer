@@ -127,14 +127,19 @@ class Renderer3D {
       case SELECT_ATTACHMENT: {
         const { hovered, selectAttachment } = this.attachmentsController
         if (hovered) {
-          selectAttachment({ object: hovered })
-          const { data: { screenPosition, title, content } } = hovered
-          if (screenPosition) {
-            this.objectController.look(screenPosition)
+          const selected = selectAttachment({ object: hovered })
+          if (selected) {
+            const { data: { screenPosition, title, content } } = hovered
+            if (screenPosition) {
+              this.objectController.look(screenPosition)
+            } else {
+              this.resetControls()
+            }
+            this.infoPanel.showPanel({ title, content })
           } else {
             this.resetControls()
+            this.infoPanel.hidePanel()
           }
-          this.infoPanel.showPanel({ title, content })
         }
         break;
       }
