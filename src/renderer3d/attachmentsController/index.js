@@ -22,8 +22,8 @@ class AttachmentsController {
       this.addSphere(attachment.position)
     })
 
-    this.hovered = []
-    this.selected = []
+    this.hovered = undefined
+    this.selected = undefined
 
     document.addEventListener("mousemove", ({ offsetX, offsetY }) => {
       this.intersectAttachments({
@@ -60,27 +60,36 @@ class AttachmentsController {
 
   intersectAttachments = ({ offsetX, offsetY, domElementWidth, domElementHeight }) => {
     try {
+      const { camera, attachments, selected } = this
       const vector = new THREE.Vector2((offsetX / domElementWidth) * 2-1, -(offsetY / domElementHeight) * 2 + 1);
-      const { camera, attachments } = this
       const raycaster = new THREE.Raycaster()
       raycaster.setFromCamera(vector, camera)
       const intersects = raycaster.intersectObjects(attachments.children)
-      this.setAllHoveredToDefaultMaterial()
+      this.setHoveredToDefault()
       if (intersects.length) {
         const [{ object }] = intersects
-        object.material = HOVERED_MATERIAL
-        this.hovered.push(object)
+        if (selected !== object) {
+          object.material = HOVERED_MATERIAL
+          this.hovered = object
+        }
       }
     } catch (e) {
       console.error(e)
     }
   }
 
-  setAllHoveredToDefaultMaterial = () => {
-    for (const object of this.hovered) {
-      object.material = DEFAULT_MATERIAL
+  setHoveredToDefault = () => {
+    if (this.hovered) {
+      this.hovered.material = DEFAULT_MATERIAL
+      this.hovered = undefined
     }
-    this.hovered = []
+  }
+
+  selectAttachment = ({ object }) => {
+    if (this.selected) this.selected.material = DEFAULT_MATERIAL
+    this.hovered = undefined
+    object.material = SELECTED_MATERIAL
+    this.selected = object
   }
 }
 

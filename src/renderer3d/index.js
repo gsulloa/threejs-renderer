@@ -3,6 +3,8 @@ import * as TWEEN from "@tweenjs/tween.js"
 import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController";
+const ADD_ATTACHMENT = "ADD_ATTACHMENT"
+const SELECT_ATTACHMENT = "SELECT_ATTACHMENT"
 class Renderer3D {
   constructor({
     modelUrl,
@@ -12,6 +14,10 @@ class Renderer3D {
     camera = {},
     ambientLight = {},
   }) {
+    this.state = {
+      click: SELECT_ATTACHMENT
+    }
+
     this.prepareEnvironment({ camera, ambientLight })
 
     this.loadModel({ initial, loading, url: modelUrl })
@@ -105,13 +111,28 @@ class Renderer3D {
 
   
   handleMouseClick = e => {
-    const position = this.objectController.getPositionInObject({
-      offsetX: e.offsetX,
-      offsetY: e.offsetY,
-      domElementHeight: this.renderer.domElement.height,
-      domElementWidth: this.renderer.domElement.width 
-    })
-    this.attachmentsController.addSphere(position)
+    switch (this.state.click) {
+      case ADD_ATTACHMENT: {
+        const position = this.objectController.getPositionInObject({
+          offsetX: e.offsetX,
+          offsetY: e.offsetY,
+          domElementHeight: this.renderer.domElement.height,
+          domElementWidth: this.renderer.domElement.width 
+        })
+        this.attachmentsController.addSphere(position)
+        break;
+      }
+      case SELECT_ATTACHMENT: {
+        const { hovered, selectAttachment } = this.attachmentsController
+        if (hovered) {
+          selectAttachment({ object: hovered })
+        }
+        break;
+      }
+      default:
+        console.error(`Unexpected case "${this.state.click}"`)
+        break;
+    }
   }
 
   /* Controls */
