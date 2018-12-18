@@ -10,13 +10,18 @@ const Overlay = styled.div`
 const Panel = styled.div`
   width: 100%;
   height: 100%;
-  background: red;
-  opacity: 0.8;
+  background: rgba(0,0,0,0.5);
   padding: 15px;
 `
 
-const Title = styled.h1``
-const Text = styled.p``
+const Title = styled.h1`
+  color: white;
+  font-family: sans-serif;
+`
+const Text = styled.p`
+  color: white;
+  font-family: sans-serif;
+`
 
 class InfoPanel extends PureComponent {
   state = {
