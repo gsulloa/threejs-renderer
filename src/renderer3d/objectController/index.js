@@ -220,13 +220,14 @@ class ObjectController {
       })
       .start()
   }
-  smoothRotateObjectTo = ({ newRotation: { x, y, z } }) => {
+  smoothRotateObjectTo = ({ newRotation: coords }) => {
     const rotationCords = new THREE.Vector3().copy(this.object.rotation)
-    const newX = useShortDistance(rotationCords.x, x)
-    const newY = useShortDistance(rotationCords.y, y)
-    const newZ = useShortDistance(rotationCords.z, z)
+    const shortDistanceCords = Object.entries(coords).reduce((newCoords, [coord, val]) => {
+      newCoords[coord] = useShortDistance(rotationCords[coord], val)
+      return newCoords
+    }, {})
     new TWEEN.Tween(rotationCords)
-      .to({ x: newX, y: newY, z: newZ }, 1000)
+      .to(shortDistanceCords, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onUpdate(vector => {
         this.object.rotation.setFromVector3(vector)
