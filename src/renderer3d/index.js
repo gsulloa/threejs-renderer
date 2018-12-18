@@ -65,6 +65,8 @@ class Renderer3D {
     this.attachmentsController = new AttachmentsController({
       model: this.object.children[0],
       attachments: this.attachments,
+      camera: this.camera,
+      domElement: this.renderer.domElement,
     })
 
     this.objectController = new ObjectController({
