@@ -1,6 +1,7 @@
 import * as THREE  from "three"
 import * as TWEEN from "@tweenjs/tween.js"
 import { toRadians } from "../utils/radiansDegreesConverter"
+import { useShortDistance } from "../utils/radiansNormalize";
 
 const CONTROL_OPTIONS = {
   DRAGGING: 1,
@@ -206,10 +207,10 @@ class ObjectController {
   }
 
   look = ({ position: newPosition, rotation: newRotation }) => {
-    this.moveCamera({ newPosition })
-    this.rotateObjectTo({ newRotation })
+    this.smoothMoveCamera({ newPosition })
+    this.smoothRotateObjectTo({ newRotation })
   }
-  moveCamera = ({ newPosition }) => {
+  smoothMoveCamera = ({ newPosition }) => {
     const positionCoords = new THREE.Vector3().copy(this.camera.position)
     new TWEEN.Tween(positionCoords)
       .to(newPosition, 1000)
@@ -219,10 +220,13 @@ class ObjectController {
       })
       .start()
   }
-  rotateObjectTo = ({ newRotation }) => {
+  smoothRotateObjectTo = ({ newRotation: { x, y, z } }) => {
     const rotationCords = new THREE.Vector3().copy(this.object.rotation)
+    const newX = useShortDistance(rotationCords.x, x)
+    const newY = useShortDistance(rotationCords.y, y)
+    const newZ = useShortDistance(rotationCords.z, z)
     new TWEEN.Tween(rotationCords)
-      .to(newRotation, 1000)
+      .to({ x: newX, y: newY, z: newZ }, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onUpdate(vector => {
         this.object.rotation.setFromVector3(vector)
@@ -236,7 +240,7 @@ class ObjectController {
   }
 
   updateInitial = ({ rotation, position }) => {
-    this.initial = { rotation, position}
+    this.initial = { rotation, position }
   }
 
   getPositionInObject = ({ offsetX, offsetY, domElementWidth, domElementHeight }) => {

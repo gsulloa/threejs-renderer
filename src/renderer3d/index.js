@@ -126,6 +126,12 @@ class Renderer3D {
         const { hovered, selectAttachment } = this.attachmentsController
         if (hovered) {
           selectAttachment({ object: hovered })
+          const { data: { screenPosition } } = hovered
+          if (screenPosition) {
+            this.objectController.look(screenPosition)
+          } else {
+            this.resetControls()
+          }
         }
         break;
       }
@@ -152,7 +158,6 @@ class Renderer3D {
   setCurrentAsInitial = () => {
     const { rotation, position } = this.getCurrentPosition()
     this.setNewInitialPosition({ rotation, position })
-    console.log(position, rotation)
   }
 
   
