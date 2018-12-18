@@ -2,6 +2,7 @@ import React, { Component, createRef } from 'react';
 
 import Loading from "./renderer3d/loading"
 import Renderer3D from "./renderer3d"
+import InfoPanel from './renderer3d/infoPanel';
  
 class App extends Component {
   state = {
@@ -11,6 +12,7 @@ class App extends Component {
     super(props)
     this.render3d = createRef()
     this.loading = createRef()
+    this.infoPanel = createRef()
     this.renderer = {}
   }
 
@@ -18,6 +20,7 @@ class App extends Component {
     this.renderer = new Renderer3D({
       modelUrl: this.state.url,
       loading: this.loading.current,
+      infoPanel: this.infoPanel.current,
       container: this.render3d.current,
       initial: {
         position: {
@@ -51,6 +54,7 @@ class App extends Component {
         </form>
         <div ref={this.render3d}>
           <Loading ref={this.loading}/>
+          <InfoPanel ref={this.infoPanel}/>
         </div>
         <button onClick={this.reset}>Reset</button>
         <button onClick={this.setCurrentAsInitial}>ChangeInitial</button>

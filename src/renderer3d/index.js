@@ -9,6 +9,7 @@ class Renderer3D {
   constructor({
     modelUrl,
     loading,
+    infoPanel,
     container,
     initial = {},
     camera = {},
@@ -17,6 +18,7 @@ class Renderer3D {
     this.state = {
       click: SELECT_ATTACHMENT
     }
+    this.infoPanel = infoPanel
 
     this.prepareEnvironment({ camera, ambientLight })
 
@@ -126,12 +128,13 @@ class Renderer3D {
         const { hovered, selectAttachment } = this.attachmentsController
         if (hovered) {
           selectAttachment({ object: hovered })
-          const { data: { screenPosition } } = hovered
+          const { data: { screenPosition, title, content } } = hovered
           if (screenPosition) {
             this.objectController.look(screenPosition)
           } else {
             this.resetControls()
           }
+          this.infoPanel.showPanel({ title, content })
         }
         break;
       }
