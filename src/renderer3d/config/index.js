@@ -12,6 +12,7 @@ export default {
       hovered: new MeshBasicMaterial({ color: "#33f" }),
       selected: new MeshBasicMaterial({ color: "#fff" }),
     },
+    scale: 5,
     set defaultColor(color) {
       this.color.default = color
       this.material.default = new MeshBasicMaterial({ color })

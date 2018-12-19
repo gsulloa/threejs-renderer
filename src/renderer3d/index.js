@@ -41,6 +41,11 @@ class Renderer3D {
         .addColor(Config.attachment, "selectedColor")
         .name("Selected")
         .listen()
+      attachmentsConfig
+        .add(Config.attachment, "scale", 1, 10, 1)
+        .name("Radius")
+        .listen()
+        .onChange(this.attachmentsController.updateScale)
       attachmentsConfig.open()
     })
 
@@ -133,7 +138,7 @@ class Renderer3D {
           domElementHeight: this.renderer.domElement.height,
           domElementWidth: this.renderer.domElement.width,
         })
-        this.attachmentsController.addSphere(position)
+        this.attachmentsController.addSphere({ position })
         break
       }
       case SELECT_ATTACHMENT: {

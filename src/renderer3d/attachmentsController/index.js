@@ -17,7 +17,7 @@ class AttachmentsController {
         data: {
           title: "Etiqueta 1",
           content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\n",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.",
           screenPosition: {
             rotation: {
               x: 1.7158242597099533,
@@ -271,10 +271,12 @@ class AttachmentsController {
     }
   }
   addSphere = ({ position, data }) => {
-    const radius = 5
+    const { scale, material } = Config.attachment
+    const radius = 1
     const segments = 32
     const geometry = new THREE.CircleGeometry(radius, segments, segments)
-    const sphere = new THREE.Mesh(geometry, Config.attachment.material.default)
+    const sphere = new THREE.Mesh(geometry, material.default)
+    sphere.scale.set(scale, scale, scale)
     sphere.data = data
     sphere.state = "default"
     this.addAttachment({ position, model: sphere })
@@ -335,6 +337,13 @@ class AttachmentsController {
   updateMaterials = () => {
     this.attachments.children.forEach(attachment => {
       attachment.material = Config.attachment.material[attachment.state]
+    })
+  }
+
+  updateScale = () => {
+    const { scale } = Config.attachment
+    this.attachments.children.forEach(attachment => {
+      attachment.scale.set(scale, scale, scale)
     })
   }
 }

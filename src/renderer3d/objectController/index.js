@@ -269,7 +269,6 @@ class ObjectController {
       const raycaster = new THREE.Raycaster()
       raycaster.setFromCamera(vector, camera)
       const intersects = raycaster.intersectObjects(model.children)
-
       if (intersects.length) {
         const [intersect] = intersects
         const { point, object } = intersect
