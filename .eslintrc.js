@@ -29,4 +29,9 @@ module.exports = {
     }],
     semi: [0, 'never']
   },
+  settings: {
+    react: {
+      version: "16.5.2",
+    }
+  }
 };
