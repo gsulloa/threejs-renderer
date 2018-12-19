@@ -46,6 +46,11 @@ class Renderer3D {
         .name("Radius")
         .listen()
         .onChange(this.attachmentsController.updateScale)
+      attachmentsConfig
+        .add(Config.attachment, "visibility")
+        .name("Visible")
+        .listen()
+        .onChange(this.attachmentsController.updateVisible)
       attachmentsConfig.open()
     })
 

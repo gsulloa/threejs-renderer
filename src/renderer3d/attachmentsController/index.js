@@ -346,6 +346,13 @@ class AttachmentsController {
       attachment.scale.set(scale, scale, scale)
     })
   }
+
+  updateVisible = () => {
+    const { visibility } = Config.attachment
+    this.attachments.children.forEach(attachment => {
+      attachment.visible = visibility
+    })
+  }
 }
 
 export default AttachmentsController
