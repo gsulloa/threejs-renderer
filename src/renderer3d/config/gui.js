@@ -20,10 +20,12 @@ class ConfigGui {
       .addColor(Config.attachment, "hoveredColor")
       .name("Hovered")
       .listen()
+      .onChange(attachmentsController.updateMaterials)
     attachmentsConfig
       .addColor(Config.attachment, "selectedColor")
       .name("Selected")
       .listen()
+      .onChange(attachmentsController.updateMaterials)
     attachmentsConfig
       .add(Config.attachment, "scale", 1, 10, 1)
       .name("Radius")
