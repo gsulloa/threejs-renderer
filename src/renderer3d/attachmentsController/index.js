@@ -276,6 +276,7 @@ class AttachmentsController {
     const geometry = new THREE.CircleGeometry(radius, segments, segments)
     const sphere = new THREE.Mesh(geometry, Config.attachment.material.default)
     sphere.data = data
+    sphere.state = "default"
     this.addAttachment({ position, model: sphere })
   }
 
@@ -300,6 +301,7 @@ class AttachmentsController {
         if (selected !== object)
           object.material = Config.attachment.material.hovered
         this.hovered = object
+        object.state = "hovered"
       }
     } catch (e) {
       devlogerror(e)
@@ -309,6 +311,7 @@ class AttachmentsController {
   setHoveredToDefault = () => {
     if (this.hovered && this.hovered !== this.selected) {
       this.hovered.material = Config.attachment.material.default
+      this.hovered.state = "default"
       this.hovered = undefined
     }
   }
@@ -319,12 +322,20 @@ class AttachmentsController {
     if (this.selected !== object) {
       this.hovered = undefined
       object.material = Config.attachment.material.selected
+      object.state = "selected"
       this.selected = object
       return true
     } else {
+      this.selected.state = "default"
       this.selected = undefined
       return false
     }
+  }
+
+  updateMaterials = () => {
+    this.attachments.children.forEach(attachment => {
+      attachment.material = Config.attachment.material[attachment.state]
+    })
   }
 }
 

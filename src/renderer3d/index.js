@@ -1,9 +1,11 @@
 import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js"
+import { GUI } from "dat.gui"
 import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController"
 import { devlogerror } from "./utils/log"
+import Config from "./config"
 const ADD_ATTACHMENT = "ADD_ATTACHMENT"
 const SELECT_ATTACHMENT = "SELECT_ATTACHMENT"
 class Renderer3D {
@@ -23,7 +25,24 @@ class Renderer3D {
 
     this.prepareEnvironment({ camera, ambientLight })
 
-    this.loadModel({ initial, loading, url: modelUrl })
+    this.loadModel({ initial, loading, url: modelUrl }).then(() => {
+      const gui = new GUI()
+      const attachmentsConfig = gui.addFolder("Attachments")
+      attachmentsConfig
+        .addColor(Config.attachment, "defaultColor")
+        .name("Default")
+        .listen()
+        .onChange(this.attachmentsController.updateMaterials)
+      attachmentsConfig
+        .addColor(Config.attachment, "hoveredColor")
+        .name("Hovered")
+        .listen()
+      attachmentsConfig
+        .addColor(Config.attachment, "selectedColor")
+        .name("Selected")
+        .listen()
+      attachmentsConfig.open()
+    })
 
     this.render({ container })
 
