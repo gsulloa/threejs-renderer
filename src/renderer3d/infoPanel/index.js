@@ -11,7 +11,9 @@ const Panel = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.5);
-  padding: 15px;
+  padding: 0 15px;
+  overflow-y: auto;
+  position: relative;
 `
 
 const Title = styled.h1`
@@ -21,6 +23,7 @@ const Title = styled.h1`
 const Text = styled.p`
   color: white;
   font-family: sans-serif;
+  white-space: pre-line;
 `
 
 class InfoPanel extends PureComponent {
@@ -44,7 +47,6 @@ class InfoPanel extends PureComponent {
     }))
   }
   render() {
-    console.log(this.state)
     const { show, title, content } = this.state
     return (
       <Overlay hidden={!show}>
