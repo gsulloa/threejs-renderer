@@ -1,5 +1,7 @@
 import React, { PureComponent } from "react"
+import PropTypes from "prop-types"
 import styled from "styled-components"
+import { devlogerror } from "../utils/log"
 
 const Overlay = styled.div`
   position: absolute;
@@ -32,6 +34,9 @@ const Title = styled.h2`
 `
 
 class Loading extends PureComponent {
+  static propTypes = {
+    last: PropTypes.bool,
+  }
   static defaultProps = {
     last: true,
   }
@@ -70,7 +75,7 @@ class Loading extends PureComponent {
   }
 
   onError = function(e) {
-    console.error(e)
+    devlogerror(e)
     this.setState({
       backgroundColor: "red",
       title: "Error!",

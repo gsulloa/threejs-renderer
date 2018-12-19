@@ -3,6 +3,7 @@ import * as TWEEN from "@tweenjs/tween.js"
 import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController"
+import { devlogerror } from "./utils/log"
 const ADD_ATTACHMENT = "ADD_ATTACHMENT"
 const SELECT_ATTACHMENT = "SELECT_ATTACHMENT"
 class Renderer3D {
@@ -138,7 +139,7 @@ class Renderer3D {
         break
       }
       default:
-        console.error(`Unexpected case "${this.state.click}"`)
+        devlogerror(`Unexpected case "${this.state.click}"`)
         break
     }
   }

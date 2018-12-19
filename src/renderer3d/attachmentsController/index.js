@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { devlogerror } from "../utils/log"
 
 const DEFAULT_MATERIAL = new THREE.MeshBasicMaterial({ color: "#fae" })
 const HOVERED_MATERIAL = new THREE.MeshBasicMaterial({ color: "#33f" })
@@ -303,7 +304,7 @@ class AttachmentsController {
         this.hovered = object
       }
     } catch (e) {
-      console.error(e)
+      devlogerror(e)
     }
   }
 

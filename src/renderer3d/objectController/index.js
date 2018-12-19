@@ -2,6 +2,7 @@ import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js"
 import { toRadians } from "../utils/radiansDegreesConverter"
 import { useShortDistance } from "../utils/radiansNormalize"
+import { devlogerror } from "../utils/log"
 
 const CONTROL_OPTIONS = {
   DRAGGING: 1,
@@ -275,7 +276,7 @@ class ObjectController {
         return object.worldToLocal(point)
       }
     } catch (e) {
-      console.error(e)
+      devlogerror(e)
     }
   }
 }
