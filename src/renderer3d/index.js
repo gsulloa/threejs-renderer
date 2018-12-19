@@ -1,8 +1,9 @@
-import * as THREE  from "three"
+import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js"
 import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
-import AttachmentsController from "./attachmentsController";
+import AttachmentsController from "./attachmentsController"
+import { devlogerror } from "./utils/log"
 const ADD_ATTACHMENT = "ADD_ATTACHMENT"
 const SELECT_ATTACHMENT = "SELECT_ATTACHMENT"
 class Renderer3D {
@@ -16,7 +17,7 @@ class Renderer3D {
     ambientLight = {},
   }) {
     this.state = {
-      click: SELECT_ATTACHMENT
+      click: SELECT_ATTACHMENT,
     }
     this.infoPanel = infoPanel
 
@@ -26,9 +27,7 @@ class Renderer3D {
 
     this.render({ container })
 
-
-    
-    window.addEventListener( 'resize', this.onWindowResize, false )
+    window.addEventListener("resize", this.onWindowResize, false)
   }
 
   prepareEnvironment = ({
@@ -37,12 +36,9 @@ class Renderer3D {
       aspect = window.innerWidth / window.innerHeight,
       near = 0.1,
       far = 2000,
-      positionZ = 600
+      positionZ = 600,
     } = {},
-    ambientLight: {
-      color = 0xffffff,
-      intensity = 0.8
-    } = {}
+    ambientLight: { color = 0xffffff, intensity = 0.8 } = {},
   }) => {
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
     this.camera.position.z = positionZ
@@ -66,7 +62,7 @@ class Renderer3D {
     const object = await new ModelLoader({ loading }).load({ url })
     this.object = object
     object.position.y = 0
-    
+
     this.scene.add(object)
     this.attachments = new THREE.Group()
     this.scene.add(this.attachments)
@@ -86,32 +82,29 @@ class Renderer3D {
         position,
         rotation,
       },
-      attachments: this.attachments
+      attachments: this.attachments,
     })
     this.renderer.domElement.addEventListener("click", this.handleMouseClick)
   }
 
   render = ({ container }) => {
-    this.renderer.setPixelRatio( window.devicePixelRatio )
-    this.renderer.setSize( window.innerWidth, window.innerHeight )
-    container.appendChild( this.renderer.domElement )
-    
+    this.renderer.setPixelRatio(window.devicePixelRatio)
+    this.renderer.setSize(window.innerWidth, window.innerHeight)
+    container.appendChild(this.renderer.domElement)
   }
 
-  onWindowResize = () =>  {
+  onWindowResize = () => {
     this.windowHalfX = window.innerWidth / 2
     this.windowHalfY = window.innerHeight / 2
     this.camera.updateProjectionMatrix()
-    
   }
-  
-  animate = (time) => {
-    requestAnimationFrame( this.animate )
-    this.renderer.render( this.scene, this.camera )   
+
+  animate = time => {
+    requestAnimationFrame(this.animate)
+    this.renderer.render(this.scene, this.camera)
     TWEEN.update(time)
   }
 
-  
   handleMouseClick = e => {
     switch (this.state.click) {
       case ADD_ATTACHMENT: {
@@ -119,17 +112,19 @@ class Renderer3D {
           offsetX: e.offsetX,
           offsetY: e.offsetY,
           domElementHeight: this.renderer.domElement.height,
-          domElementWidth: this.renderer.domElement.width 
+          domElementWidth: this.renderer.domElement.width,
         })
         this.attachmentsController.addSphere(position)
-        break;
+        break
       }
       case SELECT_ATTACHMENT: {
         const { hovered, selectAttachment } = this.attachmentsController
         if (hovered) {
           const selected = selectAttachment({ object: hovered })
           if (selected) {
-            const { data: { screenPosition, title, content } } = hovered
+            const {
+              data: { screenPosition, title, content },
+            } = hovered
             if (screenPosition) {
               this.objectController.look(screenPosition)
             } else {
@@ -141,11 +136,11 @@ class Renderer3D {
             this.infoPanel.hidePanel()
           }
         }
-        break;
+        break
       }
       default:
-        console.error(`Unexpected case "${this.state.click}"`)
-        break;
+        devlogerror(`Unexpected case "${this.state.click}"`)
+        break
     }
   }
 
@@ -167,8 +162,6 @@ class Renderer3D {
     const { rotation, position } = this.getCurrentPosition()
     this.setNewInitialPosition({ rotation, position })
   }
-
-  
 }
 
 export default Renderer3D

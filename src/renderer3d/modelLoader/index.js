@@ -13,7 +13,7 @@ class ModelLoader {
     const files = await this.getFiles({ url })
     const groupedFiles = files.reduce((all, file) => {
       if (file.ext !== "mtl" && file.ext !== "obj") {
-        all.textureFiles = { ...all.textureFiles, [file.name]: file.content}
+        all.textureFiles = { ...all.textureFiles, [file.name]: file.content }
       } else {
         all[file.ext] = file.content
       }
@@ -35,31 +35,35 @@ class ModelLoader {
     const { files } = await new JSZip().loadAsync(blob, { type: "blob" })
 
     const readedFiles = await Promise.all(
-      Object.entries(files).map(([name, zipObject]) => this.readContent(name, zipObject)
-    ))
+      Object.entries(files).map(([name, zipObject]) =>
+        this.readContent(name, zipObject)
+      )
+    )
 
     return readedFiles
   }
-  readContent = async (name, file)  =>{
+  readContent = async (name, file) => {
     const doti = name.lastIndexOf(".")
     if (doti === -1) throw new Error(`file ${name} without extension`)
     const ext = name.substring(doti + 1)
     return {
       name,
       ext,
-      content: await file.async(ext === "mtl" || ext === "obj" ? "text" : "uint8array")
+      content: await file.async(
+        ext === "mtl" || ext === "obj" ? "text" : "uint8array"
+      ),
     }
   }
-  
+
   loadMTL = ({ textureFiles, mtl }) => {
-    const loadingManager = new LoadingManager();
+    const loadingManager = new LoadingManager()
     loadingManager.setURLModifier(url => {
-      const blob = new Blob([textureFiles[url].buffer]);
-      const NewUrl = URL.createObjectURL(blob);
+      const blob = new Blob([textureFiles[url].buffer])
+      const NewUrl = URL.createObjectURL(blob)
       return NewUrl
-    });
-    const mtlLoader = new MTLLoader(loadingManager);
-    const materials = mtlLoader.parse(mtl);
+    })
+    const mtlLoader = new MTLLoader(loadingManager)
+    const materials = mtlLoader.parse(mtl)
     materials.preload()
     return materials
   }
@@ -73,10 +77,10 @@ class ModelLoader {
     const { max, min } = new Box3().setFromObject(object)
     const middleY = (max.y - min.y) / 2
     const middleZ = (max.z - min.z) / 2
-    const pivot = new Object3D();
+    const pivot = new Object3D()
     object.position.y = middleY
     object.position.z = -middleZ
-    pivot.add( object );
+    pivot.add(object)
     return pivot
   }
 }
