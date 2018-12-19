@@ -11,7 +11,7 @@ class AttachmentsController {
       camera,
       attachments,
       initialAttachments = [
-        { position: { x: 8.622963458826547, y: -15.567126364801993, z: 43.52801210469018 }, data: { title: "Etiqueta 1", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.", } },//screenPosition: {"rotation":{"x":1.7158242597099533,"y":0.061212127405937476,"z":-2.821771456199733},"position":{"x":5,"y":40,"z":290} }}},
+        { position: { x: 8.622963458826547, y: -15.567126364801993, z: 43.52801210469018 }, data: { title: "Etiqueta 1", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\n", screenPosition: {"rotation":{"x":1.7158242597099533,"y":0.061212127405937476,"z":-2.821771456199733},"position":{"x":5,"y":40,"z":290} }}},
         { position: { x: 21.519644123023504, y: -12.001333004591629, z: 96.02675761908205 }, data: { title: "Etiqueta 2", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.", screenPosition: {"rotation":{"x":1.5699221202943565,"y":-0.007921343880529572,"z":-3.0901915692326813},"position":{"x":-5,"y":-1,"z":290} }}},
         { position: { x: 71.97984122063795, y: -9.378723195423731, z: 146.55455094228932 }, data: { title: "Etiqueta 3", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.", screenPosition: {"rotation":{"x":1.5699221202943565,"y":-0.007921343880529572,"z":-3.0901915692326813},"position":{"x":-23,"y":-7,"z":290} }}},
         { position: { x: 43.612832314551085, y: 1.79033769370119, z: 105.70141537364418 }, data: { title: "Etiqueta 4", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et." } },
@@ -80,10 +80,8 @@ class AttachmentsController {
       this.setHoveredToDefault()
       if (intersects.length) {
         const [{ object }] = intersects
-        if (selected !== object) {
-          object.material = HOVERED_MATERIAL
-          this.hovered = object
-        }
+        if (selected !== object) object.material = HOVERED_MATERIAL
+        this.hovered = object
       }
     } catch (e) {
       console.error(e)
@@ -91,7 +89,7 @@ class AttachmentsController {
   }
 
   setHoveredToDefault = () => {
-    if (this.hovered) {
+    if (this.hovered && this.hovered !== this.selected) {
       this.hovered.material = DEFAULT_MATERIAL
       this.hovered = undefined
     }
@@ -99,9 +97,15 @@ class AttachmentsController {
 
   selectAttachment = ({ object }) => {
     if (this.selected) this.selected.material = DEFAULT_MATERIAL
-    this.hovered = undefined
-    object.material = SELECTED_MATERIAL
-    this.selected = object
+    if (this.selected !== object) {
+      this.hovered = undefined
+      object.material = SELECTED_MATERIAL
+      this.selected = object
+      return true
+    } else {
+      this.selected = undefined
+      return false
+    }
   }
 }
 
