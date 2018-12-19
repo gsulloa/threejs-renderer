@@ -1,9 +1,6 @@
 import * as THREE from "three"
+import Config from "../config"
 import { devlogerror } from "../utils/log"
-
-const DEFAULT_MATERIAL = new THREE.MeshBasicMaterial({ color: "#fae" })
-const HOVERED_MATERIAL = new THREE.MeshBasicMaterial({ color: "#33f" })
-const SELECTED_MATERIAL = new THREE.MeshBasicMaterial({ color: "#fff" })
 
 class AttachmentsController {
   constructor({
@@ -277,7 +274,7 @@ class AttachmentsController {
     const radius = 5
     const segments = 32
     const geometry = new THREE.CircleGeometry(radius, segments, segments)
-    const sphere = new THREE.Mesh(geometry, DEFAULT_MATERIAL)
+    const sphere = new THREE.Mesh(geometry, Config.attachment.material.default)
     sphere.data = data
     this.addAttachment({ position, model: sphere })
   }
@@ -300,7 +297,8 @@ class AttachmentsController {
       this.setHoveredToDefault()
       if (intersects.length) {
         const [{ object }] = intersects
-        if (selected !== object) object.material = HOVERED_MATERIAL
+        if (selected !== object)
+          object.material = Config.attachment.material.hovered
         this.hovered = object
       }
     } catch (e) {
@@ -310,16 +308,17 @@ class AttachmentsController {
 
   setHoveredToDefault = () => {
     if (this.hovered && this.hovered !== this.selected) {
-      this.hovered.material = DEFAULT_MATERIAL
+      this.hovered.material = Config.attachment.material.default
       this.hovered = undefined
     }
   }
 
   selectAttachment = ({ object }) => {
-    if (this.selected) this.selected.material = DEFAULT_MATERIAL
+    if (this.selected)
+      this.selected.material = Config.attachment.material.default
     if (this.selected !== object) {
       this.hovered = undefined
-      object.material = SELECTED_MATERIAL
+      object.material = Config.attachment.material.selected
       this.selected = object
       return true
     } else {
