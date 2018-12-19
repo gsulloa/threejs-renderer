@@ -1,7 +1,7 @@
-import * as THREE  from "three"
+import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js"
 import { toRadians } from "../utils/radiansDegreesConverter"
-import { useShortDistance } from "../utils/radiansNormalize";
+import { useShortDistance } from "../utils/radiansNormalize"
 
 const CONTROL_OPTIONS = {
   DRAGGING: 1,
@@ -37,7 +37,7 @@ class ObjectController {
       position: {
         x: position.x,
         y: position.y,
-        z: position.z
+        z: position.z,
       },
     }
   }
@@ -47,13 +47,9 @@ class ObjectController {
     object,
     scene,
     domElement,
-    initial: {
-      rotation,
-      position,
-    } = {},
+    initial: { rotation, position } = {},
     attachments,
   } = {}) {
-    
     this.mouseEventListener({ domElement, camera })
     this.touchEventListener({ domElement, camera })
 
@@ -71,7 +67,9 @@ class ObjectController {
   mouseEventListener = ({ domElement, camera }) => {
     domElement.addEventListener("mousedown", this.handleMouseDown)
     domElement.addEventListener("mousemove", this.handleMouseMove)
-    domElement.addEventListener("mouseup", () => { this.controlOption = undefined })
+    domElement.addEventListener("mouseup", () => {
+      this.controlOption = undefined
+    })
     domElement.addEventListener("mousewheel", e => {
       e.preventDefault()
       this.zoomObject({ value: e.deltaY, camera })
@@ -83,18 +81,17 @@ class ObjectController {
     domElement.addEventListener("touchmove", this.handleTouchMove)
   }
 
-
   deltaMove({ offsetX: currentX, offsetY: currentY }) {
     const { x: previousX, y: previousY } = this.previousMousePosition
     return {
       x: currentX - previousX,
-      y: currentY - previousY
+      y: currentY - previousY,
     }
   }
 
   /* MOUSE HANDLERS */
 
-  handleMouseDown =  (e) => {
+  handleMouseDown = e => {
     switch (e.button) {
       case MOUSE_CLICK.LEFT_CLICK:
         this.controlOption = CONTROL_OPTIONS.DRAGGING
@@ -103,7 +100,7 @@ class ObjectController {
         this.controlOption = CONTROL_OPTIONS.MOVING
         break
       default:
-        break;
+        break
     }
   }
 
@@ -126,8 +123,8 @@ class ObjectController {
     }
     this.previousMousePosition = {
       x: e.offsetX,
-      y: e.offsetY
-    };
+      y: e.offsetY,
+    }
   }
 
   /* TOUCH HANDLERS */
@@ -143,7 +140,7 @@ class ObjectController {
         this.controlOption = CONTROL_OPTIONS.MOVING
         break
       default:
-        break;
+        break
     }
   }
 
@@ -168,35 +165,44 @@ class ObjectController {
         this.previousMousePosition = { x: touch.clientX, y: touch.clientY }
         break
       }
-      default: 
+      default:
         break
     }
   }
 
   rotateObject = ({ deltaMove, object, delta = 0.25 } = {}) => {
-    const deltaRotationQuaternion = new THREE.Quaternion()
-      .setFromEuler(new THREE.Euler(
-          toRadians(deltaMove.y * delta),
-          toRadians(deltaMove.x * delta),
-          0,
-          'XYZ'
-      ));
-    object.quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion);
+    const deltaRotationQuaternion = new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        toRadians(deltaMove.y * delta),
+        toRadians(deltaMove.x * delta),
+        0,
+        "XYZ"
+      )
+    )
+    object.quaternion.multiplyQuaternions(
+      deltaRotationQuaternion,
+      object.quaternion
+    )
     this.uptadeAttachmentsPosition()
   }
   uptadeAttachmentsPosition = () => {
-    const { object: { children: [{ children: [model] }]} } = this
-    const positions = this.attachments
-      .children
-      .map(attachment => {
-        return model.localToWorld(
-          new THREE.Vector3().copy(attachment.reference.position)
-        )
-      })
-      this.attachments.children.forEach((attachment, i) => {
-        attachment.position.copy(positions[i])
-      })
-
+    const {
+      object: {
+        children: [
+          {
+            children: [model],
+          },
+        ],
+      },
+    } = this
+    const positions = this.attachments.children.map(attachment => {
+      return model.localToWorld(
+        new THREE.Vector3().copy(attachment.reference.position)
+      )
+    })
+    this.attachments.children.forEach((attachment, i) => {
+      attachment.position.copy(positions[i])
+    })
   }
   moveCamera({ deltaMove, camera }) {
     camera.position.x -= deltaMove.x
@@ -222,10 +228,13 @@ class ObjectController {
   }
   smoothRotateObjectTo = ({ newRotation: coords }) => {
     const rotationCords = new THREE.Vector3().copy(this.object.rotation)
-    const shortDistanceCords = Object.entries(coords).reduce((newCoords, [coord, val]) => {
-      newCoords[coord] = useShortDistance(rotationCords[coord], val)
-      return newCoords
-    }, {})
+    const shortDistanceCords = Object.entries(coords).reduce(
+      (newCoords, [coord, val]) => {
+        newCoords[coord] = useShortDistance(rotationCords[coord], val)
+        return newCoords
+      },
+      {}
+    )
     new TWEEN.Tween(rotationCords)
       .to(shortDistanceCords, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
@@ -244,14 +253,22 @@ class ObjectController {
     this.initial = { rotation, position }
   }
 
-  getPositionInObject = ({ offsetX, offsetY, domElementWidth, domElementHeight }) => {
+  getPositionInObject = ({
+    offsetX,
+    offsetY,
+    domElementWidth,
+    domElementHeight,
+  }) => {
     try {
-      const vector = new THREE.Vector2((offsetX / domElementWidth) * 2-1, -(offsetY / domElementHeight) * 2 + 1);
+      const vector = new THREE.Vector2(
+        (offsetX / domElementWidth) * 2 - 1,
+        -(offsetY / domElementHeight) * 2 + 1
+      )
       const { camera, model } = this
       const raycaster = new THREE.Raycaster()
       raycaster.setFromCamera(vector, camera)
       const intersects = raycaster.intersectObjects(model.children)
-      
+
       if (intersects.length) {
         const [intersect] = intersects
         const { point, object } = intersect

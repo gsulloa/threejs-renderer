@@ -8,7 +8,7 @@ const Overlay = styled.div`
   justify-content: center;
   align-items: center;
   flex-flow: column nowrap;
-  display: flex
+  display: flex;
 `
 const LoadingBar = styled.div`
   width: 25em;
@@ -22,8 +22,9 @@ const LoadingBar = styled.div`
 const ProgressBar = styled.span`
   height: inherit;
   border-radius: inherit;
-  width: ${props => props.width ? props.width : "1%"}
-  background-color: ${props => props.backgroundColor ? props.backgroundColor : "#75b800"}
+  width: ${props => (props.width ? props.width : "1%")}
+  background-color: ${props =>
+    props.backgroundColor ? props.backgroundColor : "#75b800"}
 `
 
 const Title = styled.h2`
@@ -36,7 +37,7 @@ class Loading extends PureComponent {
   }
   state = {
     percentComplete: 1,
-    backgroundColor: '#75b800',
+    backgroundColor: "#75b800",
     showLoading: true,
   }
   constructor(props) {
@@ -45,41 +46,40 @@ class Loading extends PureComponent {
   }
   animateBar = () => {
     const { percentComplete } = this.state
-    if ( percentComplete >= 100 ) {
+    if (percentComplete >= 100) {
       this.setState({
         percentComplete: 100,
-        backgroundColor: 'blue',
+        backgroundColor: "blue",
       })
     }
     this.frameID = requestAnimationFrame(this.animateBar)
-
   }
 
   onStart = ({ title = "Downloading..." } = {}) => {
     this.setState({ title })
-    if (this.frameID !== null) return;
-    this.animateBar();
-  };
+    if (this.frameID !== null) return
+    this.animateBar()
+  }
 
-  onLoad = function ( ) {
+  onLoad = function() {
     this.setState({ percentComplete: 0 })
     if (this.props.last) {
       this.setState({ showLoading: false })
-      cancelAnimationFrame(this.frameID);
+      cancelAnimationFrame(this.frameID)
     }
-  };
-  
-  onError = function ( e ) { 
-    console.error( e ); 
+  }
+
+  onError = function(e) {
+    console.error(e)
     this.setState({
-      backgroundColor: 'red',
-      title: "Error!"
+      backgroundColor: "red",
+      title: "Error!",
     })
   }
 
   onProgress = ({ loaded, total }) => {
     this.setState({
-      percentComplete: (loaded / total) * 100
+      percentComplete: (loaded / total) * 100,
     })
   }
 
@@ -90,7 +90,10 @@ class Loading extends PureComponent {
       <Overlay>
         <Title>{title}</Title>
         <LoadingBar>
-          <ProgressBar width={`${percentComplete}%`} backgroundColor={backgroundColor}/>
+          <ProgressBar
+            width={`${percentComplete}%`}
+            backgroundColor={backgroundColor}
+          />
         </LoadingBar>
       </Overlay>
     )
