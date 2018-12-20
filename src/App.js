@@ -3,6 +3,7 @@ import React, { Component, createRef } from "react"
 import Loading from "./renderer3d/loading"
 import Renderer3D from "./renderer3d"
 import InfoPanel from "./renderer3d/infoPanel"
+import ConfigGui from "./renderer3d/config/gui"
 
 class App extends Component {
   state = {
@@ -13,6 +14,7 @@ class App extends Component {
     this.render3d = createRef()
     this.loading = createRef()
     this.infoPanel = createRef()
+    this.configGui = createRef()
     this.renderer = {}
   }
 
@@ -22,6 +24,7 @@ class App extends Component {
       loading: this.loading.current,
       infoPanel: this.infoPanel.current,
       container: this.render3d.current,
+      configGui: this.configGui.current,
       initial: {
         position: {
           x: 17,
@@ -62,6 +65,7 @@ class App extends Component {
         <div ref={this.render3d}>
           <Loading ref={this.loading} />
           <InfoPanel ref={this.infoPanel} />
+          <ConfigGui ref={this.configGui} />
         </div>
         <button onClick={this.reset}>Reset</button>
         <button onClick={this.setCurrentAsInitial}>ChangeInitial</button>

@@ -2,24 +2,8 @@ import React, { PureComponent } from "react"
 import PropTypes from "prop-types"
 import styled from "styled-components"
 import { devlogerror } from "../utils/log"
-
-const Overlay = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  flex-flow: column nowrap;
-  display: flex;
-`
-const LoadingBar = styled.div`
-  width: 25em;
-  height: 1em;
-  border-radius: 0.25em;
-  background-color: black;
-  border: 1px solid grey;
-  display: inline-flex;
-`
+import { CenteredOverlay, LoadingBar } from "../components/containers"
+import { SubTitle } from "../components/text"
 
 const ProgressBar = styled.span`
   height: inherit;
@@ -27,10 +11,6 @@ const ProgressBar = styled.span`
   width: ${props => (props.width ? props.width : "1%")}
   background-color: ${props =>
     props.backgroundColor ? props.backgroundColor : "#75b800"}
-`
-
-const Title = styled.h2`
-  color: #fff;
 `
 
 class Loading extends PureComponent {
@@ -92,15 +72,15 @@ class Loading extends PureComponent {
     const { percentComplete, showLoading, backgroundColor, title } = this.state
     if (!showLoading) return null
     return (
-      <Overlay>
-        <Title>{title}</Title>
+      <CenteredOverlay>
+        <SubTitle>{title}</SubTitle>
         <LoadingBar>
           <ProgressBar
             width={`${percentComplete}%`}
             backgroundColor={backgroundColor}
           />
         </LoadingBar>
-      </Overlay>
+      </CenteredOverlay>
     )
   }
 }

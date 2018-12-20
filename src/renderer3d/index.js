@@ -4,26 +4,28 @@ import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController"
 import { devlogerror } from "./utils/log"
-const ADD_ATTACHMENT = "ADD_ATTACHMENT"
-const SELECT_ATTACHMENT = "SELECT_ATTACHMENT"
+import config from "./config";
 class Renderer3D {
   constructor({
     modelUrl,
     loading,
     infoPanel,
+    configGui,
     container,
     initial = {},
     camera = {},
     ambientLight = {},
   }) {
-    this.state = {
-      click: SELECT_ATTACHMENT,
-    }
     this.infoPanel = infoPanel
 
     this.prepareEnvironment({ camera, ambientLight })
 
-    this.loadModel({ initial, loading, url: modelUrl })
+    this.loadModel({ initial, loading, url: modelUrl }).then(() => {
+      if (!configGui) return
+      configGui.addAttachmentConfig({
+        attachmentsController: this.attachmentsController,
+      })
+    })
 
     this.render({ container })
 
@@ -106,18 +108,18 @@ class Renderer3D {
   }
 
   handleMouseClick = e => {
-    switch (this.state.click) {
-      case ADD_ATTACHMENT: {
+    switch (config.object.onMouseSelect) {
+      case "add": {
         const position = this.objectController.getPositionInObject({
           offsetX: e.offsetX,
           offsetY: e.offsetY,
           domElementHeight: this.renderer.domElement.height,
           domElementWidth: this.renderer.domElement.width,
         })
-        this.attachmentsController.addSphere(position)
+        this.attachmentsController.addSphere({ position })
         break
       }
-      case SELECT_ATTACHMENT: {
+      case "select": {
         const { hovered, selectAttachment } = this.attachmentsController
         if (hovered) {
           const selected = selectAttachment({ object: hovered })

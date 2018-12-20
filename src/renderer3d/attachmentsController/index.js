@@ -1,9 +1,6 @@
 import * as THREE from "three"
+import Config from "../config"
 import { devlogerror } from "../utils/log"
-
-const DEFAULT_MATERIAL = new THREE.MeshBasicMaterial({ color: "#fae" })
-const HOVERED_MATERIAL = new THREE.MeshBasicMaterial({ color: "#33f" })
-const SELECTED_MATERIAL = new THREE.MeshBasicMaterial({ color: "#fff" })
 
 class AttachmentsController {
   constructor({
@@ -20,7 +17,7 @@ class AttachmentsController {
         data: {
           title: "Etiqueta 1",
           content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.\n",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.",
           screenPosition: {
             rotation: {
               x: 1.7158242597099533,
@@ -274,11 +271,14 @@ class AttachmentsController {
     }
   }
   addSphere = ({ position, data }) => {
-    const radius = 5
+    const { scale, material } = Config.attachment
+    const radius = 1
     const segments = 32
     const geometry = new THREE.CircleGeometry(radius, segments, segments)
-    const sphere = new THREE.Mesh(geometry, DEFAULT_MATERIAL)
+    const sphere = new THREE.Mesh(geometry, material.default)
+    sphere.scale.set(scale, scale, scale)
     sphere.data = data
+    sphere.state = "default"
     this.addAttachment({ position, model: sphere })
   }
 
@@ -300,8 +300,10 @@ class AttachmentsController {
       this.setHoveredToDefault()
       if (intersects.length) {
         const [{ object }] = intersects
-        if (selected !== object) object.material = HOVERED_MATERIAL
+        if (selected !== object)
+          object.material = Config.attachment.material.hovered
         this.hovered = object
+        object.state = "hovered"
       }
     } catch (e) {
       devlogerror(e)
@@ -310,22 +312,46 @@ class AttachmentsController {
 
   setHoveredToDefault = () => {
     if (this.hovered && this.hovered !== this.selected) {
-      this.hovered.material = DEFAULT_MATERIAL
+      this.hovered.material = Config.attachment.material.default
+      this.hovered.state = "default"
       this.hovered = undefined
     }
   }
 
   selectAttachment = ({ object }) => {
-    if (this.selected) this.selected.material = DEFAULT_MATERIAL
+    if (this.selected)
+      this.selected.material = Config.attachment.material.default
     if (this.selected !== object) {
       this.hovered = undefined
-      object.material = SELECTED_MATERIAL
+      object.material = Config.attachment.material.selected
+      object.state = "selected"
       this.selected = object
       return true
     } else {
+      this.selected.state = "default"
       this.selected = undefined
       return false
     }
+  }
+
+  updateMaterials = () => {
+    this.attachments.children.forEach(attachment => {
+      attachment.material = Config.attachment.material[attachment.state]
+    })
+  }
+
+  updateScale = () => {
+    const { scale } = Config.attachment
+    this.attachments.children.forEach(attachment => {
+      attachment.scale.set(scale, scale, scale)
+    })
+  }
+
+  updateVisible = () => {
+    const { visibility } = Config.attachment
+    this.attachments.children.forEach(attachment => {
+      attachment.visible = visibility
+    })
   }
 }
 
