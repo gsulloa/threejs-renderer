@@ -4,8 +4,7 @@ import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController"
 import { devlogerror } from "./utils/log"
-const ADD_ATTACHMENT = "ADD_ATTACHMENT"
-const SELECT_ATTACHMENT = "SELECT_ATTACHMENT"
+import config from "./config";
 class Renderer3D {
   constructor({
     modelUrl,
@@ -17,9 +16,6 @@ class Renderer3D {
     camera = {},
     ambientLight = {},
   }) {
-    this.state = {
-      click: SELECT_ATTACHMENT,
-    }
     this.infoPanel = infoPanel
 
     this.prepareEnvironment({ camera, ambientLight })
@@ -112,8 +108,8 @@ class Renderer3D {
   }
 
   handleMouseClick = e => {
-    switch (this.state.click) {
-      case ADD_ATTACHMENT: {
+    switch (config.object.onMouseSelect) {
+      case "add": {
         const position = this.objectController.getPositionInObject({
           offsetX: e.offsetX,
           offsetY: e.offsetY,
@@ -123,7 +119,7 @@ class Renderer3D {
         this.attachmentsController.addSphere({ position })
         break
       }
-      case SELECT_ATTACHMENT: {
+      case "select": {
         const { hovered, selectAttachment } = this.attachmentsController
         if (hovered) {
           const selected = selectAttachment({ object: hovered })

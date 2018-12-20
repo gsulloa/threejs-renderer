@@ -3,10 +3,11 @@ import * as TWEEN from "@tweenjs/tween.js"
 import { toRadians } from "../utils/radiansDegreesConverter"
 import { useShortDistance } from "../utils/radiansNormalize"
 import { devlogerror } from "../utils/log"
+import Config from "../config";
 
 const CONTROL_OPTIONS = {
-  DRAGGING: 1,
-  MOVING: 2,
+  LEFT_CLICK: 1,
+  MIDDLE_CLICK: 2,
 }
 
 const MOUSE_CLICK = {
@@ -95,10 +96,10 @@ class ObjectController {
   handleMouseDown = e => {
     switch (e.button) {
       case MOUSE_CLICK.LEFT_CLICK:
-        this.controlOption = CONTROL_OPTIONS.DRAGGING
+        this.controlOption = CONTROL_OPTIONS.LEFT_CLICK
         break
       case MOUSE_CLICK.MIDDLE_CLICK:
-        this.controlOption = CONTROL_OPTIONS.MOVING
+        this.controlOption = CONTROL_OPTIONS.MIDDLE_CLICK
         break
       default:
         break
@@ -110,11 +111,16 @@ class ObjectController {
       const deltaMove = this.deltaMove(e)
       const { object, camera, spheres } = this
       switch (this.controlOption) {
-        case CONTROL_OPTIONS.DRAGGING: {
-          this.rotateObject({ deltaMove, object, spheres })
+        case CONTROL_OPTIONS.LEFT_CLICK: {
+          this[Config.object.onMouseMove]({
+            deltaMove,
+            object,
+            spheres,
+            camera,
+          })
           break
         }
-        case CONTROL_OPTIONS.MOVING: {
+        case CONTROL_OPTIONS.MIDDLE_CLICK: {
           this.moveCamera({ deltaMove, camera })
           break
         }

@@ -36,4 +36,26 @@ export default {
       return this.color.selected
     },
   },
+  object: {
+    onMouseMoveVal: "rotateObject",
+    get onMouseMove() {
+      return this.onMouseMoveVal
+    },
+    set onMouseMove(val) {
+      const options = ["rotateObject", "moveCamera"]
+      if (options.includes(val)) {
+        this.onMouseMoveVal = val
+      }
+    },
+    onMouseSelectVal: "select",
+    get onMouseSelect() {
+      return this.onMouseSelectVal
+    },
+    set onMouseSelect(val) {
+      const options = ["select", "add"]
+      if (options.includes(val)) {
+        this.onMouseSelectVal = val
+      }
+    },
+  },
 }
