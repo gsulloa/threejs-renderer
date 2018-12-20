@@ -12,6 +12,7 @@ class Renderer3D {
     modelUrl,
     loading,
     infoPanel,
+    configGui,
     container,
     initial = {},
     camera = {},
@@ -25,7 +26,8 @@ class Renderer3D {
     this.prepareEnvironment({ camera, ambientLight })
 
     this.loadModel({ initial, loading, url: modelUrl }).then(() => {
-      new ConfigGui({
+      if (!configGui) return
+      configGui.addAttachmentConfig({
         attachmentsController: this.attachmentsController,
       })
     })

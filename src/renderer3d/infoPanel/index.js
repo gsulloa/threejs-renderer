@@ -1,30 +1,6 @@
 import React, { PureComponent } from "react"
-import styled from "styled-components"
-
-const Overlay = styled.div`
-  position: absolute;
-  width: 300px;
-  height: 100%;
-`
-
-const Panel = styled.div`
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 0 15px;
-  overflow-y: auto;
-  position: relative;
-`
-
-const Title = styled.h1`
-  color: white;
-  font-family: sans-serif;
-`
-const Text = styled.p`
-  color: white;
-  font-family: sans-serif;
-  white-space: pre-line;
-`
+import { Overlay, Panel } from "../components/containers"
+import { Title, Text } from "../components/text"
 
 class InfoPanel extends PureComponent {
   state = {
@@ -49,7 +25,7 @@ class InfoPanel extends PureComponent {
   render() {
     const { show, title, content } = this.state
     return (
-      <Overlay hidden={!show}>
+      <Overlay hidden={!show} width="300px">
         <Panel>
           <Title>{title}</Title>
           <Text>{content}</Text>
