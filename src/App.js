@@ -3,7 +3,7 @@ import React, { Component, createRef } from "react"
 import Loading from "./renderer3d/loading"
 import Renderer3D from "./renderer3d"
 import InfoPanel from "./renderer3d/infoPanel"
-import ConfigGui from "./renderer3d/config/gui";
+import ConfigGui from "./renderer3d/config/gui"
 
 class App extends Component {
   state = {

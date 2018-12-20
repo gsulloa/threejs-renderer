@@ -4,7 +4,6 @@ import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController"
 import { devlogerror } from "./utils/log"
-import ConfigGui from "./config/gui"
 const ADD_ATTACHMENT = "ADD_ATTACHMENT"
 const SELECT_ATTACHMENT = "SELECT_ATTACHMENT"
 class Renderer3D {
