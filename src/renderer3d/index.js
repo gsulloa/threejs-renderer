@@ -4,7 +4,7 @@ import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController"
 import { devlogerror } from "./utils/log"
-import config from "./config";
+import config from "./config"
 class Renderer3D {
   constructor({
     modelUrl,

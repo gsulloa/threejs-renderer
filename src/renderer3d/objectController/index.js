@@ -3,7 +3,7 @@ import * as TWEEN from "@tweenjs/tween.js"
 import { toRadians } from "../utils/radiansDegreesConverter"
 import { useShortDistance } from "../utils/radiansNormalize"
 import { devlogerror } from "../utils/log"
-import Config from "../config";
+import Config from "../config"
 
 const CONTROL_OPTIONS = {
   LEFT_CLICK: 1,
