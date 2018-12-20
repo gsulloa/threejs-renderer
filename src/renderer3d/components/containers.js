@@ -4,6 +4,10 @@ export const Overlay = styled.div`
   position: absolute;
   width: ${({ width }) => (width ? width : "100%")};
   height: 100%;
+  pointer-events: none;
+  * {
+    pointer-events: auto;
+  }
 `
 
 const FlexOverlay = styled(Overlay)`
