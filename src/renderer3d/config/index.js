@@ -59,32 +59,36 @@ export default {
     },
   },
   orbit: {
-    suscriptors: [],
     position: {
+      suscriptors: [],
       x: 17,
       y: 13,
       z: 550,
+      suscribe(callback) {
+        this.suscriptors.push(callback)
+      },
     },
     rotation: {
+      suscriptors: [],
       x: 1.633995837560991,
       y: 0.049426731896162514,
       z: -3.001684471665421,
+      suscribe(callback) {
+        this.suscriptors.push(callback)
+      },
     },
     set changePosition(position) {
       this.position = {
         ...this.position,
         ...position,
       }
-      this.suscriptors.forEach(callback => callback(this.position))
+      this.position.suscriptors.forEach(callback => callback(this.position))
     },
     set changeRotation(rotation) {
       this.rotation = {
         ...this.rotation,
         ...rotation,
       }
-    },
-    suscribe(callback) {
-      this.suscriptors.push(callback)
     },
   },
 }

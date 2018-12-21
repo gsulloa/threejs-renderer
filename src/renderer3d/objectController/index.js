@@ -64,10 +64,10 @@ class ObjectController {
     this.spheres = []
     this.attachments = attachments
     this.resetControls()
-    Config.orbit.suscribe(this.zoomObject)
+    Config.orbit.position.suscribe(this.zoomObject)
   }
 
-  mouseEventListener = ({ domElement, camera }) => {
+  mouseEventListener = ({ domElement }) => {
     domElement.addEventListener("mousedown", this.handleMouseDown)
     domElement.addEventListener("mousemove", this.handleMouseMove)
     domElement.addEventListener("mouseup", () => {
@@ -75,7 +75,9 @@ class ObjectController {
     })
     domElement.addEventListener("mousewheel", e => {
       e.preventDefault()
-      this.zoomObject({ value: e.deltaY, camera })
+      Config.orbit.changePosition = {
+        z: Config.orbit.position.z + Math.sign(e.deltaY) * 20,
+      }
     })
   }
 
@@ -217,6 +219,7 @@ class ObjectController {
     camera.position.y += deltaMove.y
   }
   zoomObject = ({ z: value }) => {
+    if (this.camera.position.z === value) return
     this.camera.position.z = value
   }
 
