@@ -64,7 +64,7 @@ class ObjectController {
     this.spheres = []
     this.attachments = attachments
     this.resetControls()
-    Config.orbit.position.suscribe(this.zoomObject)
+    Config.orbit.position.suscribe(this.moveCamera)
   }
 
   mouseEventListener = ({ domElement }) => {
@@ -115,6 +115,12 @@ class ObjectController {
       const { object, camera, spheres } = this
       switch (this.controlOption) {
         case CONTROL_OPTIONS.LEFT_CLICK: {
+          if (Config.object.onMouseMove === "moveCamera") {
+            const { x, y } = deltaMove
+            const { x: prevX, y: prevY, z } = this.camera.position
+            Config.orbit.changePosition = { x: -x + prevX, y: y + prevY, z }
+            break
+          }
           this[Config.object.onMouseMove]({
             deltaMove,
             object,
@@ -124,7 +130,9 @@ class ObjectController {
           break
         }
         case CONTROL_OPTIONS.MIDDLE_CLICK: {
-          this.moveCamera({ deltaMove, camera })
+          const { x, y } = deltaMove
+          const { x: prevX, y: prevY, z } = this.camera.position
+          Config.orbit.changePosition = { x: -x + prevX, y: y + prevY, z }
           break
         }
         default:
@@ -214,13 +222,17 @@ class ObjectController {
       attachment.position.copy(positions[i])
     })
   }
-  moveCamera({ deltaMove, camera }) {
-    camera.position.x -= deltaMove.x
-    camera.position.y += deltaMove.y
-  }
-  zoomObject = ({ z: value }) => {
-    if (this.camera.position.z === value) return
-    this.camera.position.z = value
+  moveCamera = ({ x, y, z }) => {
+    const { position } = this.camera
+    if (
+      [[x, position.x], [y, position.y], [z, position.z]].every(
+        ([next, prev]) => next === prev
+      )
+    )
+      return
+    this.camera.position.x = x
+    this.camera.position.y = y
+    this.camera.position.z = z
   }
 
   look = ({ position: newPosition, rotation: newRotation }) => {
@@ -228,12 +240,12 @@ class ObjectController {
     this.smoothRotateObjectTo({ newRotation })
   }
   smoothMoveCamera = ({ newPosition }) => {
-    const positionCoords = new THREE.Vector3().copy(this.camera.position)
+    const positionCoords = { ...Config.orbit.position }
     new TWEEN.Tween(positionCoords)
       .to(newPosition, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onUpdate(({ x, y, z }) => {
-        this.camera.position.set(x, y, z)
+        Config.orbit.changePosition = { x, y, z }
       })
       .start()
   }
