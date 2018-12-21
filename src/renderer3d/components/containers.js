@@ -24,6 +24,11 @@ export const EndOverlay = styled(FlexOverlay)`
   align-items: flex-end;
 `
 
+export const BottomEndOverlay = styled(EndOverlay)`
+  justify-content: flex-end;
+  flex-flow: row nowrap;
+`
+
 export const LoadingBar = styled.div`
   width: 25em;
   height: 1em;

@@ -4,6 +4,7 @@ import Loading from "./renderer3d/loading"
 import Renderer3D from "./renderer3d"
 import InfoPanel from "./renderer3d/infoPanel"
 import ConfigGui from "./renderer3d/config/gui"
+import Controls from "./renderer3d/controls";
 
 class App extends Component {
   state = {
@@ -66,6 +67,7 @@ class App extends Component {
           <Loading ref={this.loading} />
           <InfoPanel ref={this.infoPanel} />
           <ConfigGui ref={this.configGui} />
+          <Controls />
         </div>
         <button onClick={this.reset}>Reset</button>
         <button onClick={this.setCurrentAsInitial}>ChangeInitial</button>
