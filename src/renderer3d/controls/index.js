@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react"
-import { BottomEndOverlay } from "../components/containers"
+import { BottomEndOverlay, SliderWrapper } from "../components/containers"
 import { CircleButton } from "../components/button"
-import config from "../config"
+import Config from "../config"
 
 class Controls extends PureComponent {
   state = {
@@ -15,7 +15,7 @@ class Controls extends PureComponent {
           </svg>
         ),
         onClick: () => {
-          config.object.onMouseMove = "moveCamera"
+          Config.object.onMouseMove = "moveCamera"
         },
       },
       {
@@ -30,11 +30,12 @@ class Controls extends PureComponent {
           </svg>
         ),
         onClick: () => {
-          config.object.onMouseMove = "rotateObject"
+          Config.object.onMouseMove = "rotateObject"
         },
         selected: true,
       },
     ],
+    zoom: 500,
   }
   handleClick = ({ title: optionTitle, onClick }) => {
     const index = this.state.options.findIndex(
@@ -55,6 +56,12 @@ class Controls extends PureComponent {
       options: state.options.map(option => ({ ...option, selected: false })),
     }))
   }
+  changeZoom = zoom => {
+    this.setState({ zoom })
+    Config.orbit.changePosition = {
+      z: zoom,
+    }
+  }
   render() {
     const { options } = this.state
     return (
@@ -68,6 +75,18 @@ class Controls extends PureComponent {
             {option.title}
           </CircleButton>
         ))}
+        <SliderWrapper>
+          <input
+            type="range"
+            value={this.state.zoom}
+            onChange={({ target: { valueAsNumber: value } }) =>
+              this.changeZoom(value)
+            }
+            step={20}
+            min={100}
+            max={800}
+          />
+        </SliderWrapper>
       </BottomEndOverlay>
     )
   }

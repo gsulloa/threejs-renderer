@@ -18,6 +18,9 @@ class App extends Component {
     this.configGui = createRef()
     this.renderer = {}
   }
+  componentDidMount() {
+    this.loadModel()
+  }
 
   loadModel = () => {
     this.renderer = new Renderer3D({

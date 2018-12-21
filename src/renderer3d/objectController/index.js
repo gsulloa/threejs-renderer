@@ -64,6 +64,7 @@ class ObjectController {
     this.spheres = []
     this.attachments = attachments
     this.resetControls()
+    Config.orbit.suscribe(this.zoomObject)
   }
 
   mouseEventListener = ({ domElement, camera }) => {
@@ -215,8 +216,8 @@ class ObjectController {
     camera.position.x -= deltaMove.x
     camera.position.y += deltaMove.y
   }
-  zoomObject({ value, camera }) {
-    camera.position.z += Math.sign(value) * 20
+  zoomObject = ({ z: value }) => {
+    this.camera.position.z = value
   }
 
   look = ({ position: newPosition, rotation: newRotation }) => {

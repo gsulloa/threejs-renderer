@@ -45,3 +45,17 @@ export const Panel = styled.div`
   overflow-y: auto;
   position: relative;
 `
+
+export const SliderWrapper = styled.div`
+  display: inline-block;
+  width: 20px;
+  height: 150px;
+  padding: 0;
+  input {
+    width: 150px;
+    height: 20px;
+    margin: -175px;
+    transform-origin: 100px 100px;
+    transform: rotate(90deg);
+  }
+`
