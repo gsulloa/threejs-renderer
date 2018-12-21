@@ -78,9 +78,13 @@ export default {
       },
     },
     set changePosition(position) {
+      const edges = {}
+      if (position.z && position.z > 800) edges.z = 800
+      else if (position.z && position.z < 100) edges.z = 100
       this.position = {
         ...this.position,
         ...position,
+        ...edges,
       }
       this.position.suscriptors.forEach(callback => callback(this.position))
     },
