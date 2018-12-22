@@ -1,6 +1,7 @@
 import * as THREE from "three"
 import Config from "../config"
 import { devlogerror } from "../utils/log"
+import font from "./font"
 
 class AttachmentsController {
   constructor({
@@ -10,11 +11,14 @@ class AttachmentsController {
     initialAttachments = [],
     domElement,
   } = {}) {
+    this.textureFont = new THREE.FontLoader().parse(font)
     this.model = model
     this.camera = camera
     this.attachments = attachments
     this.domElement = domElement
-    initialAttachments.forEach(this.addSphere)
+    initialAttachments.forEach((attachment, i) =>
+      this.addSphere({ ...attachment, number: i })
+    )
 
     this.hovered = undefined
     this.selected = undefined
@@ -45,7 +49,7 @@ class AttachmentsController {
       this.attachments.add(model)
     }
   }
-  addSphere = ({ position, data }) => {
+  addSphere = ({ position, data, number }) => {
     const { scale, material } = Config.attachment
     const radius = 1
     const segments = 32
@@ -54,6 +58,14 @@ class AttachmentsController {
     sphere.scale.set(scale, scale, scale)
     sphere.data = data
     sphere.state = "default"
+
+    const textMaterial = new THREE.MeshBasicMaterial({ color: "black" })
+    const textShapes = this.textureFont.generateShapes(String(number + 1), 1)
+    const textGeometry = new THREE.ShapeBufferGeometry(textShapes)
+    const text = new THREE.Mesh(textGeometry, textMaterial)
+    text.position.x -= 0.5 * String(number + 1).length
+    text.position.y -= 0.5
+    sphere.add(text)
     this.addAttachment({ position, model: sphere })
   }
 
