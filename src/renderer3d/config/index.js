@@ -77,7 +77,7 @@ export default {
         ...position,
         ...edges,
       }
-      this._position.next({ ...this._position, ...newPosition })
+      this._position.next({ ...this.position, ...newPosition })
     },
     _rotation: new BehaviorSubject({
       x: 1.633995837560991,

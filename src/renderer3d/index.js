@@ -153,7 +153,7 @@ class Renderer3D {
   }
 
   getCurrentPosition = () => {
-    return this.objectController.currentPosition()
+    return config.orbit
   }
 
   setNewInitialPosition = ({ rotation, position }) => {
