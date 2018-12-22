@@ -39,7 +39,11 @@ class Controls extends PureComponent {
   }
   constructor(props) {
     super(props)
-    Config.orbit.position.suscribe(({ z }) => this.changeZoom(z))
+  }
+  componentDidMount() {
+    Config.orbit._position.subscribe(({ z: zoom }) => {
+      this.setState({ zoom })
+    })
   }
   handleClick = ({ title: optionTitle, onClick }) => {
     const index = this.state.options.findIndex(
@@ -61,12 +65,9 @@ class Controls extends PureComponent {
     }))
   }
   changeZoom = zoom => {
-    if (zoom === this.state.zoom) return
-    this.setState({ zoom }, () => {
-      Config.orbit.changePosition = {
-        z: zoom,
-      }
-    })
+    Config.orbit.position = {
+      z: zoom,
+    }
   }
   render() {
     const { options } = this.state

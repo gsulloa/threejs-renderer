@@ -1,4 +1,5 @@
 import { MeshBasicMaterial } from "three"
+import { BehaviorSubject } from "rxjs"
 
 export default {
   attachment: {
@@ -59,40 +60,38 @@ export default {
     },
   },
   orbit: {
-    position: {
-      suscriptors: [],
+    _position: new BehaviorSubject({
       x: 17,
       y: 13,
       z: 550,
-      suscribe(callback) {
-        this.suscriptors.push(callback)
-      },
+    }),
+    get position() {
+      return this._position.getValue()
     },
-    rotation: {
-      suscriptors: [],
-      x: 1.633995837560991,
-      y: 0.049426731896162514,
-      z: -3.001684471665421,
-      suscribe(callback) {
-        this.suscriptors.push(callback)
-      },
-    },
-    set changePosition(position) {
+    set position(position) {
       const edges = {}
       if (position.z && position.z > 800) edges.z = 800
       else if (position.z && position.z < 100) edges.z = 100
-      this.position = {
+      const newPosition = {
         ...this.position,
         ...position,
         ...edges,
       }
-      this.position.suscriptors.forEach(callback => callback(this.position))
+      this._position.next({ ...this._position, ...newPosition })
     },
-    set changeRotation(rotation) {
-      this.rotation = {
+    _rotation: new BehaviorSubject({
+      x: 1.633995837560991,
+      y: 0.049426731896162514,
+      z: -3.001684471665421,
+    }),
+    get rotation() {
+      return this._rotation.getValue()
+    },
+    set rotation(rotation) {
+      this._rotation.next({
         ...this.rotation,
         ...rotation,
-      }
+      })
     },
   },
 }

@@ -64,7 +64,9 @@ class ObjectController {
     this.spheres = []
     this.attachments = attachments
     this.resetControls()
-    Config.orbit.position.suscribe(this.moveCamera)
+
+    Config.orbit._position.subscribe(this.moveCamera)
+    Config.orbit._rotation.subscribe(this.rotateObject)
   }
 
   mouseEventListener = ({ domElement }) => {
@@ -75,7 +77,7 @@ class ObjectController {
     })
     domElement.addEventListener("mousewheel", e => {
       e.preventDefault()
-      Config.orbit.changePosition = {
+      Config.orbit.position = {
         z: Config.orbit.position.z + Math.sign(e.deltaY) * 20,
       }
     })
@@ -118,10 +120,10 @@ class ObjectController {
           if (Config.object.onMouseMove === "moveCamera") {
             const { x, y } = deltaMove
             const { x: prevX, y: prevY, z } = this.camera.position
-            Config.orbit.changePosition = { x: -x + prevX, y: y + prevY, z }
+            Config.orbit.position = { x: -x + prevX, y: y + prevY, z }
             break
           }
-          this[Config.object.onMouseMove]({
+          this.calcNewRotation({
             deltaMove,
             object,
             spheres,
@@ -132,7 +134,7 @@ class ObjectController {
         case CONTROL_OPTIONS.MIDDLE_CLICK: {
           const { x, y } = deltaMove
           const { x: prevX, y: prevY, z } = this.camera.position
-          Config.orbit.changePosition = { x: -x + prevX, y: y + prevY, z }
+          Config.orbit.position = { x: -x + prevX, y: y + prevY, z }
           break
         }
         default:
@@ -188,7 +190,11 @@ class ObjectController {
     }
   }
 
-  rotateObject = ({ deltaMove, object, delta = 0.25 } = {}) => {
+  rotateObject = vector => {
+    this.object.rotation.setFromVector3(vector)
+    this.uptadeAttachmentsPosition()
+  }
+  calcNewRotation = ({ deltaMove, object, delta = 0.25 } = {}) => {
     const deltaRotationQuaternion = new THREE.Quaternion().setFromEuler(
       new THREE.Euler(
         toRadians(deltaMove.y * delta),
@@ -197,11 +203,14 @@ class ObjectController {
         "XYZ"
       )
     )
-    object.quaternion.multiplyQuaternions(
-      deltaRotationQuaternion,
-      object.quaternion
-    )
-    this.uptadeAttachmentsPosition()
+    const quaternion = object.quaternion.clone()
+    quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion)
+    const vector = new THREE.Euler().setFromQuaternion(quaternion)
+    Config.orbit.rotation = {
+      x: vector.x,
+      y: vector.y,
+      z: vector.z,
+    }
   }
   uptadeAttachmentsPosition = () => {
     const {
@@ -245,7 +254,7 @@ class ObjectController {
       .to(newPosition, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onUpdate(({ x, y, z }) => {
-        Config.orbit.changePosition = { x, y, z }
+        Config.orbit.position = { x, y, z }
       })
       .start()
   }
@@ -261,9 +270,8 @@ class ObjectController {
     new TWEEN.Tween(rotationCords)
       .to(shortDistanceCords, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
-      .onUpdate(vector => {
-        this.object.rotation.setFromVector3(vector)
-        this.uptadeAttachmentsPosition()
+      .onUpdate(({ x, y, z }) => {
+        Config.orbit.rotation = { x, y, z }
       })
       .start()
   }

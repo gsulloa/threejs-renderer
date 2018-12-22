@@ -4,7 +4,7 @@ import Loading from "./renderer3d/loading"
 import Renderer3D from "./renderer3d"
 import InfoPanel from "./renderer3d/infoPanel"
 import ConfigGui from "./renderer3d/config/gui"
-import Controls from "./renderer3d/controls";
+import Controls from "./renderer3d/controls"
 
 class App extends Component {
   state = {
