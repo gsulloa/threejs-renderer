@@ -12,8 +12,7 @@ class Renderer3D {
     infoPanel,
     configGui,
     container,
-    initial = {},
-    camera = {},
+    initial: { orbit = {}, attachments = [] } = {},
     ambientLight = {},
   }) {
     this.infoPanel = infoPanel
@@ -25,7 +24,11 @@ class Renderer3D {
       ambientLight,
     })
 
-    this.loadModel({ initial, loading, url: modelUrl }).then(() => {
+    this.loadModel({
+      initial: { orbit, attachments },
+      loading,
+      url: modelUrl,
+    }).then(() => {
       if (!configGui) return
       configGui.addAttachmentConfig({
         attachmentsController: this.attachmentsController,
@@ -65,8 +68,11 @@ class Renderer3D {
   loadModel = async ({
     url,
     initial: {
-      position = { x: 0, y: 0, z: 0 },
-      rotation = { x: 0, y: 0, z: 0 },
+      orbit: {
+        position = { x: 0, y: 0, z: 0 },
+        rotation = { x: 0, y: 0, z: 0 },
+      },
+      attachments = [],
     } = {},
     loading,
   }) => {
@@ -82,6 +88,7 @@ class Renderer3D {
       attachments: this.attachments,
       camera: this.camera,
       domElement: this.renderer.domElement,
+      initialAttachments: attachments,
     })
 
     this.objectController = new ObjectController({
