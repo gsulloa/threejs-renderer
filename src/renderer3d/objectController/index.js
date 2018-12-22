@@ -26,23 +26,6 @@ class ObjectController {
   static set previousMousePosition({ x = 0, y = 0 } = {}) {
     this.mousePosition = { x, y }
   }
-
-  currentPosition = () => {
-    const { rotation } = this.object
-    const { position } = this.camera
-    return {
-      rotation: {
-        x: rotation.x,
-        y: rotation.y,
-        z: rotation.z,
-      },
-      position: {
-        x: position.x,
-        y: position.y,
-        z: position.z,
-      },
-    }
-  }
   controlOption = undefined
   constructor({
     camera,
@@ -64,9 +47,12 @@ class ObjectController {
     this.spheres = []
     this.attachments = attachments
     this.resetControls()
+
+    Config.orbit._position.subscribe(this.moveCamera)
+    Config.orbit._rotation.subscribe(this.rotateObject)
   }
 
-  mouseEventListener = ({ domElement, camera }) => {
+  mouseEventListener = ({ domElement }) => {
     domElement.addEventListener("mousedown", this.handleMouseDown)
     domElement.addEventListener("mousemove", this.handleMouseMove)
     domElement.addEventListener("mouseup", () => {
@@ -74,7 +60,9 @@ class ObjectController {
     })
     domElement.addEventListener("mousewheel", e => {
       e.preventDefault()
-      this.zoomObject({ value: e.deltaY, camera })
+      Config.orbit.position = {
+        z: Config.orbit.position.z + Math.sign(e.deltaY) * 20,
+      }
     })
   }
 
@@ -109,19 +97,17 @@ class ObjectController {
   handleMouseMove = e => {
     if (this.controlOption) {
       const deltaMove = this.deltaMove(e)
-      const { object, camera, spheres } = this
       switch (this.controlOption) {
         case CONTROL_OPTIONS.LEFT_CLICK: {
           this[Config.object.onMouseMove]({
             deltaMove,
-            object,
-            spheres,
-            camera,
           })
           break
         }
         case CONTROL_OPTIONS.MIDDLE_CLICK: {
-          this.moveCamera({ deltaMove, camera })
+          const { x, y } = deltaMove
+          const { x: prevX, y: prevY, z } = this.camera.position
+          Config.orbit.position = { x: -x + prevX, y: y + prevY, z }
           break
         }
         default:
@@ -177,7 +163,12 @@ class ObjectController {
     }
   }
 
-  rotateObject = ({ deltaMove, object, delta = 0.25 } = {}) => {
+  rotateObject = vector => {
+    this.object.rotation.setFromVector3(vector)
+    this.uptadeAttachmentsPosition()
+  }
+  rotate = ({ deltaMove, delta = 0.25 } = {}) => {
+    const { object } = this
     const deltaRotationQuaternion = new THREE.Quaternion().setFromEuler(
       new THREE.Euler(
         toRadians(deltaMove.y * delta),
@@ -186,11 +177,14 @@ class ObjectController {
         "XYZ"
       )
     )
-    object.quaternion.multiplyQuaternions(
-      deltaRotationQuaternion,
-      object.quaternion
-    )
-    this.uptadeAttachmentsPosition()
+    const quaternion = object.quaternion.clone()
+    quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion)
+    const vector = new THREE.Euler().setFromQuaternion(quaternion)
+    Config.orbit.rotation = {
+      x: vector.x,
+      y: vector.y,
+      z: vector.z,
+    }
   }
   uptadeAttachmentsPosition = () => {
     const {
@@ -211,12 +205,24 @@ class ObjectController {
       attachment.position.copy(positions[i])
     })
   }
-  moveCamera({ deltaMove, camera }) {
-    camera.position.x -= deltaMove.x
-    camera.position.y += deltaMove.y
+
+  moveCamera = ({ x, y, z }) => {
+    const { position } = this.camera
+    if (
+      [[x, position.x], [y, position.y], [z, position.z]].every(
+        ([next, prev]) => next === prev
+      )
+    )
+      return
+    this.camera.position.x = x
+    this.camera.position.y = y
+    this.camera.position.z = z
   }
-  zoomObject({ value, camera }) {
-    camera.position.z += Math.sign(value) * 20
+
+  move = ({ deltaMove }) => {
+    const { x, y } = deltaMove
+    const { x: prevX, y: prevY, z } = this.camera.position
+    Config.orbit.position = { x: -x + prevX, y: y + prevY, z }
   }
 
   look = ({ position: newPosition, rotation: newRotation }) => {
@@ -224,12 +230,12 @@ class ObjectController {
     this.smoothRotateObjectTo({ newRotation })
   }
   smoothMoveCamera = ({ newPosition }) => {
-    const positionCoords = new THREE.Vector3().copy(this.camera.position)
+    const positionCoords = { ...Config.orbit.position }
     new TWEEN.Tween(positionCoords)
       .to(newPosition, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onUpdate(({ x, y, z }) => {
-        this.camera.position.set(x, y, z)
+        Config.orbit.position = { x, y, z }
       })
       .start()
   }
@@ -245,9 +251,8 @@ class ObjectController {
     new TWEEN.Tween(rotationCords)
       .to(shortDistanceCords, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
-      .onUpdate(vector => {
-        this.object.rotation.setFromVector3(vector)
-        this.uptadeAttachmentsPosition()
+      .onUpdate(({ x, y, z }) => {
+        Config.orbit.rotation = { x, y, z }
       })
       .start()
   }

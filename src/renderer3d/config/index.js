@@ -1,4 +1,5 @@
 import { MeshBasicMaterial } from "three"
+import { BehaviorSubject } from "rxjs"
 
 export default {
   attachment: {
@@ -37,12 +38,12 @@ export default {
     },
   },
   object: {
-    onMouseMoveVal: "rotateObject",
+    onMouseMoveVal: "rotate",
     get onMouseMove() {
       return this.onMouseMoveVal
     },
     set onMouseMove(val) {
-      const options = ["rotateObject", "moveCamera"]
+      const options = ["rotate", "move"]
       if (options.includes(val)) {
         this.onMouseMoveVal = val
       }
@@ -56,6 +57,41 @@ export default {
       if (options.includes(val)) {
         this.onMouseSelectVal = val
       }
+    },
+  },
+  orbit: {
+    _position: new BehaviorSubject({
+      x: 17,
+      y: 13,
+      z: 550,
+    }),
+    get position() {
+      return this._position.getValue()
+    },
+    set position(position) {
+      const edges = {}
+      if (position.z && position.z > 800) edges.z = 800
+      else if (position.z && position.z < 100) edges.z = 100
+      const newPosition = {
+        ...this.position,
+        ...position,
+        ...edges,
+      }
+      this._position.next({ ...this.position, ...newPosition })
+    },
+    _rotation: new BehaviorSubject({
+      x: 1.633995837560991,
+      y: 0.049426731896162514,
+      z: -3.001684471665421,
+    }),
+    get rotation() {
+      return this._rotation.getValue()
+    },
+    set rotation(rotation) {
+      this._rotation.next({
+        ...this.rotation,
+        ...rotation,
+      })
     },
   },
 }
