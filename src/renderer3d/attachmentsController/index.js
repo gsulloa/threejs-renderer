@@ -2,6 +2,7 @@ import * as THREE from "three"
 import Config from "../config"
 import { devlogerror } from "../utils/log"
 import font from "./font"
+import { timingSafeEqual } from "crypto";
 
 class AttachmentsController {
   constructor({
@@ -11,14 +12,13 @@ class AttachmentsController {
     initialAttachments = [],
     domElement,
   } = {}) {
+    this.id = this.number()
     this.textureFont = new THREE.FontLoader().parse(font)
     this.model = model
     this.camera = camera
     this.attachments = attachments
     this.domElement = domElement
-    initialAttachments.forEach((attachment, i) =>
-      this.addSphere({ ...attachment, number: i })
-    )
+    initialAttachments.forEach(this.addSphere)
 
     this.hovered = undefined
     this.selected = undefined
@@ -31,6 +31,13 @@ class AttachmentsController {
         domElementWidth: this.domElement.width,
       })
     })
+  }
+  *number() {
+    let n = 0
+    while (true) {
+      yield n
+      n += 1
+    }
   }
 
   addAttachment = ({ position, model }) => {
@@ -49,7 +56,8 @@ class AttachmentsController {
       this.attachments.add(model)
     }
   }
-  addSphere = ({ position, data, number }) => {
+  addSphere = ({ position, data }) => {
+    const number = this.id.next().value
     const { scale, material } = Config.attachment
     const radius = 1
     const segments = 32
