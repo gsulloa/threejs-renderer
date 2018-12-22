@@ -2,7 +2,6 @@ import * as THREE from "three"
 import Config from "../config"
 import { devlogerror } from "../utils/log"
 import font from "./font"
-import { timingSafeEqual } from "crypto";
 
 class AttachmentsController {
   constructor({

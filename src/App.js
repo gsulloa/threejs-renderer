@@ -267,7 +267,7 @@ class App extends Component {
               },
             },
           },
-        ]
+        ],
       },
     })
     this.renderer.animate()
