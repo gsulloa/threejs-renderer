@@ -26,23 +26,6 @@ class ObjectController {
   static set previousMousePosition({ x = 0, y = 0 } = {}) {
     this.mousePosition = { x, y }
   }
-
-  currentPosition = () => {
-    const { rotation } = this.object
-    const { position } = this.camera
-    return {
-      rotation: {
-        x: rotation.x,
-        y: rotation.y,
-        z: rotation.z,
-      },
-      position: {
-        x: position.x,
-        y: position.y,
-        z: position.z,
-      },
-    }
-  }
   controlOption = undefined
   constructor({
     camera,
@@ -114,20 +97,10 @@ class ObjectController {
   handleMouseMove = e => {
     if (this.controlOption) {
       const deltaMove = this.deltaMove(e)
-      const { object, camera, spheres } = this
       switch (this.controlOption) {
         case CONTROL_OPTIONS.LEFT_CLICK: {
-          if (Config.object.onMouseMove === "moveCamera") {
-            const { x, y } = deltaMove
-            const { x: prevX, y: prevY, z } = this.camera.position
-            Config.orbit.position = { x: -x + prevX, y: y + prevY, z }
-            break
-          }
-          this.calcNewRotation({
+          this[Config.object.onMouseMove]({
             deltaMove,
-            object,
-            spheres,
-            camera,
           })
           break
         }
@@ -194,7 +167,8 @@ class ObjectController {
     this.object.rotation.setFromVector3(vector)
     this.uptadeAttachmentsPosition()
   }
-  calcNewRotation = ({ deltaMove, object, delta = 0.25 } = {}) => {
+  rotate = ({ deltaMove, delta = 0.25 } = {}) => {
+    const { object } = this
     const deltaRotationQuaternion = new THREE.Quaternion().setFromEuler(
       new THREE.Euler(
         toRadians(deltaMove.y * delta),
@@ -231,6 +205,7 @@ class ObjectController {
       attachment.position.copy(positions[i])
     })
   }
+
   moveCamera = ({ x, y, z }) => {
     const { position } = this.camera
     if (
@@ -242,6 +217,12 @@ class ObjectController {
     this.camera.position.x = x
     this.camera.position.y = y
     this.camera.position.z = z
+  }
+
+  move = ({ deltaMove }) => {
+    const { x, y } = deltaMove
+    const { x: prevX, y: prevY, z } = this.camera.position
+    Config.orbit.position = { x: -x + prevX, y: y + prevY, z }
   }
 
   look = ({ position: newPosition, rotation: newRotation }) => {

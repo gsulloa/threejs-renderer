@@ -38,12 +38,12 @@ export default {
     },
   },
   object: {
-    onMouseMoveVal: "rotateObject",
+    onMouseMoveVal: "rotate",
     get onMouseMove() {
       return this.onMouseMoveVal
     },
     set onMouseMove(val) {
-      const options = ["rotateObject", "moveCamera"]
+      const options = ["rotate", "move"]
       if (options.includes(val)) {
         this.onMouseMoveVal = val
       }

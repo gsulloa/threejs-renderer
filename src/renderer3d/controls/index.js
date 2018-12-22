@@ -15,7 +15,7 @@ class Controls extends PureComponent {
           </svg>
         ),
         onClick: () => {
-          Config.object.onMouseMove = "moveCamera"
+          Config.object.onMouseMove = "move"
         },
       },
       {
@@ -30,15 +30,12 @@ class Controls extends PureComponent {
           </svg>
         ),
         onClick: () => {
-          Config.object.onMouseMove = "rotateObject"
+          Config.object.onMouseMove = "rotate"
         },
         selected: true,
       },
     ],
     zoom: 500,
-  }
-  constructor(props) {
-    super(props)
   }
   componentDidMount() {
     Config.orbit._position.subscribe(({ z: zoom }) => {
