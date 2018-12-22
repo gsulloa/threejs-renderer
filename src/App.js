@@ -54,7 +54,13 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+        }}
+      >
         <form
           onSubmit={e => {
             e.preventDefault()
@@ -66,11 +72,16 @@ class App extends Component {
             onChange={({ target: { value: url } }) => this.setState({ url })}
           />
         </form>
-        <div ref={this.render3d}>
-          <Loading ref={this.loading} />
-          <InfoPanel ref={this.infoPanel} />
-          <ConfigGui ref={this.configGui} />
-          <Controls />
+        <div style={{ height: 800 }}>
+          <div
+            ref={this.render3d}
+            style={{ width: 1200, height: 800, position: "absolute" }}
+          >
+            <Loading ref={this.loading} />
+            <InfoPanel ref={this.infoPanel} />
+            <ConfigGui ref={this.configGui} />
+            <Controls />
+          </div>
         </div>
         <button onClick={this.reset}>Reset</button>
         <button onClick={this.setCurrentAsInitial}>ChangeInitial</button>

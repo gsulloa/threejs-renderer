@@ -18,7 +18,12 @@ class Renderer3D {
   }) {
     this.infoPanel = infoPanel
 
-    this.prepareEnvironment({ camera, ambientLight })
+    this.prepareEnvironment({
+      camera: {
+        aspect: container.clientWidth / container.clientHeight,
+      },
+      ambientLight,
+    })
 
     this.loadModel({ initial, loading, url: modelUrl }).then(() => {
       if (!configGui) return
@@ -29,7 +34,11 @@ class Renderer3D {
 
     this.render({ container })
 
-    window.addEventListener("resize", this.onWindowResize, false)
+    window.addEventListener(
+      "resize",
+      () => this.onWindowResize({ container }),
+      false
+    )
   }
 
   prepareEnvironment = ({
@@ -91,7 +100,7 @@ class Renderer3D {
 
   render = ({ container }) => {
     this.renderer.setPixelRatio(window.devicePixelRatio)
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
+    this.renderer.setSize(container.clientWidth, container.clientHeight)
     container.appendChild(this.renderer.domElement)
   }
 
