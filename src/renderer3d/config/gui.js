@@ -2,6 +2,7 @@ import React, { Component, createRef } from "react"
 import { GUI } from "dat.gui"
 import Config from "./"
 import { EndOverlay } from "../components/containers"
+import config from "./";
 
 class ConfigGui extends Component {
   constructor(props) {
@@ -25,7 +26,8 @@ class ConfigGui extends Component {
     return false
   }
 
-  addAttachmentConfig({ attachmentsController }) {
+  addAttachmentConfig() {
+    const { attachmentsController } = config.controllers
     const { attachments } = this.configs
     const COLORS = {
       Red: "#d94545",

@@ -3,7 +3,6 @@ import * as TWEEN from "@tweenjs/tween.js"
 import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController"
-import { devlogerror } from "./utils/log"
 import config from "./config"
 class Renderer3D {
   constructor({
@@ -30,9 +29,7 @@ class Renderer3D {
       url: modelUrl,
     }).then(() => {
       if (!configGui) return
-      configGui.addAttachmentConfig({
-        attachmentsController: this.attachmentsController,
-      })
+      configGui.addAttachmentConfig()
     })
 
     this.render({ container })
@@ -83,7 +80,7 @@ class Renderer3D {
     this.scene.add(object)
     this.attachments = new THREE.Group()
     this.scene.add(this.attachments)
-    this.attachmentsController = new AttachmentsController({
+    config.controllers.attachmentsController = new AttachmentsController({
       model: this.object.children[0],
       attachments: this.attachments,
       camera: this.camera,
@@ -91,7 +88,7 @@ class Renderer3D {
       initialAttachments: attachments,
     })
 
-    this.objectController = new ObjectController({
+    config.controllers.objectController = new ObjectController({
       camera: this.camera,
       scene: this.scene,
       object: this.object,
@@ -124,24 +121,25 @@ class Renderer3D {
   }
 
   handleMouseClick = e => {
+    const { objectController, attachmentsController } = config.controllers
     const object = this.handleAttachmentSelect(e)
     if (object === null && config.object.editing) {
-      const position = this.objectController.getPositionInObject({
+      const position = objectController.getPositionInObject({
         offsetX: e.offsetX,
         offsetY: e.offsetY,
         domElementHeight: this.renderer.domElement.height,
         domElementWidth: this.renderer.domElement.width,
       })
-      const attachment = this.attachmentsController.addSphere({ position })
+      const attachment = attachmentsController.addSphere({ position })
       if (attachment) {
-        this.attachmentsController.selectObject(attachment)
+        attachmentsController.selectObject(attachment)
         this.lookObject(attachment)
       }
     }
   }
 
   handleAttachmentSelect = ({ offsetX, offsetY }) => {
-    const { selectAttachment } = this.attachmentsController
+    const { selectAttachment } = config.controllers.attachmentsController
     const object = selectAttachment({
       offsetX,
       offsetY,
@@ -160,7 +158,7 @@ class Renderer3D {
       data: { screenPosition, title, content },
     } = object
     if (screenPosition) {
-      this.objectController.look(screenPosition)
+      config.controllers.objectController.look(screenPosition)
     } else {
       this.resetControls()
     }
@@ -170,7 +168,7 @@ class Renderer3D {
   /* Controls */
 
   resetControls = () => {
-    this.objectController.resetControls()
+    config.controllers.objectController.resetControls()
   }
 
   getCurrentPosition = () => {
@@ -178,7 +176,7 @@ class Renderer3D {
   }
 
   setNewInitialPosition = ({ rotation, position }) => {
-    this.objectController.updateInitial({ rotation, position })
+    config.controllers.objectController.updateInitial({ rotation, position })
   }
 
   setCurrentAsInitial = () => {
