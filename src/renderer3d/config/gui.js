@@ -35,20 +35,17 @@ class ConfigGui extends Component {
     }
     if (!attachmentsController || !attachments) return
     attachments
-      .add(Config.attachment, "defaultColor", COLORS)
+      .add(Config.attachment, "defaultColor", { ...COLORS })
       .name("Default")
       .listen()
-      .onChange(attachmentsController.updateMaterials)
     attachments
-      .add(Config.attachment, "hoveredColor", COLORS)
+      .add(Config.attachment, "hoveredColor", { ...COLORS })
       .name("Hovered")
       .listen()
-      .onChange(attachmentsController.updateMaterials)
     attachments
-      .add(Config.attachment, "selectedColor", COLORS)
+      .add(Config.attachment, "selectedColor", { ...COLORS })
       .name("Selected")
       .listen()
-      .onChange(attachmentsController.updateMaterials)
     attachments
       .add(Config.attachment, "scale", 1, 10, 1)
       .name("Radius")
