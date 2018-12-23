@@ -25,15 +25,6 @@ class AttachmentsController {
         offsetY,
       })
     })
-    Config.attachment._color.default.subscribe(() =>
-      this.updateMaterials("default")
-    )
-    Config.attachment._color.hovered.subscribe(() =>
-      this.updateMaterials("hovered")
-    )
-    Config.attachment._color.selected.subscribe(() =>
-      this.updateMaterials("selected")
-    )
   }
 
   get hovereds() {
@@ -158,12 +149,6 @@ class AttachmentsController {
       }
     }
     return null
-  }
-
-  updateMaterials = state => {
-    this.filterByState(state).forEach(attachment => {
-      attachment.material = Config.attachment.material[attachment.state]
-    })
   }
 
   updateScale = () => {

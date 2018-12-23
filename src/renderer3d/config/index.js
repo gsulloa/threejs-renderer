@@ -1,19 +1,12 @@
-import { MeshBasicMaterial } from "three"
+import { MeshBasicMaterial, Color } from "three"
 import { BehaviorSubject } from "rxjs"
 
 export default {
   attachment: {
-    _color: {
-      default: new BehaviorSubject("#fae"),
-      hovered: new BehaviorSubject("#33f"),
-      selected: new BehaviorSubject("#fff"),
-    },
-    get color() {
-      return {
-        default: this._color.default.getValue(),
-        hovered: this._color.hovered.getValue(),
-        selected: this._color.selected.getValue(),
-      }
+    color: {
+      default: "#fae",
+      hovered: "#33f",
+      selected: "#fff",
     },
     material: {
       default: new MeshBasicMaterial({ color: "#fae" }),
@@ -23,22 +16,19 @@ export default {
     scale: 5,
     visibility: true,
     set defaultColor(color) {
-      this.material.default = new MeshBasicMaterial({ color })
-      this._color.default.next(color)
+      this.material.default.color.set(new Color(color))
     },
     get defaultColor() {
       return this.color.default
     },
     set hoveredColor(color) {
-      this.material.hovered = new MeshBasicMaterial({ color })
-      this._color.hovered.next(color)
+      this.material.hovered.color.set(new Color(color))
     },
     get hoveredColor() {
       return this.color.hovered
     },
     set selectedColor(color) {
-      this.material.selected = new MeshBasicMaterial({ color })
-      this._color.selected.next(color)
+      this.material.selected.color.set(new Color(color))
     },
     get selectedColor() {
       return this.color.selected
