@@ -62,9 +62,17 @@ class AttachmentsController {
       model.position.copy(worldPosition)
       model.reference = transparentModel
       this.attachments.add(model)
+      return model
     }
   }
-  addSphere = ({ position, data }) => {
+  addSphere = ({
+    position,
+    data = {
+      title: "Change me!",
+      content: "Change me description!",
+      screenPosition: { ...Config.orbit },
+    },
+  }) => {
     const number = this.id.next().value
     const { scale, material } = Config.attachment
     const radius = 1
@@ -82,7 +90,7 @@ class AttachmentsController {
     text.position.x -= 0.5 * String(number + 1).length
     text.position.y -= 0.5
     sphere.add(text)
-    this.addAttachment({ position, model: sphere })
+    return this.addAttachment({ position, model: sphere })
   }
 
   intersectAttachments = ({ offsetX, offsetY }) => {
@@ -131,12 +139,7 @@ class AttachmentsController {
       const [{ object }] = intersects
       switch (object.state) {
         case "hovered": {
-          this.selecteds.forEach(attachment => {
-            attachment.state = "default"
-            attachment.material = Config.attachment.material.default
-          })
-          object.state = "selected"
-          object.material = Config.attachment.material.selected
+          this.selectObject(object)
           return object
         }
         case "selected": {
@@ -149,6 +152,15 @@ class AttachmentsController {
       }
     }
     return null
+  }
+
+  selectObject = object => {
+    this.selecteds.forEach(attachment => {
+      attachment.state = "default"
+      attachment.material = Config.attachment.material.default
+    })
+    object.state = "selected"
+    object.material = Config.attachment.material.selected
   }
 
   updateScale = () => {

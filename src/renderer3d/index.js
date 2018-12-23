@@ -124,24 +124,17 @@ class Renderer3D {
   }
 
   handleMouseClick = e => {
-    switch (config.object.onMouseSelect) {
-      case "add": {
-        const position = this.objectController.getPositionInObject({
-          offsetX: e.offsetX,
-          offsetY: e.offsetY,
-          domElementHeight: this.renderer.domElement.height,
-          domElementWidth: this.renderer.domElement.width,
-        })
-        this.attachmentsController.addSphere({ position })
-        break
-      }
-      case "select": {
-        this.handleAttachmentSelect(e)
-        break
-      }
-      default:
-        devlogerror(`Unexpected case "${this.state.click}"`)
-        break
+    const object = this.handleAttachmentSelect(e)
+    if (object === null && config.object.editing) {
+      const position = this.objectController.getPositionInObject({
+        offsetX: e.offsetX,
+        offsetY: e.offsetY,
+        domElementHeight: this.renderer.domElement.height,
+        domElementWidth: this.renderer.domElement.width,
+      })
+      const attachment = this.attachmentsController.addSphere({ position })
+      this.attachmentsController.selectObject(attachment)
+      this.lookObject(attachment)
     }
   }
 
@@ -152,19 +145,24 @@ class Renderer3D {
       offsetY,
     })
     if (object) {
-      const {
-        data: { screenPosition, title, content },
-      } = object
-      if (screenPosition) {
-        this.objectController.look(screenPosition)
-      } else {
-        this.resetControls()
-      }
-      this.infoPanel.showPanel({ title, content })
+      this.lookObject(object)
     } else if (object !== null) {
       this.resetControls()
       this.infoPanel.hidePanel()
     }
+    return object
+  }
+
+  lookObject = object => {
+    const {
+      data: { screenPosition, title, content },
+    } = object
+    if (screenPosition) {
+      this.objectController.look(screenPosition)
+    } else {
+      this.resetControls()
+    }
+    this.infoPanel.showPanel({ title, content })
   }
 
   /* Controls */

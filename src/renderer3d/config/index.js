@@ -45,7 +45,7 @@ export default {
         this.onMouseMoveVal = val
       }
     },
-    onMouseSelectVal: "select",
+    onMouseSelectVal: "add",
     get onMouseSelect() {
       return this.onMouseSelectVal
     },
@@ -55,6 +55,7 @@ export default {
         this.onMouseSelectVal = val
       }
     },
+    editing: true,
   },
   orbit: {
     _position: new BehaviorSubject({
