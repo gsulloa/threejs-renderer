@@ -154,6 +154,13 @@ class AttachmentsController {
     return null
   }
 
+  updateScreenPosition = () => {
+    this.selecteds.forEach(attachment => {
+      const { position, rotation } = Config.orbit
+      attachment.data.screenPosition = { position, rotation }
+    })
+  }
+
   selectObject = object => {
     this.selecteds.forEach(attachment => {
       attachment.state = "default"

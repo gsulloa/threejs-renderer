@@ -53,6 +53,9 @@ class InfoPanel extends PureComponent {
       content: "",
     }))
   }
+  handleChangeDefaultLook = () => {
+    config.controllers.attachmentsController.updateScreenPosition()
+  }
   render() {
     const { show, title, content, editing } = this.state
     return (
@@ -63,7 +66,9 @@ class InfoPanel extends PureComponent {
           {editing && [
             <hr key="divider" />,
             <Column key="options">
-              <Button>Set Camera as Default</Button>
+              <Button onClick={this.handleChangeDefaultLook}>
+                Set Camera as Default
+              </Button>
               <Button>Replace</Button>
               <Button>Remove</Button>
             </Column>,
