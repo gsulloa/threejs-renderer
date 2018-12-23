@@ -73,7 +73,6 @@ class AttachmentsController {
       screenPosition: { ...Config.orbit },
     },
   }) => {
-    const number = this.id.next().value
     const { scale, material } = Config.attachment
     const radius = 1
     const segments = 32
@@ -82,15 +81,29 @@ class AttachmentsController {
     sphere.scale.set(scale, scale, scale)
     sphere.data = data
     sphere.state = "default"
+    this.addNumber({ model: sphere })
+    return this.addAttachment({ position, model: sphere })
+  }
 
+  addNumber({ model } = {}) {
+    if (!model) return
+    const number = this.id.next().value
     const textMaterial = new THREE.MeshBasicMaterial({ color: "black" })
     const textShapes = this.textureFont.generateShapes(String(number + 1), 1)
     const textGeometry = new THREE.ShapeBufferGeometry(textShapes)
     const text = new THREE.Mesh(textGeometry, textMaterial)
     text.position.x -= 0.5 * String(number + 1).length
     text.position.y -= 0.5
-    sphere.add(text)
-    return this.addAttachment({ position, model: sphere })
+    model.add(text)
+  }
+
+  replaceAllNumbers = () => {
+    this.id = this.number()
+    this.attachments.children.forEach(attachment => {
+      const [number] = attachment.children
+      attachment.remove(number)
+      this.addNumber({ model: attachment })
+    })
   }
 
   intersectAttachments = ({ offsetX, offsetY }) => {
@@ -158,6 +171,12 @@ class AttachmentsController {
     this.selecteds.forEach(attachment => {
       const { position, rotation } = Config.orbit
       attachment.data.screenPosition = { position, rotation }
+    })
+  }
+
+  removeSelectedAttachment = () => {
+    this.selecteds.forEach(attachment => {
+      this.attachments.remove(attachment)
     })
   }
 

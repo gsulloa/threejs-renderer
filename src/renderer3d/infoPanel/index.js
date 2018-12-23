@@ -56,6 +56,12 @@ class InfoPanel extends PureComponent {
   handleChangeDefaultLook = () => {
     config.controllers.attachmentsController.updateScreenPosition()
   }
+  handleRemoveAttachment = () => {
+    this.hidePanel()
+    config.controllers.attachmentsController.removeSelectedAttachment()
+    config.controllers.objectController.resetControls()
+    config.controllers.attachmentsController.replaceAllNumbers()
+  }
   render() {
     const { show, title, content, editing } = this.state
     return (
@@ -70,7 +76,7 @@ class InfoPanel extends PureComponent {
                 Set Camera as Default
               </Button>
               <Button>Replace</Button>
-              <Button>Remove</Button>
+              <Button onClick={this.handleRemoveAttachment}>Remove</Button>
             </Column>,
           ]}
         </Panel>
