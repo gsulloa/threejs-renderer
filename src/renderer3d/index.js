@@ -133,8 +133,10 @@ class Renderer3D {
         domElementWidth: this.renderer.domElement.width,
       })
       const attachment = this.attachmentsController.addSphere({ position })
-      this.attachmentsController.selectObject(attachment)
-      this.lookObject(attachment)
+      if (attachment) {
+        this.attachmentsController.selectObject(attachment)
+        this.lookObject(attachment)
+      }
     }
   }
 
