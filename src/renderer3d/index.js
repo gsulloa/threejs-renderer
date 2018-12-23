@@ -136,29 +136,34 @@ class Renderer3D {
         break
       }
       case "select": {
-        const { hovered, selectAttachment } = this.attachmentsController
-        if (hovered) {
-          const selected = selectAttachment({ object: hovered })
-          if (selected) {
-            const {
-              data: { screenPosition, title, content },
-            } = hovered
-            if (screenPosition) {
-              this.objectController.look(screenPosition)
-            } else {
-              this.resetControls()
-            }
-            this.infoPanel.showPanel({ title, content })
-          } else {
-            this.resetControls()
-            this.infoPanel.hidePanel()
-          }
-        }
+        this.handleAttachmentSelect(e)
         break
       }
       default:
         devlogerror(`Unexpected case "${this.state.click}"`)
         break
+    }
+  }
+
+  handleAttachmentSelect = ({ offsetX, offsetY }) => {
+    const { selectAttachment } = this.attachmentsController
+    const object = selectAttachment({
+      offsetX,
+      offsetY,
+    })
+    if (object) {
+      const {
+        data: { screenPosition, title, content },
+      } = object
+      if (screenPosition) {
+        this.objectController.look(screenPosition)
+      } else {
+        this.resetControls()
+      }
+      this.infoPanel.showPanel({ title, content })
+    } else if (object !== null) {
+      this.resetControls()
+      this.infoPanel.hidePanel()
     }
   }
 

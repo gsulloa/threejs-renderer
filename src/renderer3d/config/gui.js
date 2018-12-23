@@ -27,22 +27,25 @@ class ConfigGui extends Component {
 
   addAttachmentConfig({ attachmentsController }) {
     const { attachments } = this.configs
+    const COLORS = {
+      Red: "#d94545",
+      Pink: "#fae",
+      Blue: "#33f",
+      White: "#fff",
+    }
     if (!attachmentsController || !attachments) return
     attachments
-      .addColor(Config.attachment, "defaultColor")
+      .add(Config.attachment, "defaultColor", { ...COLORS })
       .name("Default")
       .listen()
-      .onChange(attachmentsController.updateMaterials)
     attachments
-      .addColor(Config.attachment, "hoveredColor")
+      .add(Config.attachment, "hoveredColor", { ...COLORS })
       .name("Hovered")
       .listen()
-      .onChange(attachmentsController.updateMaterials)
     attachments
-      .addColor(Config.attachment, "selectedColor")
+      .add(Config.attachment, "selectedColor", { ...COLORS })
       .name("Selected")
       .listen()
-      .onChange(attachmentsController.updateMaterials)
     attachments
       .add(Config.attachment, "scale", 1, 10, 1)
       .name("Radius")

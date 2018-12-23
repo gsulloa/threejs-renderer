@@ -19,18 +19,27 @@ class AttachmentsController {
     this.domElement = domElement
     initialAttachments.forEach(this.addSphere)
 
-    this.hovered = undefined
-    this.selected = undefined
-
     document.addEventListener("mousemove", ({ offsetX, offsetY }) => {
-      this.intersectAttachments({
+      this.setHovereds({
         offsetX,
         offsetY,
-        domElementHeight: this.domElement.height,
-        domElementWidth: this.domElement.width,
       })
     })
   }
+
+  get hovereds() {
+    return this.filterByState("hovered")
+  }
+  get selecteds() {
+    return this.filterByState("selected")
+  }
+
+  filterByState = state => {
+    return this.attachments.children.filter(
+      attachment => attachment.state === state
+    )
+  };
+
   *number() {
     let n = 0
     while (true) {
@@ -76,14 +85,11 @@ class AttachmentsController {
     this.addAttachment({ position, model: sphere })
   }
 
-  intersectAttachments = ({
-    offsetX,
-    offsetY,
-    domElementWidth,
-    domElementHeight,
-  }) => {
+  intersectAttachments = ({ offsetX, offsetY }) => {
+    const domElementHeight = this.domElement.height
+    const domElementWidth = this.domElement.width
     try {
-      const { camera, attachments, selected } = this
+      const { camera, attachments } = this
       const vector = new THREE.Vector2(
         (offsetX / domElementWidth) * 2 - 1,
         -(offsetY / domElementHeight) * 2 + 1
@@ -91,47 +97,58 @@ class AttachmentsController {
       const raycaster = new THREE.Raycaster()
       raycaster.setFromCamera(vector, camera)
       const intersects = raycaster.intersectObjects(attachments.children)
-      this.setHoveredToDefault()
-      if (intersects.length) {
-        const [{ object }] = intersects
-        if (selected !== object)
-          object.material = Config.attachment.material.hovered
-        this.hovered = object
-        object.state = "hovered"
-      }
+      return intersects
     } catch (e) {
       devlogerror(e)
     }
   }
 
-  setHoveredToDefault = () => {
-    if (this.hovered && this.hovered !== this.selected) {
-      this.hovered.material = Config.attachment.material.default
-      this.hovered.state = "default"
-      this.hovered = undefined
-    }
-  }
-
-  selectAttachment = ({ object }) => {
-    if (this.selected)
-      this.selected.material = Config.attachment.material.default
-    if (this.selected !== object) {
-      this.hovered = undefined
-      object.material = Config.attachment.material.selected
-      object.state = "selected"
-      this.selected = object
-      return true
-    } else {
-      this.selected.state = "default"
-      this.selected = undefined
-      return false
-    }
-  }
-
-  updateMaterials = () => {
-    this.attachments.children.forEach(attachment => {
-      attachment.material = Config.attachment.material[attachment.state]
+  setHovereds = ({ offsetX, offsetY }) => {
+    const intersects = this.intersectAttachments({
+      offsetX,
+      offsetY,
     })
+    if (intersects.length) {
+      const [{ object }] = intersects
+      if (object.state !== "selected") {
+        object.material = Config.attachment.material.hovered
+        object.state = "hovered"
+      }
+    } else {
+      this.hovereds.forEach(attachment => {
+        attachment.state = "default"
+        attachment.material = Config.attachment.material.default
+      })
+    }
+  }
+
+  selectAttachment = ({ offsetX, offsetY }) => {
+    const intersects = this.intersectAttachments({
+      offsetX,
+      offsetY,
+    })
+    if (intersects.length) {
+      const [{ object }] = intersects
+      switch (object.state) {
+        case "hovered": {
+          this.selecteds.forEach(attachment => {
+            attachment.state = "default"
+            attachment.material = Config.attachment.material.default
+          })
+          object.state = "selected"
+          object.material = Config.attachment.material.selected
+          return object
+        }
+        case "selected": {
+          object.state = "hovered"
+          object.material = Config.attachment.material.hovered
+          return undefined
+        }
+        default:
+          break
+      }
+    }
+    return null
   }
 
   updateScale = () => {
