@@ -121,6 +121,10 @@ class Renderer3D {
   }
 
   handleMouseClick = e => {
+    if (config.object.replacing && config.object.editing) {
+      this.handleReplaceSelected(e)
+      return
+    }
     const { objectController, attachmentsController } = config.controllers
     const object = this.handleAttachmentSelect(e)
     if (object === null && config.object.editing) {
@@ -151,6 +155,15 @@ class Renderer3D {
       this.infoPanel.hidePanel()
     }
     return object
+  }
+  handleReplaceSelected = ({ offsetX, offsetY }) => {
+    const position = config.controllers.objectController.getPositionInObject({
+      offsetX,
+      offsetY,
+      domElementHeight: this.renderer.domElement.height,
+      domElementWidth: this.renderer.domElement.width,
+    })
+    config.controllers.attachmentsController.replaceSelected(position)
   }
 
   lookObject = object => {

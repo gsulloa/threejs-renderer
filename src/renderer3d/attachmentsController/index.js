@@ -2,6 +2,7 @@ import * as THREE from "three"
 import Config from "../config"
 import { devlogerror } from "../utils/log"
 import font from "./font"
+import config from "../config"
 
 class AttachmentsController {
   constructor({
@@ -178,6 +179,16 @@ class AttachmentsController {
     this.selecteds.forEach(attachment => {
       this.attachments.remove(attachment)
     })
+  }
+
+  replaceSelected = vector => {
+    this.selecteds.forEach(attachment => {
+      attachment.reference.position.copy(vector)
+      attachment.position.copy(
+        this.model.localToWorld(new THREE.Vector3().copy(vector))
+      )
+    })
+    config.object.replacing = false
   }
 
   selectObject = object => {

@@ -29,8 +29,9 @@ const Button = styled.button`
   position: relative;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
   color: rgba(0, 0, 0, 0.65);
-  background-color: #fff;
-  border-color: #d9d9d9;
+  background-color: ${({ selected }) => (selected ? "#008" : "#fff")};
+  border-color: ${({ selected }) => (selected ? "#4062d4" : "#d9d9d9")};
+  outline: none;
 `
 class InfoPanel extends PureComponent {
   state = {
@@ -38,6 +39,15 @@ class InfoPanel extends PureComponent {
     title: "",
     content: "",
     editing: config.object.editing,
+    replacing: config.object.replacing,
+  }
+  componentDidMount() {
+    config.object._editing.subscribe(() => {
+      this.setState({ editing: config.object.editing })
+    })
+    config.object._replacing.subscribe(() => {
+      this.setState({ replacing: config.object.replacing })
+    })
   }
   showPanel = ({ title, content }) => {
     this.setState(() => ({
@@ -62,8 +72,11 @@ class InfoPanel extends PureComponent {
     config.controllers.objectController.resetControls()
     config.controllers.attachmentsController.replaceAllNumbers()
   }
+  handleToogleReplace = () => {
+    config.object.replacing = !config.object.replacing
+  }
   render() {
-    const { show, title, content, editing } = this.state
+    const { show, title, content, editing, replacing } = this.state
     return (
       <Overlay hidden={!show} width="300px">
         <Panel>
@@ -75,7 +88,9 @@ class InfoPanel extends PureComponent {
               <Button onClick={this.handleChangeDefaultLook}>
                 Set Camera as Default
               </Button>
-              <Button>Replace</Button>
+              <Button onClick={this.handleToogleReplace} selected={replacing}>
+                Replace
+              </Button>
               <Button onClick={this.handleRemoveAttachment}>Remove</Button>
             </Column>,
           ]}

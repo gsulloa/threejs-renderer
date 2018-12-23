@@ -55,7 +55,20 @@ export default {
         this.onMouseSelectVal = val
       }
     },
-    editing: true,
+    _editing: new BehaviorSubject(true),
+    get editing() {
+      return this._editing.getValue()
+    },
+    set editing(val) {
+      this._editing.next(val)
+    },
+    _replacing: new BehaviorSubject(false),
+    get replacing() {
+      return this._replacing.getValue()
+    },
+    set replacing(val) {
+      this._replacing.next(val)
+    },
   },
   orbit: {
     _position: new BehaviorSubject({
