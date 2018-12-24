@@ -20,6 +20,7 @@ class Renderer3D {
       updateAttachmentDefaultScreen,
       updateAttachmentPosition,
     } = {},
+    editable = false,
   }) {
     this.callbacks = {
       addAttachment,
@@ -28,6 +29,7 @@ class Renderer3D {
       updateAttachmentDefaultScreen,
       updateAttachmentPosition,
     }
+    config.object.editing = editable
     this.infoPanel = infoPanel
 
     this.prepareEnvironment({

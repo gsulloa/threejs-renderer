@@ -73,6 +73,10 @@ class InfoPanel extends PureComponent {
       title,
       content,
     }))
+    this.prepareForm()
+  }
+  prepareForm = () => {
+    if (!this.state.editing) return
     this.autoGrow("title")
     this.autoGrow("content")
     this.titleElement.current.focus()
