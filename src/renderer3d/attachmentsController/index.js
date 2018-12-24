@@ -62,6 +62,8 @@ class AttachmentsController {
       n += 1
     }
   }
+  findAttachmentIndex = model =>
+    this.attachments.children.findIndex(a => a === model)
 
   addAttachment = ({ position, model }) => {
     if (position && model) {
@@ -188,48 +190,55 @@ class AttachmentsController {
   }
 
   updateScreenPosition = () => {
-    this.selecteds.forEach((attachment, i) => {
+    this.selecteds.forEach(attachment => {
       const { position, rotation } = Config.orbit
       attachment.data.screenPosition = { position, rotation }
       if (this.callbacks.updateAttachmentDefaultScreen)
         this.callbacks.updateAttachmentDefaultScreen(
-          i,
+          this.findAttachmentIndex(attachment),
           attachment.data.screenPosition
         )
     })
   }
 
   removeSelectedAttachment = () => {
-    this.selecteds.forEach((attachment, i) => {
+    this.selecteds.forEach(attachment => {
+      if (this.callbacks.removeAttachment)
+        this.callbacks.removeAttachment(this.findAttachmentIndex(attachment))
       this.attachments.remove(attachment)
-      if (this.callbacks.removeAttachment) this.callbacks.removeAttachment(i)
     })
   }
 
   replaceSelected = vector => {
-    this.selecteds.forEach((attachment, i) => {
+    this.selecteds.forEach(attachment => {
       attachment.reference.position.copy(vector)
       attachment.position.copy(
         this.model.localToWorld(new THREE.Vector3().copy(vector))
       )
       if (this.callbacks.updateAttachmentPosition)
-        this.callbacks.updateAttachmentPosition(i, {
-          x: vector.x,
-          y: vector.y,
-          z: vector.z,
-        })
+        this.callbacks.updateAttachmentPosition(
+          this.findAttachmentIndex(attachment),
+          {
+            x: vector.x,
+            y: vector.y,
+            z: vector.z,
+          }
+        )
     })
     config.object.replacing = false
   }
 
   updateSelectedData = data => {
-    this.selecteds.forEach((attachment, i) => {
+    this.selecteds.forEach(attachment => {
       attachment.data = {
         ...attachment.data,
         ...data,
       }
       if (this.callbacks.updateAttachmentData)
-        this.callbacks.updateAttachmentData(i, attachment.data)
+        this.callbacks.updateAttachmentData(
+          this.findAttachmentIndex(attachment),
+          attachment.data
+        )
     })
   }
 
