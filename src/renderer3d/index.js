@@ -19,6 +19,7 @@ class Renderer3D {
       updateAttachmentData,
       updateAttachmentDefaultScreen,
       updateAttachmentPosition,
+      updateDefaultOrbit,
     } = {},
     editable = false,
   }) {
@@ -28,6 +29,7 @@ class Renderer3D {
       updateAttachmentData,
       updateAttachmentDefaultScreen,
       updateAttachmentPosition,
+      updateDefaultOrbit,
     }
     config.object.editing = editable
     this.infoPanel = infoPanel
