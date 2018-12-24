@@ -11,14 +11,28 @@ class AttachmentsController {
     attachments,
     initialAttachments = [],
     domElement,
+    callbacks: {
+      addAttachment,
+      removeAttachment,
+      updateAttachmentData,
+      updateAttachmentDefaultScreen,
+      updateAttachmentPosition,
+    },
   } = {}) {
     this.id = this.number()
+    this.callbacks = {
+      addAttachment,
+      removeAttachment,
+      updateAttachmentData,
+      updateAttachmentDefaultScreen,
+      updateAttachmentPosition,
+    }
     this.textureFont = new THREE.FontLoader().parse(font)
     this.model = model
     this.camera = camera
     this.attachments = attachments
     this.domElement = domElement
-    initialAttachments.forEach(this.addSphere)
+    initialAttachments.forEach(a => this.addSphere(a, false))
 
     document.addEventListener("mousemove", ({ offsetX, offsetY }) => {
       this.setHovereds({
@@ -66,14 +80,17 @@ class AttachmentsController {
       return model
     }
   }
-  addSphere = ({
-    position,
-    data = {
-      title: "Change me!",
-      content: "Change me description!",
-      screenPosition: { ...Config.orbit },
+  addSphere = (
+    {
+      position,
+      data = {
+        title: "Change me!",
+        content: "Change me description!",
+        screenPosition: { ...Config.orbit },
+      },
     },
-  }) => {
+    withCallback = true
+  ) => {
     const { scale, material } = Config.attachment
     const radius = 1
     const segments = 32
@@ -83,6 +100,8 @@ class AttachmentsController {
     sphere.data = data
     sphere.state = "default"
     this.addNumber({ model: sphere })
+    if (withCallback && this.callbacks.addAttachment)
+      this.callbacks.addAttachment({ ...sphere.data, position })
     return this.addAttachment({ position, model: sphere })
   }
 
@@ -169,34 +188,48 @@ class AttachmentsController {
   }
 
   updateScreenPosition = () => {
-    this.selecteds.forEach(attachment => {
+    this.selecteds.forEach((attachment, i) => {
       const { position, rotation } = Config.orbit
       attachment.data.screenPosition = { position, rotation }
+      if (this.callbacks.updateAttachmentDefaultScreen)
+        this.callbacks.updateAttachmentDefaultScreen(
+          i,
+          attachment.data.screenPosition
+        )
     })
   }
 
   removeSelectedAttachment = () => {
-    this.selecteds.forEach(attachment => {
+    this.selecteds.forEach((attachment, i) => {
       this.attachments.remove(attachment)
+      if (this.callbacks.removeAttachment) this.callbacks.removeAttachment(i)
     })
   }
 
   replaceSelected = vector => {
-    this.selecteds.forEach(attachment => {
+    this.selecteds.forEach((attachment, i) => {
       attachment.reference.position.copy(vector)
       attachment.position.copy(
         this.model.localToWorld(new THREE.Vector3().copy(vector))
       )
+      if (this.callbacks.updateAttachmentPosition)
+        this.callbacks.updateAttachmentPosition(i, {
+          x: vector.x,
+          y: vector.y,
+          z: vector.z,
+        })
     })
     config.object.replacing = false
   }
 
   updateSelectedData = data => {
-    this.selecteds.forEach(attachment => {
+    this.selecteds.forEach((attachment, i) => {
       attachment.data = {
         ...attachment.data,
         ...data,
       }
+      if (this.callbacks.updateAttachmentData)
+        this.callbacks.updateAttachmentData(i, attachment.data)
     })
   }
 

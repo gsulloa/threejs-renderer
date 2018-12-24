@@ -13,7 +13,21 @@ class Renderer3D {
     container,
     initial: { orbit = {}, attachments = [] } = {},
     ambientLight = {},
+    callbacks: {
+      addAttachment,
+      removeAttachment,
+      updateAttachmentData,
+      updateAttachmentDefaultScreen,
+      updateAttachmentPosition,
+    } = {},
   }) {
+    this.callbacks = {
+      addAttachment,
+      removeAttachment,
+      updateAttachmentData,
+      updateAttachmentDefaultScreen,
+      updateAttachmentPosition,
+    }
     this.infoPanel = infoPanel
 
     this.prepareEnvironment({
@@ -86,6 +100,7 @@ class Renderer3D {
       camera: this.camera,
       domElement: this.renderer.domElement,
       initialAttachments: attachments,
+      callbacks: this.callbacks,
     })
 
     config.controllers.objectController = new ObjectController({
@@ -98,6 +113,7 @@ class Renderer3D {
         rotation,
       },
       attachments: this.attachments,
+      callbacks: this.callbacks,
     })
     this.renderer.domElement.addEventListener("click", this.handleMouseClick)
   }

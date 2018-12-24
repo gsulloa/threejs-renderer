@@ -34,7 +34,11 @@ class ObjectController {
     domElement,
     initial: { rotation, position } = {},
     attachments,
+    callbacks: { updateDefaultOrbit },
   } = {}) {
+    this.callbacks = {
+      updateDefaultOrbit,
+    }
     this.mouseEventListener({ domElement, camera })
     this.touchEventListener({ domElement, camera })
 
@@ -263,6 +267,8 @@ class ObjectController {
 
   updateInitial = ({ rotation, position }) => {
     this.initial = { rotation, position }
+    if (this.callbacks.updateDefaultOrbit)
+      this.callbacks.updateDefaultOrbit(this.initial)
   }
 
   getPositionInObject = ({
