@@ -127,7 +127,11 @@ class Renderer3D {
     }
     const { objectController, attachmentsController } = config.controllers
     const object = this.handleAttachmentSelect(e)
-    if (object === null && config.object.editing) {
+    if (
+      object === null &&
+      config.object.editing &&
+      !config.controllers.attachmentsController.selecteds.length
+    ) {
       const position = objectController.getPositionInObject({
         offsetX: e.offsetX,
         offsetY: e.offsetY,

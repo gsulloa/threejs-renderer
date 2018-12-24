@@ -45,16 +45,6 @@ export default {
         this.onMouseMoveVal = val
       }
     },
-    onMouseSelectVal: "add",
-    get onMouseSelect() {
-      return this.onMouseSelectVal
-    },
-    set onMouseSelect(val) {
-      const options = ["select", "add"]
-      if (options.includes(val)) {
-        this.onMouseSelectVal = val
-      }
-    },
     _editing: new BehaviorSubject(true),
     get editing() {
       return this._editing.getValue()
