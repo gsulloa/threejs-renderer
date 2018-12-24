@@ -1,11 +1,11 @@
 import React, { Component, createRef } from "react"
 
-import Renderer3D, {
-  Loading,
-  InfoPanel,
-  ConfigGui,
-  Controls,
-} from "./renderer3d"
+import Renderer3D from "./dist"
+
+import Loading from "./dist/loading"
+import InfoPanel from "./dist/infoPanel"
+import ConfigGui from "./dist/config/gui"
+import Controls from "./dist/controls"
 
 class App extends Component {
   state = {
