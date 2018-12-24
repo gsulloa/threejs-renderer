@@ -30,9 +30,18 @@ const Button = styled.button`
   position: relative;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
   color: rgba(0, 0, 0, 0.65);
-  background-color: ${({ selected }) => (selected ? "#008" : "#fff")};
-  border-color: ${({ selected }) => (selected ? "#4062d4" : "#d9d9d9")};
+  background-color: ${({ selected }) =>
+    selected ? "#008 !important" : "#fff"};
+  border-color: ${({ selected }) =>
+    selected ? "#4062d4 !important" : "#d9d9d9"};
   outline: none;
+  :active {
+    background-color: #008 !important;
+    border-color: #4062d4;
+  }
+  :hover {
+    background-color: #d9d9d9;
+  }
 `
 
 class InfoPanel extends PureComponent {
