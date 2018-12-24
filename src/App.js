@@ -1,10 +1,11 @@
 import React, { Component, createRef } from "react"
 
-import Loading from "./renderer3d/loading"
-import Renderer3D from "./renderer3d"
-import InfoPanel from "./renderer3d/infoPanel"
-import ConfigGui from "./renderer3d/config/gui"
-import Controls from "./renderer3d/controls"
+import Renderer3D, {
+  Loading,
+  InfoPanel,
+  ConfigGui,
+  Controls,
+} from "./renderer3d"
 
 class App extends Component {
   state = {
@@ -268,6 +269,13 @@ class App extends Component {
             },
           },
         ],
+      },
+      callbacks: {
+        addAttachment: console.log,
+        removeAttachment: console.log,
+        updateAttachmentData: console.log,
+        updateAttachmentDefaultScreen: console.log,
+        updateAttachmentPosition: console.log,
       },
     })
     this.renderer.animate()

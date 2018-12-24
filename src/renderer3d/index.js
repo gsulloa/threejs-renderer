@@ -217,5 +217,8 @@ class Renderer3D {
     this.setNewInitialPosition({ rotation, position })
   }
 }
-
+export { default as Loading } from "./loading"
+export { default as InfoPanel } from "./infoPanel"
+export { default as ConfigGui } from "./config/gui"
+export { default as Controls } from "./controls"
 export default Renderer3D
