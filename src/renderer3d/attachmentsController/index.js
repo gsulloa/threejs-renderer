@@ -191,6 +191,15 @@ class AttachmentsController {
     config.object.replacing = false
   }
 
+  updateSelectedData = data => {
+    this.selecteds.forEach(attachment => {
+      attachment.data = {
+        ...attachment.data,
+        ...data,
+      }
+    })
+  }
+
   selectObject = object => {
     this.selecteds.forEach(attachment => {
       attachment.state = "default"
