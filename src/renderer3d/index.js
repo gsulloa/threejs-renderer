@@ -3,7 +3,6 @@ import * as TWEEN from "@tweenjs/tween.js"
 import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController"
-import { devlogerror } from "./utils/log"
 import config from "./config"
 class Renderer3D {
   constructor({
@@ -30,9 +29,7 @@ class Renderer3D {
       url: modelUrl,
     }).then(() => {
       if (!configGui) return
-      configGui.addAttachmentConfig({
-        attachmentsController: this.attachmentsController,
-      })
+      configGui.addAttachmentConfig()
     })
 
     this.render({ container })
@@ -83,7 +80,7 @@ class Renderer3D {
     this.scene.add(object)
     this.attachments = new THREE.Group()
     this.scene.add(this.attachments)
-    this.attachmentsController = new AttachmentsController({
+    config.controllers.attachmentsController = new AttachmentsController({
       model: this.object.children[0],
       attachments: this.attachments,
       camera: this.camera,
@@ -91,7 +88,7 @@ class Renderer3D {
       initialAttachments: attachments,
     })
 
-    this.objectController = new ObjectController({
+    config.controllers.objectController = new ObjectController({
       camera: this.camera,
       scene: this.scene,
       object: this.object,
@@ -124,53 +121,71 @@ class Renderer3D {
   }
 
   handleMouseClick = e => {
-    switch (config.object.onMouseSelect) {
-      case "add": {
-        const position = this.objectController.getPositionInObject({
-          offsetX: e.offsetX,
-          offsetY: e.offsetY,
-          domElementHeight: this.renderer.domElement.height,
-          domElementWidth: this.renderer.domElement.width,
-        })
-        this.attachmentsController.addSphere({ position })
-        break
+    if (config.object.replacing && config.object.editing) {
+      this.handleReplaceSelected(e)
+      return
+    }
+    const { objectController, attachmentsController } = config.controllers
+    const object = this.handleAttachmentSelect(e)
+    if (
+      object === null &&
+      config.object.editing &&
+      !config.controllers.attachmentsController.selecteds.length
+    ) {
+      const position = objectController.getPositionInObject({
+        offsetX: e.offsetX,
+        offsetY: e.offsetY,
+        domElementHeight: this.renderer.domElement.height,
+        domElementWidth: this.renderer.domElement.width,
+      })
+      const attachment = attachmentsController.addSphere({ position })
+      if (attachment) {
+        attachmentsController.selectObject(attachment)
+        this.lookObject(attachment)
       }
-      case "select": {
-        this.handleAttachmentSelect(e)
-        break
-      }
-      default:
-        devlogerror(`Unexpected case "${this.state.click}"`)
-        break
     }
   }
 
   handleAttachmentSelect = ({ offsetX, offsetY }) => {
-    const { selectAttachment } = this.attachmentsController
+    const { selectAttachment } = config.controllers.attachmentsController
     const object = selectAttachment({
       offsetX,
       offsetY,
     })
     if (object) {
-      const {
-        data: { screenPosition, title, content },
-      } = object
-      if (screenPosition) {
-        this.objectController.look(screenPosition)
-      } else {
-        this.resetControls()
-      }
-      this.infoPanel.showPanel({ title, content })
+      this.lookObject(object)
     } else if (object !== null) {
       this.resetControls()
       this.infoPanel.hidePanel()
     }
+    return object
+  }
+  handleReplaceSelected = ({ offsetX, offsetY }) => {
+    const position = config.controllers.objectController.getPositionInObject({
+      offsetX,
+      offsetY,
+      domElementHeight: this.renderer.domElement.height,
+      domElementWidth: this.renderer.domElement.width,
+    })
+    config.controllers.attachmentsController.replaceSelected(position)
+  }
+
+  lookObject = object => {
+    const {
+      data: { screenPosition, title, content },
+    } = object
+    if (screenPosition) {
+      config.controllers.objectController.look(screenPosition)
+    } else {
+      this.resetControls()
+    }
+    this.infoPanel.showPanel({ title, content })
   }
 
   /* Controls */
 
   resetControls = () => {
-    this.objectController.resetControls()
+    config.controllers.objectController.resetControls()
   }
 
   getCurrentPosition = () => {
@@ -178,7 +193,7 @@ class Renderer3D {
   }
 
   setNewInitialPosition = ({ rotation, position }) => {
-    this.objectController.updateInitial({ rotation, position })
+    config.controllers.objectController.updateInitial({ rotation, position })
   }
 
   setCurrentAsInitial = () => {

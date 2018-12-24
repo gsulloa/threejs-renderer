@@ -2,6 +2,7 @@ import * as THREE from "three"
 import Config from "../config"
 import { devlogerror } from "../utils/log"
 import font from "./font"
+import config from "../config"
 
 class AttachmentsController {
   constructor({
@@ -62,10 +63,17 @@ class AttachmentsController {
       model.position.copy(worldPosition)
       model.reference = transparentModel
       this.attachments.add(model)
+      return model
     }
   }
-  addSphere = ({ position, data }) => {
-    const number = this.id.next().value
+  addSphere = ({
+    position,
+    data = {
+      title: "Change me!",
+      content: "Change me description!",
+      screenPosition: { ...Config.orbit },
+    },
+  }) => {
     const { scale, material } = Config.attachment
     const radius = 1
     const segments = 32
@@ -74,15 +82,29 @@ class AttachmentsController {
     sphere.scale.set(scale, scale, scale)
     sphere.data = data
     sphere.state = "default"
+    this.addNumber({ model: sphere })
+    return this.addAttachment({ position, model: sphere })
+  }
 
+  addNumber({ model } = {}) {
+    if (!model) return
+    const number = this.id.next().value
     const textMaterial = new THREE.MeshBasicMaterial({ color: "black" })
     const textShapes = this.textureFont.generateShapes(String(number + 1), 1)
     const textGeometry = new THREE.ShapeBufferGeometry(textShapes)
     const text = new THREE.Mesh(textGeometry, textMaterial)
     text.position.x -= 0.5 * String(number + 1).length
     text.position.y -= 0.5
-    sphere.add(text)
-    this.addAttachment({ position, model: sphere })
+    model.add(text)
+  }
+
+  replaceAllNumbers = () => {
+    this.id = this.number()
+    this.attachments.children.forEach(attachment => {
+      const [number] = attachment.children
+      attachment.remove(number)
+      this.addNumber({ model: attachment })
+    })
   }
 
   intersectAttachments = ({ offsetX, offsetY }) => {
@@ -131,12 +153,7 @@ class AttachmentsController {
       const [{ object }] = intersects
       switch (object.state) {
         case "hovered": {
-          this.selecteds.forEach(attachment => {
-            attachment.state = "default"
-            attachment.material = Config.attachment.material.default
-          })
-          object.state = "selected"
-          object.material = Config.attachment.material.selected
+          this.selectObject(object)
           return object
         }
         case "selected": {
@@ -149,6 +166,47 @@ class AttachmentsController {
       }
     }
     return null
+  }
+
+  updateScreenPosition = () => {
+    this.selecteds.forEach(attachment => {
+      const { position, rotation } = Config.orbit
+      attachment.data.screenPosition = { position, rotation }
+    })
+  }
+
+  removeSelectedAttachment = () => {
+    this.selecteds.forEach(attachment => {
+      this.attachments.remove(attachment)
+    })
+  }
+
+  replaceSelected = vector => {
+    this.selecteds.forEach(attachment => {
+      attachment.reference.position.copy(vector)
+      attachment.position.copy(
+        this.model.localToWorld(new THREE.Vector3().copy(vector))
+      )
+    })
+    config.object.replacing = false
+  }
+
+  updateSelectedData = data => {
+    this.selecteds.forEach(attachment => {
+      attachment.data = {
+        ...attachment.data,
+        ...data,
+      }
+    })
+  }
+
+  selectObject = object => {
+    this.selecteds.forEach(attachment => {
+      attachment.state = "default"
+      attachment.material = Config.attachment.material.default
+    })
+    object.state = "selected"
+    object.material = Config.attachment.material.selected
   }
 
   updateScale = () => {

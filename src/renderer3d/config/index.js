@@ -45,15 +45,19 @@ export default {
         this.onMouseMoveVal = val
       }
     },
-    onMouseSelectVal: "select",
-    get onMouseSelect() {
-      return this.onMouseSelectVal
+    _editing: new BehaviorSubject(true),
+    get editing() {
+      return this._editing.getValue()
     },
-    set onMouseSelect(val) {
-      const options = ["select", "add"]
-      if (options.includes(val)) {
-        this.onMouseSelectVal = val
-      }
+    set editing(val) {
+      this._editing.next(val)
+    },
+    _replacing: new BehaviorSubject(false),
+    get replacing() {
+      return this._replacing.getValue()
+    },
+    set replacing(val) {
+      this._replacing.next(val)
     },
   },
   orbit: {
@@ -91,4 +95,5 @@ export default {
       })
     },
   },
+  controllers: {},
 }

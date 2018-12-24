@@ -40,10 +40,11 @@ export const LoadingBar = styled.div`
 export const Panel = styled.div`
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.2);
   padding: 0 15px;
   overflow-y: auto;
   position: relative;
+  pointer-events: none;
 `
 
 export const SliderWrapper = styled.div`
