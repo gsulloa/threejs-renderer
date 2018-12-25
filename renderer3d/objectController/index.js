@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import * as TWEEN from "@tweenjs/tween.js"
+import { Tween, Easing } from "@tweenjs/tween.js"
 import { toRadians } from "../utils/radiansDegreesConverter"
 import { useShortDistance } from "../utils/radiansNormalize"
 import { devlogerror } from "../utils/log"
@@ -235,9 +235,9 @@ class ObjectController {
   }
   smoothMoveCamera = ({ newPosition }) => {
     const positionCoords = { ...Config.orbit.position }
-    new TWEEN.Tween(positionCoords)
+    new Tween(positionCoords)
       .to(newPosition, 1000)
-      .easing(TWEEN.Easing.Quadratic.Out)
+      .easing(Easing.Quadratic.Out)
       .onUpdate(({ x, y, z }) => {
         Config.orbit.position = { x, y, z }
       })
@@ -252,9 +252,9 @@ class ObjectController {
       },
       {}
     )
-    new TWEEN.Tween(rotationCords)
+    new Tween(rotationCords)
       .to(shortDistanceCords, 1000)
-      .easing(TWEEN.Easing.Quadratic.Out)
+      .easing(Easing.Quadratic.Out)
       .onUpdate(({ x, y, z }) => {
         Config.orbit.rotation = { x, y, z }
       })

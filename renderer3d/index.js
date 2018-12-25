@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { update } from "@tweenjs/tween.js"
+import TWEEN from "@tweenjs/tween.js"
 import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
 import AttachmentsController from "./attachmentsController"
@@ -134,10 +134,10 @@ class Renderer3D {
     this.camera.updateProjectionMatrix()
   }
 
-  animate = time => {
+  animate = () => {
     requestAnimationFrame(this.animate)
     this.renderer.render(this.scene, this.camera)
-    update(time)
+    TWEEN.update()
   }
 
   handleMouseClick = e => {

@@ -1,11 +1,11 @@
 import React, { Component, createRef } from "react"
 
-import Renderer3D from "./dist"
+import Renderer3D from "renderer3d-model/dist"
 
-import Loading from "./dist/loading"
-import InfoPanel from "./dist/infoPanel"
-import ConfigGui from "./dist/config/gui"
-import Controls from "./dist/controls"
+import Loading from "renderer3d-model/dist/loading"
+import InfoPanel from "renderer3d-model/dist/infoPanel"
+import ConfigGui from "renderer3d-model/dist/config/gui"
+import Controls from "renderer3d-model/dist/controls"
 
 class App extends Component {
   state = {
