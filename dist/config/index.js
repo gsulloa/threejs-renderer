@@ -35,6 +35,7 @@ var _default = {
     visibility: true,
 
     set defaultColor(color) {
+      this.color.default = color;
       this.material.default.color.set(new _three.Color(color));
     },
 
@@ -43,6 +44,7 @@ var _default = {
     },
 
     set hoveredColor(color) {
+      this.color.hovered = color;
       this.material.hovered.color.set(new _three.Color(color));
     },
 
@@ -51,6 +53,7 @@ var _default = {
     },
 
     set selectedColor(color) {
+      this.color.selected = color;
       this.material.selected.color.set(new _three.Color(color));
     },
 

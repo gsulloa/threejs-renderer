@@ -16,18 +16,21 @@ export default {
     scale: 5,
     visibility: true,
     set defaultColor(color) {
+      this.color.default = color
       this.material.default.color.set(new Color(color))
     },
     get defaultColor() {
       return this.color.default
     },
     set hoveredColor(color) {
+      this.color.hovered = color
       this.material.hovered.color.set(new Color(color))
     },
     get hoveredColor() {
       return this.color.hovered
     },
     set selectedColor(color) {
+      this.color.selected = color
       this.material.selected.color.set(new Color(color))
     },
     get selectedColor() {
