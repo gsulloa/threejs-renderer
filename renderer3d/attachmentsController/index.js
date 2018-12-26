@@ -102,7 +102,7 @@ class AttachmentsController {
     sphere.data = data
     sphere.state = "default"
     this.addNumber({ model: sphere })
-    if (withCallback && this.callbacks.addAttachment)
+    if (withCallback && this.callbacks.addAttachment && position)
       this.callbacks.addAttachment({ ...sphere.data, position })
     return this.addAttachment({ position, model: sphere })
   }
