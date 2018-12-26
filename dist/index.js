@@ -33,6 +33,8 @@ Object.defineProperty(exports, "Controls", {
 });
 exports.default = void 0;
 
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
+
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
@@ -87,7 +89,6 @@ var Renderer3D = function Renderer3D(_ref) {
       updateAttachmentDefaultScreen = _ref$callbacks.updateAttachmentDefaultScreen,
       updateAttachmentPosition = _ref$callbacks.updateAttachmentPosition,
       updateDefaultOrbit = _ref$callbacks.updateDefaultOrbit,
-      getCurrentState = _ref$callbacks.getCurrentState,
       _ref$editable = _ref.editable,
       editable = _ref$editable === void 0 ? false : _ref$editable;
   (0, _classCallCheck2.default)(this, Renderer3D);
@@ -325,17 +326,18 @@ var Renderer3D = function Renderer3D(_ref) {
     });
   });
   (0, _defineProperty2.default)(this, "getCurrentState", function () {
-    if (!_this.callbacks.getCurrentState) return;
     var orbit = _config.default.controllers.objectController.initial;
 
     var attachments = _this.attachments.children.map(function (attachment) {
-      return attachment.data;
+      return (0, _objectSpread2.default)({}, attachment.data, {
+        position: attachment.reference.position
+      });
     });
 
-    _this.callbacks.getCurrentState({
+    return {
       orbit: orbit,
       attachments: attachments
-    });
+    };
   });
   this.callbacks = {
     addAttachment: addAttachment,
@@ -343,8 +345,7 @@ var Renderer3D = function Renderer3D(_ref) {
     updateAttachmentData: updateAttachmentData,
     updateAttachmentDefaultScreen: updateAttachmentDefaultScreen,
     updateAttachmentPosition: updateAttachmentPosition,
-    updateDefaultOrbit: updateDefaultOrbit,
-    getCurrentState: getCurrentState
+    updateDefaultOrbit: updateDefaultOrbit
   };
   _config.default.object.editing = editable;
   this.infoPanel = infoPanel;
