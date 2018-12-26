@@ -270,6 +270,7 @@ class App extends Component {
         updateAttachmentDefaultScreen: console.log,
         updateAttachmentPosition: console.log,
         updateDefaultOrbit: console.log,
+        getCurrentState: console.log,
       },
     })
     this.renderer.animate()
@@ -280,6 +281,9 @@ class App extends Component {
   }
   setCurrentAsInitial = () => {
     this.renderer.setCurrentAsInitial()
+  }
+  getCurrentState = () => {
+    this.renderer.getCurrentState()
   }
 
   render() {
@@ -315,6 +319,7 @@ class App extends Component {
         </div>
         <button onClick={this.reset}>Reset</button>
         <button onClick={this.setCurrentAsInitial}>ChangeInitial</button>
+        <button onClick={this.getCurrentState}>Current State</button>
       </div>
     )
   }

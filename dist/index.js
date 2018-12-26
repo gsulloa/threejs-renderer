@@ -73,7 +73,7 @@ var Renderer3D = function Renderer3D(_ref) {
   _ref$initial = _ref$initial === void 0 ? {} : _ref$initial;
 
   var _ref$initial$orbit = _ref$initial.orbit,
-      orbit = _ref$initial$orbit === void 0 ? {} : _ref$initial$orbit,
+      _orbit = _ref$initial$orbit === void 0 ? {} : _ref$initial$orbit,
       _ref$initial$attachme = _ref$initial.attachments,
       _attachments = _ref$initial$attachme === void 0 ? [] : _ref$initial$attachme,
       _ref$ambientLight = _ref.ambientLight,
@@ -87,6 +87,7 @@ var Renderer3D = function Renderer3D(_ref) {
       updateAttachmentDefaultScreen = _ref$callbacks.updateAttachmentDefaultScreen,
       updateAttachmentPosition = _ref$callbacks.updateAttachmentPosition,
       updateDefaultOrbit = _ref$callbacks.updateDefaultOrbit,
+      getCurrentState = _ref$callbacks.getCurrentState,
       _ref$editable = _ref.editable,
       editable = _ref$editable === void 0 ? false : _ref$editable;
   (0, _classCallCheck2.default)(this, Renderer3D);
@@ -323,13 +324,27 @@ var Renderer3D = function Renderer3D(_ref) {
       position: position
     });
   });
+  (0, _defineProperty2.default)(this, "getCurrentState", function () {
+    if (!_this.callbacks.getCurrentState) return;
+    var orbit = _config.default.controllers.objectController.initial;
+
+    var attachments = _this.attachments.children.map(function (attachment) {
+      return attachment.data;
+    });
+
+    _this.callbacks.getCurrentState({
+      orbit: orbit,
+      attachments: attachments
+    });
+  });
   this.callbacks = {
     addAttachment: addAttachment,
     removeAttachment: removeAttachment,
     updateAttachmentData: updateAttachmentData,
     updateAttachmentDefaultScreen: updateAttachmentDefaultScreen,
     updateAttachmentPosition: updateAttachmentPosition,
-    updateDefaultOrbit: updateDefaultOrbit
+    updateDefaultOrbit: updateDefaultOrbit,
+    getCurrentState: getCurrentState
   };
   _config.default.object.editing = editable;
   this.infoPanel = infoPanel;
@@ -341,7 +356,7 @@ var Renderer3D = function Renderer3D(_ref) {
   });
   this.loadModel({
     initial: {
-      orbit: orbit,
+      orbit: _orbit,
       attachments: _attachments
     },
     loading: _loading,
