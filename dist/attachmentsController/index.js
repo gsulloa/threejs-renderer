@@ -111,7 +111,7 @@ function () {
         model: sphere
       });
 
-      if (withCallback && _this.callbacks.addAttachment) _this.callbacks.addAttachment((0, _objectSpread2.default)({}, sphere.data, {
+      if (withCallback && _this.callbacks.addAttachment && position) _this.callbacks.addAttachment((0, _objectSpread2.default)({}, sphere.data, {
         position: position
       }));
       return _this.addAttachment({
