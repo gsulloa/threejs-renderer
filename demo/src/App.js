@@ -1,11 +1,11 @@
 import React, { Component, createRef } from "react"
 
-import Renderer3D, {
-  Loading,
-  InfoPanel,
-  ConfigGui,
-  Controls,
-} from "./renderer3d"
+import Renderer3D from "renderer3d-model/dist"
+
+import Loading from "renderer3d-model/dist/loading"
+import InfoPanel from "renderer3d-model/dist/infoPanel"
+import ConfigGui from "renderer3d-model/dist/config/gui"
+import Controls from "renderer3d-model/dist/controls"
 
 class App extends Component {
   state = {
@@ -30,6 +30,7 @@ class App extends Component {
       infoPanel: this.infoPanel.current,
       container: this.render3d.current,
       configGui: this.configGui.current,
+      editable: true,
       initial: {
         orbit: {
           position: {
@@ -54,14 +55,6 @@ class App extends Component {
               title: "Etiqueta 1",
               content:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.",
-              screenPosition: {
-                rotation: {
-                  x: 1.7158242597099533,
-                  y: 0.061212127405937476,
-                  z: -2.821771456199733,
-                },
-                position: { x: 5, y: 40, z: 290 },
-              },
             },
           },
           {
@@ -276,6 +269,7 @@ class App extends Component {
         updateAttachmentData: console.log,
         updateAttachmentDefaultScreen: console.log,
         updateAttachmentPosition: console.log,
+        updateDefaultOrbit: console.log,
       },
     })
     this.renderer.animate()
