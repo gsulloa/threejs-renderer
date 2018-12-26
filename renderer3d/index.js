@@ -20,7 +20,6 @@ class Renderer3D {
       updateAttachmentDefaultScreen,
       updateAttachmentPosition,
       updateDefaultOrbit,
-      getCurrentState,
     } = {},
     editable = false,
   }) {
@@ -31,7 +30,6 @@ class Renderer3D {
       updateAttachmentDefaultScreen,
       updateAttachmentPosition,
       updateDefaultOrbit,
-      getCurrentState
     }
     config.object.editing = editable
     this.infoPanel = infoPanel
@@ -224,13 +222,12 @@ class Renderer3D {
   }
 
   getCurrentState = () => {
-    if (!this.callbacks.getCurrentState) return
     const { controllers: { objectController: { initial: orbit }}} = config
     const attachments = this.attachments.children.map(attachment => attachment.data)
-    this.callbacks.getCurrentState({
+    return {
       orbit,
       attachments,
-    })
+    }
   }
 }
 export { default as Loading } from "./loading"
