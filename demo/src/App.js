@@ -317,7 +317,6 @@ class App extends Component {
             <Controls />
           </div>
         </div>
-        <button onClick={this.reset}>Reset</button>
         <button onClick={this.setCurrentAsInitial}>ChangeInitial</button>
         <button onClick={this.getCurrentState}>Current State</button>
       </div>
