@@ -35,6 +35,24 @@ class Controls extends PureComponent {
         selected: true,
       },
     ],
+    addLock: {
+      title: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 361.118 361.118">
+			    <path d="M274.765,141.3V94.205C274.765,42.172,232.583,0,180.559,0c-52.032,0-94.205,42.172-94.205,94.205V141.3     c-17.34,0-31.4,14.06-31.4,31.4v157.016c0,17.344,14.06,31.402,31.4,31.402h188.411c17.341,0,31.398-14.059,31.398-31.402V172.7     C306.164,155.36,292.106,141.3,274.765,141.3z M117.756,94.205c0-34.69,28.12-62.803,62.803-62.803     c34.685,0,62.805,28.112,62.805,62.803V141.3H117.756V94.205z M274.765,329.715H86.354V172.708h188.411V329.715z      M164.858,262.558v20.054c0,8.664,7.035,15.701,15.701,15.701c8.664,0,15.701-7.037,15.701-15.701v-20.054     c9.337-5.441,15.701-15.456,15.701-27.046c0-17.348-14.062-31.41-31.402-31.41c-17.34,0-31.4,14.062-31.4,31.41     C149.159,247.102,155.517,257.117,164.858,262.558z"/>
+        </svg>
+      ),
+      onClick: () => {
+        const state = Config.object.add
+        Config.object.add = !state
+        this.setState({
+          addLock: {
+            ...this.state.addLock,
+            selected: state,
+          }
+        })
+      },
+      selected: !Config.object.add,
+    },
     zoom: 500,
   }
   componentDidMount() {
@@ -70,6 +88,11 @@ class Controls extends PureComponent {
     const { options } = this.state
     return (
       <BottomEndOverlay>
+        {Config.object.editing && (
+          <CircleButton onClick={this.state.addLock.onClick} selected={this.state.addLock.selected}>
+            {this.state.addLock.title}
+          </CircleButton>
+        )}
         {options.map((option, i) => (
           <CircleButton
             key={i}

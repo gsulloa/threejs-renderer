@@ -20,7 +20,7 @@
     "three-obj-mtl-loader": "^1.0.3"
   },
   "scripts": {
-    "build": "babel renderer3d -d dist",
+    "build": "babel renderer3d -d demo/node_modules/renderer3d-model/dist",
     "lint": "eslint ./src",
     "lint:fix": "yarn lint --fix"
   },
