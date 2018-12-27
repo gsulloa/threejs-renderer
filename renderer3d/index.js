@@ -148,6 +148,7 @@ class Renderer3D {
     const { objectController, attachmentsController } = config.controllers
     const object = this.handleAttachmentSelect(e)
     if (
+      config.object.add &&
       object === null &&
       config.object.editing &&
       !config.controllers.attachmentsController.selecteds.length
