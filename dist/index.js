@@ -233,7 +233,7 @@ var Renderer3D = function Renderer3D(_ref) {
 
     var object = _this.handleAttachmentSelect(e);
 
-    if (object === null && _config.default.object.editing && !_config.default.controllers.attachmentsController.selecteds.length) {
+    if (_config.default.object.add && object === null && _config.default.object.editing && !_config.default.controllers.attachmentsController.selecteds.length) {
       var position = objectController.getPositionInObject({
         offsetX: e.offsetX,
         offsetY: e.offsetY,

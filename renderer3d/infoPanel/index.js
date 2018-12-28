@@ -1,19 +1,27 @@
 import React, { PureComponent, createRef } from "react"
 import styled from "styled-components"
 import { Overlay, Panel } from "../components/containers"
-import { Title, Text } from "../components/text"
+import { Title, Text, SubTitle } from "../components/text"
 import { TitleInput, ContentInput } from "../components/form"
 import config from "../config"
 
 const Row = styled.div`
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   justify-content: space-around;
+  width: 100%;
+`
+
+const Column = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
 `
 
 const Button = styled.button`
-  height: 50px;
-  width: 50px;
+  height: ${({ radius }) => radius ? radius : "50"}px;
+  width: ${({ radius }) => radius ? radius : "50"}px;;
   line-height: 1.499;
   display: flex;
   justify-content: center;
@@ -123,6 +131,9 @@ class InfoPanel extends PureComponent {
       }
     )
   }
+  handleMoveAttachment({ x, y, z }) {
+    config.controllers.attachmentsController.moveSelectedObject({ x, y, z })
+  }
   render() {
     const {
       show,
@@ -183,6 +194,30 @@ class InfoPanel extends PureComponent {
                     </svg>
                   </Button>
                 </Row>,
+                <Column key="dx-move">
+                  <Row>
+                    <SubTitle>
+                      Posición
+                    </SubTitle>
+                  </Row>
+                  <Row>
+                    <Column>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ x: 1 })}>+</Button>
+                      <Text>X</Text>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ x: -1 })}>-</Button>
+                    </Column>
+                    <Column>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ y: 1 })}>+</Button>
+                      <Text>Y</Text>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ y: -1 })}>-</Button>
+                    </Column>
+                    <Column>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ z: 1 })}>+</Button>
+                      <Text>Z</Text>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ z: -1 })}>-</Button>
+                    </Column>
+                  </Row>
+                </Column>
               ]}
         </Panel>
       </Overlay>

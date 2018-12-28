@@ -95,8 +95,9 @@ var _default = {
 
     set replacing(val) {
       this._replacing.next(val);
-    }
+    },
 
+    add: false
   },
   orbit: {
     _position: new _rxjs.BehaviorSubject({
