@@ -248,6 +248,27 @@ function () {
         if (_this.callbacks.updateAttachmentData) _this.callbacks.updateAttachmentData(_this.findAttachmentIndex(attachment), attachment.data);
       });
     });
+    (0, _defineProperty2.default)(this, "moveSelectedObject", function (_ref7) {
+      var _ref7$x = _ref7.x,
+          x = _ref7$x === void 0 ? 0 : _ref7$x,
+          _ref7$y = _ref7.y,
+          y = _ref7$y === void 0 ? 0 : _ref7$y,
+          _ref7$z = _ref7.z,
+          z = _ref7$z === void 0 ? 0 : _ref7$z;
+
+      _this.selecteds.forEach(function (attachment) {
+        var position = attachment.reference.position;
+        position.x += x;
+        position.y += y;
+        position.z += z;
+        attachment.position.copy(_this.model.localToWorld(new THREE.Vector3().copy(position)));
+        if (_this.callbacks.updateAttachmentPosition) _this.callbacks.updateAttachmentPosition(_this.findAttachmentIndex(attachment), {
+          x: position.x,
+          y: position.y,
+          z: position.z
+        });
+      });
+    });
     (0, _defineProperty2.default)(this, "selectObject", function (object) {
       _this.selecteds.forEach(function (attachment) {
         attachment.state = "default";
@@ -287,9 +308,9 @@ function () {
     initialAttachments.forEach(function (a) {
       return _this.addSphere(a, false);
     });
-    document.addEventListener("mousemove", function (_ref7) {
-      var offsetX = _ref7.offsetX,
-          offsetY = _ref7.offsetY;
+    document.addEventListener("mousemove", function (_ref8) {
+      var offsetX = _ref8.offsetX,
+          offsetY = _ref8.offsetY;
 
       _this.setHovereds({
         offsetX: offsetX,
@@ -334,8 +355,8 @@ function () {
   }, {
     key: "addNumber",
     value: function addNumber() {
-      var _ref8 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          model = _ref8.model;
+      var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          model = _ref9.model;
 
       if (!model) return;
       var number = this.id.next().value;

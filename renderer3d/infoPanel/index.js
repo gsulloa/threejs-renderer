@@ -131,6 +131,9 @@ class InfoPanel extends PureComponent {
       }
     )
   }
+  handleMoveAttachment({ x, y, z }) {
+    config.controllers.attachmentsController.moveSelectedObject({ x, y, z })
+  }
   render() {
     const {
       show,
@@ -199,19 +202,19 @@ class InfoPanel extends PureComponent {
                   </Row>
                   <Row>
                     <Column>
-                      <Button radius="30">+</Button>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ x: 1 })}>+</Button>
                       <Text>X</Text>
-                      <Button radius="30">-</Button>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ x: -1 })}>-</Button>
                     </Column>
                     <Column>
-                      <Button radius="30">+</Button>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ y: 1 })}>+</Button>
                       <Text>Y</Text>
-                      <Button radius="30">-</Button>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ y: -1 })}>-</Button>
                     </Column>
                     <Column>
-                      <Button radius="30">+</Button>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ z: 1 })}>+</Button>
                       <Text>Z</Text>
-                      <Button radius="30">-</Button>
+                      <Button radius="30" onClick={() => this.handleMoveAttachment({ z: -1 })}>-</Button>
                     </Column>
                   </Row>
                 </Column>

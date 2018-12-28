@@ -242,6 +242,27 @@ class AttachmentsController {
     })
   }
 
+  moveSelectedObject = ({ x = 0, y = 0, z = 0 }) => {
+    this.selecteds.forEach(attachment => {
+      const { reference: { position }} = attachment
+      position.x += x
+      position.y += y
+      position.z += z
+      attachment.position.copy(
+        this.model.localToWorld(new THREE.Vector3().copy(position))
+      )
+      if (this.callbacks.updateAttachmentPosition)
+        this.callbacks.updateAttachmentPosition(
+          this.findAttachmentIndex(attachment),
+          {
+            x: position.x,
+            y: position.y,
+            z: position.z,
+          }
+        )
+    })
+  }
+
   selectObject = object => {
     this.selecteds.forEach(attachment => {
       attachment.state = "default"
