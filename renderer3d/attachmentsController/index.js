@@ -244,7 +244,9 @@ class AttachmentsController {
 
   moveSelectedObject = ({ x = 0, y = 0, z = 0 }) => {
     this.selecteds.forEach(attachment => {
-      const { reference: { position }} = attachment
+      const {
+        reference: { position },
+      } = attachment
       position.x += x
       position.y += y
       position.z += z

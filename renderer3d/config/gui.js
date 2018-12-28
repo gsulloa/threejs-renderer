@@ -2,7 +2,7 @@ import React, { Component, createRef } from "react"
 import { GUI } from "dat.gui"
 import Config from "./"
 import { EndOverlay } from "../components/containers"
-import config from "./";
+import config from "./"
 
 class ConfigGui extends Component {
   constructor(props) {

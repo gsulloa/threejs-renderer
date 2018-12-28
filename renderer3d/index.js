@@ -223,8 +223,15 @@ class Renderer3D {
   }
 
   getCurrentState = () => {
-    const { controllers: { objectController: { initial: orbit }}} = config
-    const attachments = this.attachments.children.map(attachment => ({ ...attachment.data, position: attachment.reference.position }))
+    const {
+      controllers: {
+        objectController: { initial: orbit },
+      },
+    } = config
+    const attachments = this.attachments.children.map(attachment => ({
+      ...attachment.data,
+      position: attachment.reference.position,
+    }))
     return {
       orbit,
       attachments,
