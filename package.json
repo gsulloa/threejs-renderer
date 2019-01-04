@@ -1,6 +1,6 @@
 {
   "name": "renderer3d-model",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": false,
   "main": "dist",
   "author": "Gabriel Ulloa <gsulloa@uc.cl>",
@@ -44,7 +44,7 @@
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^9.0.0",
     "eslint": "^5.11.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.3.0",
