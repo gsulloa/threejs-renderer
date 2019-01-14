@@ -208,8 +208,7 @@ var Renderer3D = function Renderer3D(_ref) {
     container.appendChild(_this.renderer.domElement);
   });
   (0, _defineProperty2.default)(this, "onWindowResize", function () {
-    _this.windowHalfX = window.innerWidth / 2;
-    _this.windowHalfY = window.innerHeight / 2;
+    console.log('resize!');
 
     _this.camera.updateProjectionMatrix();
   });
@@ -373,7 +372,7 @@ var Renderer3D = function Renderer3D(_ref) {
     return _this.onWindowResize({
       container: _container
     });
-  }, false);
+  });
 };
 
 var _default = Renderer3D;

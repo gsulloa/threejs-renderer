@@ -52,11 +52,7 @@ class Renderer3D {
 
     this.render({ container })
 
-    window.addEventListener(
-      "resize",
-      () => this.onWindowResize({ container }),
-      false
-    )
+    window.addEventListener("resize", () => this.onWindowResize({ container }))
   }
 
   prepareEnvironment = ({
@@ -129,8 +125,6 @@ class Renderer3D {
   }
 
   onWindowResize = () => {
-    this.windowHalfX = window.innerWidth / 2
-    this.windowHalfY = window.innerHeight / 2
     this.camera.updateProjectionMatrix()
   }
 
