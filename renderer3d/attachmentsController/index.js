@@ -33,11 +33,15 @@ class AttachmentsController {
     this.attachments = attachments
     this.domElement = domElement
     initialAttachments.forEach(a => this.addSphere(a, false))
-
+    const initialRatio = Math.round(window.devicePixelRatio * 100) / 100
+    let ratio = 1
+    window.addEventListener("resize", () => {
+      ratio = Math.round(window.devicePixelRatio * 100) / 100 / initialRatio
+    })
     document.addEventListener("mousemove", ({ offsetX, offsetY }) => {
       this.setHovereds({
-        offsetX,
-        offsetY,
+        offsetX: offsetX / ratio,
+        offsetY: offsetY / ratio,
       })
     })
   }
@@ -129,8 +133,10 @@ class AttachmentsController {
   }
 
   intersectAttachments = ({ offsetX, offsetY }) => {
-    const domElementHeight = this.domElement.height
-    const domElementWidth = this.domElement.width
+    const domElementHeight =
+      (this.domElement.height * 100) / Math.round(window.devicePixelRatio * 100)
+    const domElementWidth =
+      (this.domElement.width * 100) / Math.round(window.devicePixelRatio * 100)
     try {
       const { camera, attachments } = this
       const vector = new THREE.Vector2(

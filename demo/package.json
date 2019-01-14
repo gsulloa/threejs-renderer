@@ -6,7 +6,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.2",
-    "renderer3d-model": "^1.0.9"
+    "renderer3d-model": "^1.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

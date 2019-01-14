@@ -38,7 +38,7 @@ var _form = require("../components/form");
 var _config = _interopRequireDefault(require("../config"));
 
 function _templateObject3() {
-  var data = (0, _taggedTemplateLiteral2.default)(["\n  height: ", "px;\n  width: ", "px;;\n  line-height: 1.499;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-weight: 400;\n  touch-action: manipulation;\n  cursor: pointer;\n  background-image: none;\n  border: 1px solid transparent;\n  white-space: nowrap;\n  font-size: 14px;\n  border-radius: 100%;\n  user-select: none;\n  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: relative;\n  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);\n  color: rgba(0, 0, 0, 0.65);\n  background-color: ", ";\n  border-color: ", ";\n  outline: none;\n  :active {\n    background-color: #38b1ea !important;\n    border-color: #4062d4;\n  }\n  :hover {\n    background-color: #d9d9d9;\n  }\n"]);
+  var data = (0, _taggedTemplateLiteral2.default)(["\n  height: ", "px;\n  width: ", "px;\n  line-height: 1.499;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-weight: 400;\n  touch-action: manipulation;\n  cursor: pointer;\n  background-image: none;\n  border: 1px solid transparent;\n  white-space: nowrap;\n  font-size: 14px;\n  border-radius: 100%;\n  user-select: none;\n  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: relative;\n  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);\n  color: rgba(0, 0, 0, 0.65);\n  background-color: ", ";\n  border-color: ", ";\n  outline: none;\n  :active {\n    background-color: #38b1ea !important;\n    border-color: #4062d4;\n  }\n  :hover {\n    background-color: #d9d9d9;\n  }\n"]);
 
   _templateObject3 = function _templateObject3() {
     return data;

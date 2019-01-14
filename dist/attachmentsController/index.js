@@ -136,8 +136,8 @@ function () {
     (0, _defineProperty2.default)(this, "intersectAttachments", function (_ref4) {
       var offsetX = _ref4.offsetX,
           offsetY = _ref4.offsetY;
-      var domElementHeight = _this.domElement.height;
-      var domElementWidth = _this.domElement.width;
+      var domElementHeight = _this.domElement.height * 100 / Math.round(window.devicePixelRatio * 100);
+      var domElementWidth = _this.domElement.width * 100 / Math.round(window.devicePixelRatio * 100);
 
       try {
         var camera = _this.camera,
@@ -146,6 +146,14 @@ function () {
         var raycaster = new THREE.Raycaster();
         raycaster.setFromCamera(vector, camera);
         var intersects = raycaster.intersectObjects(attachments.children);
+        console.log((0, _objectSpread2.default)({
+          domElementHeight: domElementHeight,
+          domElementWidth: domElementWidth,
+          offsetX: offsetX,
+          offsetY: offsetY
+        }, vector, {
+          intersects: intersects
+        }));
         return intersects;
       } catch (e) {
         (0, _log.devlogerror)(e);
@@ -156,6 +164,11 @@ function () {
           offsetY = _ref5.offsetY;
 
       var intersects = _this.intersectAttachments({
+        offsetX: offsetX,
+        offsetY: offsetY
+      });
+
+      console.log("hover", {
         offsetX: offsetX,
         offsetY: offsetY
       });
@@ -180,6 +193,11 @@ function () {
           offsetY = _ref6.offsetY;
 
       var intersects = _this.intersectAttachments({
+        offsetX: offsetX,
+        offsetY: offsetY
+      });
+
+      console.log("select", {
         offsetX: offsetX,
         offsetY: offsetY
       });
@@ -308,13 +326,20 @@ function () {
     initialAttachments.forEach(function (a) {
       return _this.addSphere(a, false);
     });
+    var initialRatio = Math.round(window.devicePixelRatio * 100) / 100;
+    var ratio = 1;
+    window.addEventListener("resize", function () {
+      ratio = Math.round(window.devicePixelRatio * 100) / 100 / initialRatio;
+      console.log("resize!", ratio);
+    });
     document.addEventListener("mousemove", function (_ref8) {
       var offsetX = _ref8.offsetX,
           offsetY = _ref8.offsetY;
+      console.log(ratio);
 
       _this.setHovereds({
-        offsetX: offsetX,
-        offsetY: offsetY
+        offsetX: offsetX / ratio,
+        offsetY: offsetY / ratio
       });
     });
   }
