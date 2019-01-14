@@ -143,7 +143,14 @@ function (_PureComponent) {
         })),
         onClick: function onClick() {
           var element = document.querySelector("canvas").parentNode;
-          if (element.requestFullscreen) element.requestFullscreen();
+
+          if (element.requestFullscreen) {
+            if (document.fullscreen) {
+              document.exitFullscreen();
+            } else {
+              element.requestFullscreen();
+            }
+          }
         }
       },
       zoom: 500

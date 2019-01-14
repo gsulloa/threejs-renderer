@@ -146,14 +146,6 @@ function () {
         var raycaster = new THREE.Raycaster();
         raycaster.setFromCamera(vector, camera);
         var intersects = raycaster.intersectObjects(attachments.children);
-        console.log((0, _objectSpread2.default)({
-          domElementHeight: domElementHeight,
-          domElementWidth: domElementWidth,
-          offsetX: offsetX,
-          offsetY: offsetY
-        }, vector, {
-          intersects: intersects
-        }));
         return intersects;
       } catch (e) {
         (0, _log.devlogerror)(e);
@@ -164,11 +156,6 @@ function () {
           offsetY = _ref5.offsetY;
 
       var intersects = _this.intersectAttachments({
-        offsetX: offsetX,
-        offsetY: offsetY
-      });
-
-      console.log("hover", {
         offsetX: offsetX,
         offsetY: offsetY
       });
@@ -193,11 +180,6 @@ function () {
           offsetY = _ref6.offsetY;
 
       var intersects = _this.intersectAttachments({
-        offsetX: offsetX,
-        offsetY: offsetY
-      });
-
-      console.log("select", {
         offsetX: offsetX,
         offsetY: offsetY
       });
@@ -330,12 +312,10 @@ function () {
     var ratio = 1;
     window.addEventListener("resize", function () {
       ratio = Math.round(window.devicePixelRatio * 100) / 100 / initialRatio;
-      console.log("resize!", ratio);
     });
     document.addEventListener("mousemove", function (_ref8) {
       var offsetX = _ref8.offsetX,
           offsetY = _ref8.offsetY;
-      console.log(ratio);
 
       _this.setHovereds({
         offsetX: offsetX / ratio,

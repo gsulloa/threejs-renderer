@@ -208,8 +208,6 @@ var Renderer3D = function Renderer3D(_ref) {
     container.appendChild(_this.renderer.domElement);
   });
   (0, _defineProperty2.default)(this, "onWindowResize", function () {
-    console.log('resize!');
-
     _this.camera.updateProjectionMatrix();
   });
   (0, _defineProperty2.default)(this, "animate", function () {
