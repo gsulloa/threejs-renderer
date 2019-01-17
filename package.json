@@ -1,6 +1,6 @@
 {
   "name": "renderer3d-model",
-  "version": "1.1.0",
+  "version": "1.2.5",
   "private": false,
   "main": "dist",
   "author": "Gabriel Ulloa <gsulloa@uc.cl>",
@@ -21,8 +21,10 @@
   },
   "scripts": {
     "build": "babel renderer3d -d dist",
+    "build:dev": "mkdir -p demo/src/renderer3d-model/dist && cp -rf renderer3d/* demo/src/renderer3d-model/dist",
     "lint": "eslint ./renderer3d",
-    "lint:fix": "yarn lint --fix"
+    "lint:fix": "yarn lint --fix",
+    "prepublishOnly": "yarn build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -44,8 +46,8 @@
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.11.1",
+    "babel-eslint": "^9.0.0",
+    "eslint": "5.6.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",

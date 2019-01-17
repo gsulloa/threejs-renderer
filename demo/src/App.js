@@ -1,11 +1,11 @@
 import React, { Component, createRef } from "react"
 
-import Renderer3D from "renderer3d-model/dist"
+import Renderer3D from "./renderer3d-model/dist"
 
-import Loading from "renderer3d-model/dist/loading"
-import InfoPanel from "renderer3d-model/dist/infoPanel"
-import ConfigGui from "renderer3d-model/dist/config/gui"
-import Controls from "renderer3d-model/dist/controls"
+import Loading from "./renderer3d-model/dist/loading"
+import InfoPanel from "./renderer3d-model/dist/infoPanel"
+import ConfigGui from "./renderer3d-model/dist/config/gui"
+import Controls from "./renderer3d-model/dist/controls"
 
 class App extends Component {
   state = {
@@ -306,10 +306,10 @@ class App extends Component {
             onChange={({ target: { value: url } }) => this.setState({ url })}
           />
         </form>
-        <div style={{ height: 800 }}>
+        <div style={{ height: 800, width: 1200 }}>
           <div
             ref={this.render3d}
-            style={{ width: 1200, height: 800, position: "absolute" }}
+            style={{ width: "100%", height: "100%", position: "relative" }}
           >
             <Loading ref={this.loading} />
             <InfoPanel ref={this.infoPanel} />
@@ -317,8 +317,6 @@ class App extends Component {
             <Controls />
           </div>
         </div>
-        <button onClick={this.setCurrentAsInitial}>ChangeInitial</button>
-        <button onClick={this.getCurrentState}>Current State</button>
       </div>
     )
   }
