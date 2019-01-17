@@ -53,6 +53,9 @@ class Renderer3D {
     this.render({ container })
 
     window.addEventListener("resize", () => this.onResize({ container }))
+    document.addEventListener("fullscreenchange", () =>
+      this.onResize({ container })
+    )
   }
 
   prepareEnvironment = ({
@@ -124,7 +127,10 @@ class Renderer3D {
     container.appendChild(this.renderer.domElement)
   }
 
-  onResize = () => {
+  onResize = ({ container }) => {
+    this.renderer.setPixelRatio(window.devicePixelRatio)
+    this.renderer.setSize(container.clientWidth, container.clientHeight)
+    this.camera.aspect = container.clientWidth / container.clientHeight
     this.camera.updateProjectionMatrix()
   }
 

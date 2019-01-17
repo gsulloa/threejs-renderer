@@ -207,7 +207,15 @@ var Renderer3D = function Renderer3D(_ref) {
 
     container.appendChild(_this.renderer.domElement);
   });
-  (0, _defineProperty2.default)(this, "onWindowResize", function () {
+  (0, _defineProperty2.default)(this, "onResize", function (_ref6) {
+    var container = _ref6.container;
+
+    _this.renderer.setPixelRatio(window.devicePixelRatio);
+
+    _this.renderer.setSize(container.clientWidth, container.clientHeight);
+
+    _this.camera.aspect = container.clientWidth / container.clientHeight;
+
     _this.camera.updateProjectionMatrix();
   });
   (0, _defineProperty2.default)(this, "animate", function () {
@@ -248,9 +256,9 @@ var Renderer3D = function Renderer3D(_ref) {
       }
     }
   });
-  (0, _defineProperty2.default)(this, "handleAttachmentSelect", function (_ref6) {
-    var offsetX = _ref6.offsetX,
-        offsetY = _ref6.offsetY;
+  (0, _defineProperty2.default)(this, "handleAttachmentSelect", function (_ref7) {
+    var offsetX = _ref7.offsetX,
+        offsetY = _ref7.offsetY;
     var selectAttachment = _config.default.controllers.attachmentsController.selectAttachment;
     var object = selectAttachment({
       offsetX: offsetX,
@@ -267,9 +275,9 @@ var Renderer3D = function Renderer3D(_ref) {
 
     return object;
   });
-  (0, _defineProperty2.default)(this, "handleReplaceSelected", function (_ref7) {
-    var offsetX = _ref7.offsetX,
-        offsetY = _ref7.offsetY;
+  (0, _defineProperty2.default)(this, "handleReplaceSelected", function (_ref8) {
+    var offsetX = _ref8.offsetX,
+        offsetY = _ref8.offsetY;
 
     var position = _config.default.controllers.objectController.getPositionInObject({
       offsetX: offsetX,
@@ -303,9 +311,9 @@ var Renderer3D = function Renderer3D(_ref) {
   (0, _defineProperty2.default)(this, "getCurrentPosition", function () {
     return _config.default.orbit;
   });
-  (0, _defineProperty2.default)(this, "setNewInitialPosition", function (_ref8) {
-    var rotation = _ref8.rotation,
-        position = _ref8.position;
+  (0, _defineProperty2.default)(this, "setNewInitialPosition", function (_ref9) {
+    var rotation = _ref9.rotation,
+        position = _ref9.position;
 
     _config.default.controllers.objectController.updateInitial({
       rotation: rotation,
@@ -367,7 +375,12 @@ var Renderer3D = function Renderer3D(_ref) {
     container: _container
   });
   window.addEventListener("resize", function () {
-    return _this.onWindowResize({
+    return _this.onResize({
+      container: _container
+    });
+  });
+  document.addEventListener("fullscreenchange", function () {
+    return _this.onResize({
       container: _container
     });
   });
