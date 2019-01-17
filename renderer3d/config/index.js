@@ -9,7 +9,7 @@ export default {
       selected: "#fff",
     },
     material: {
-      default: new MeshBasicMaterial({ color: "#fae" }),
+      default: new MeshBasicMaterial({ color: "#fae", opacity: 0.5 }),
       hovered: new MeshBasicMaterial({ color: "#33f" }),
       selected: new MeshBasicMaterial({ color: "#fff" }),
     },

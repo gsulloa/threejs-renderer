@@ -22,7 +22,8 @@ var _default = {
     },
     material: {
       default: new _three.MeshBasicMaterial({
-        color: "#fae"
+        color: "#fae",
+        opacity: 0.5
       }),
       hovered: new _three.MeshBasicMaterial({
         color: "#33f"
