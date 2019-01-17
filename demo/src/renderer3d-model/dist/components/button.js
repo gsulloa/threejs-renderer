@@ -1,9 +1,5 @@
 import styled from "styled-components"
-
-const WHITE = "#fff"
-const GRAY = "#494949"
-const WHITE_HOVER = "#eaeaea"
-const GRAY_HOVER = "#888"
+import { GRAY, GRAY_HOVER, WHITE, WHITE_HOVER } from "../constants"
 
 export const CircleButton = styled.button`
   background: ${({ selected }) => (selected ? WHITE : GRAY)};

@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { GRAY, WHITE } from "../constants"
 
 export const Overlay = styled.div`
   position: absolute;
@@ -26,7 +27,7 @@ export const EndOverlay = styled(FlexOverlay)`
 
 export const BottomEndOverlay = styled(EndOverlay)`
   justify-content: flex-end;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
 `
 
 export const LoadingBar = styled.div`
@@ -49,14 +50,45 @@ export const Panel = styled.div`
 
 export const SliderWrapper = styled.div`
   display: inline-block;
-  width: 20px;
-  height: 150px;
+  color: ${WHITE}
+  background: ${GRAY}
+  width: 50px;
+  height: 170px;
+  border-radius: 7px;
   padding: 0;
-  input {
-    width: 150px;
+  margin: 10px;
+  div {
+    width: 170px;
     height: 20px;
-    margin: -175px;
+    margin: 10px -163px;
     transform-origin: 100px 100px;
     transform: rotate(90deg);
+    
+  }
+  input {
+    appearance: none;
+    background: ${WHITE};
+    height: 3px;
+    width: 150px;
+    outline: none;
+    &::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 32px;
+      background: ${GRAY};
+      border: 3px ${WHITE} solid;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+    
+    &::-moz-range-thumb {
+      appearance: none;
+      width: 14px;
+      height: 32px;
+      background: ${GRAY};
+      border: 3px ${WHITE} solid;
+      border-radius: 7px;
+      cursor: pointer;
+    }
   }
 `

@@ -1,4 +1,6 @@
+import React from "react"
 import styled from "styled-components"
+import { SliderWrapper } from "./containers"
 
 export const TitleInput = styled.textarea`
   background: transparent;
@@ -36,3 +38,18 @@ export const ContentInput = styled.textarea`
   overflow: hidden;
   border-bottom: 1px solid;
 `
+
+export const VerticalSlider = ({ value, onChange, step, min, max }) => (
+  <SliderWrapper>
+    <div>
+      <input
+        type="range"
+        value={value}
+        onChange={onChange}
+        step={step}
+        min={min}
+        max={max}
+      />
+    </div>
+  </SliderWrapper>
+)

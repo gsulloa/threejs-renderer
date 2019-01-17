@@ -1,14 +1,9 @@
 import React, { PureComponent } from "react"
-import { BottomEndOverlay, SliderWrapper } from "../components/containers"
+import { BottomEndOverlay } from "../components/containers"
 import { CircleButton } from "../components/button"
+import { VerticalSlider } from "../components/form"
 import Config from "../config"
-import {
-  AddPin,
-  NewTarget,
-  MoveUpDown,
-  Move360,
-  SavePosition,
-} from "../assets/icons"
+import { AddPin, MoveUpDown, Move360, SavePosition } from "../assets/icons"
 
 class Controls extends PureComponent {
   state = {
@@ -111,15 +106,18 @@ class Controls extends PureComponent {
     }
   }
   render() {
-    const {
-      options,
-      addLock,
-      resetOrbit,
-      changeInitial,
-      fullScreen,
-    } = this.state
+    const { options, addLock, changeInitial, fullScreen } = this.state
     return (
       <BottomEndOverlay>
+        <VerticalSlider
+          value={this.state.zoom}
+          onChange={({ target: { valueAsNumber: value } }) =>
+            this.changeZoom(value)
+          }
+          step={20}
+          min={100}
+          max={800}
+        />
         {Config.object.editing && [
           <CircleButton
             key="add-lock"
@@ -132,9 +130,6 @@ class Controls extends PureComponent {
             {changeInitial.title}
           </CircleButton>,
         ]}
-        <CircleButton onClick={resetOrbit.onClick}>
-          {resetOrbit.title}
-        </CircleButton>
         {options.map((option, i) => (
           <CircleButton
             key={i}
@@ -147,18 +142,6 @@ class Controls extends PureComponent {
         <CircleButton onClick={fullScreen.onClick}>
           {fullScreen.title}
         </CircleButton>
-        <SliderWrapper>
-          <input
-            type="range"
-            value={this.state.zoom}
-            onChange={({ target: { valueAsNumber: value } }) =>
-              this.changeZoom(value)
-            }
-            step={20}
-            min={100}
-            max={800}
-          />
-        </SliderWrapper>
       </BottomEndOverlay>
     )
   }
