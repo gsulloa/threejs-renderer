@@ -21,6 +21,7 @@
   },
   "scripts": {
     "build": "babel renderer3d -d dist",
+    "build:dev": "mkdir -p demo/src/renderer3d-model/dist && cp -rf renderer3d/* demo/src/renderer3d-model/dist",
     "lint": "eslint ./renderer3d",
     "lint:fix": "yarn lint --fix"
   },
