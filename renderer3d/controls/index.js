@@ -136,7 +136,13 @@ class Controls extends PureComponent {
     }
   }
   render() {
-    const { options, addLock, resetOrbit, changeInitial, fullScreen } = this.state
+    const {
+      options,
+      addLock,
+      resetOrbit,
+      changeInitial,
+      fullScreen,
+    } = this.state
     return (
       <BottomEndOverlay>
         {Config.object.editing && [
