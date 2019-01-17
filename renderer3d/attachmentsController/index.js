@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import Config from "../config"
 import { devlogerror } from "../utils/log"
-import font from "./font"
+import font from "../assets/font/font"
 import config from "../config"
 
 class AttachmentsController {
