@@ -14,13 +14,13 @@ class Controls extends PureComponent {
   state = {
     options: [
       {
-        title: <MoveUpDown />,
+        title: <MoveUpDown width={30} height={30} />,
         onClick: () => {
           Config.object.onMouseMove = "move"
         },
       },
       {
-        title: <Move360 />,
+        title: <Move360 width={30} height={30} />,
         onClick: () => {
           Config.object.onMouseMove = "rotate"
         },
@@ -28,7 +28,7 @@ class Controls extends PureComponent {
       },
     ],
     addLock: {
-      title: <AddPin />,
+      title: <AddPin width={30} height={30} />,
       onClick: () => {
         const state = Config.object.add
         Config.object.add = !state
@@ -54,7 +54,7 @@ class Controls extends PureComponent {
       },
     },
     changeInitial: {
-      title: <SavePosition />,
+      title: <SavePosition width={30} height={30} />,
       onClick: () => {
         Config.controllers.objectController.updateInitial({
           position: Config.orbit.position,
