@@ -52,7 +52,7 @@ class Renderer3D {
 
     this.render({ container })
 
-    window.addEventListener("resize", () => this.onWindowResize({ container }))
+    window.addEventListener("resize", () => this.onResize({ container }))
   }
 
   prepareEnvironment = ({
@@ -124,7 +124,7 @@ class Renderer3D {
     container.appendChild(this.renderer.domElement)
   }
 
-  onWindowResize = () => {
+  onResize = () => {
     this.camera.updateProjectionMatrix()
   }
 
