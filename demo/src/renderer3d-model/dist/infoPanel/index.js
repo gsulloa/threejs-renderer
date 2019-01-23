@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { Overlay, Panel } from "../components/containers"
 import { Title, Text, SubTitle } from "../components/text"
 import { TitleInput, ContentInput } from "../components/form"
+import { InverseCircleButton as Button } from "../components/button"
 import config from "../config"
 
 const Row = styled.div`
@@ -17,40 +18,6 @@ const Column = styled.div`
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
-`
-
-const Button = styled.button`
-  height: ${({ radius }) => (radius ? radius : "50")}px;
-  width: ${({ radius }) => (radius ? radius : "50")}px;
-  line-height: 1.499;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 400;
-  touch-action: manipulation;
-  cursor: pointer;
-  background-image: none;
-  border: 1px solid transparent;
-  white-space: nowrap;
-  font-size: 14px;
-  border-radius: 100%;
-  user-select: none;
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  position: relative;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
-  color: rgba(0, 0, 0, 0.65);
-  background-color: ${({ selected }) =>
-    selected ? "#38b1ea !important" : "#fff"};
-  border-color: ${({ selected }) =>
-    selected ? "#4062d4 !important" : "#d9d9d9"};
-  outline: none;
-  :active {
-    background-color: #38b1ea !important;
-    border-color: #4062d4;
-  }
-  :hover {
-    background-color: #d9d9d9;
-  }
 `
 
 class InfoPanel extends PureComponent {
@@ -209,14 +176,14 @@ class InfoPanel extends PureComponent {
                   <Row>
                     <Column>
                       <Button
-                        radius="30"
+                        size={30}
                         onClick={() => this.handleMoveAttachment({ x: 1 })}
                       >
                         +
                       </Button>
                       <Text>X</Text>
                       <Button
-                        radius="30"
+                        size={30}
                         onClick={() => this.handleMoveAttachment({ x: -1 })}
                       >
                         -
@@ -224,14 +191,14 @@ class InfoPanel extends PureComponent {
                     </Column>
                     <Column>
                       <Button
-                        radius="30"
+                        size={30}
                         onClick={() => this.handleMoveAttachment({ y: 1 })}
                       >
                         +
                       </Button>
                       <Text>Y</Text>
                       <Button
-                        radius="30"
+                        size={30}
                         onClick={() => this.handleMoveAttachment({ y: -1 })}
                       >
                         -
@@ -239,14 +206,14 @@ class InfoPanel extends PureComponent {
                     </Column>
                     <Column>
                       <Button
-                        radius="30"
+                        size={30}
                         onClick={() => this.handleMoveAttachment({ z: 1 })}
                       >
                         +
                       </Button>
                       <Text>Z</Text>
                       <Button
-                        radius="30"
+                        size={30}
                         onClick={() => this.handleMoveAttachment({ z: -1 })}
                       >
                         -

@@ -7,8 +7,8 @@ export const CircleButton = styled.button`
   opacity: ${({ selected }) => (selected ? "0.8" : "1")};
   border: solid black 1px;
   border-radius: 7px;
-  width: 50px;
-  height: 50px;
+  width: ${({ size }) => (size ? size : "50")}px;
+  height: ${({ size }) => (size ? size : "50")}px;
   cursor: pointer;
   margin: 10px;
   outline: none;
