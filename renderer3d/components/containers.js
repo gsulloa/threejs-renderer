@@ -92,3 +92,10 @@ export const SliderWrapper = styled.div`
     }
   }
 `
+
+export const MaxLengthContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  color: white;
+`
