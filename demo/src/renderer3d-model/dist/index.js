@@ -194,13 +194,14 @@ class Renderer3D {
   lookObject = object => {
     const {
       data: { screenPosition, title, content },
+      uuid,
     } = object
     if (screenPosition) {
       config.controllers.objectController.look(screenPosition)
     } else {
       this.resetControls()
     }
-    this.infoPanel.showPanel({ title, content })
+    this.infoPanel.showPanel({ title, content, uuid })
   }
 
   /* Controls */
