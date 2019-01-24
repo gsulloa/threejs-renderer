@@ -2,6 +2,9 @@ import React, { Component, Fragment, createRef } from "react"
 import PropTypes from "prop-types"
 import { TitleInput, ContentInput } from "../components/form"
 import config from "../config"
+import { MaxLengthContainer } from "../components/containers"
+
+const MAX_LENGTH = { title: 30, content: 300 }
 
 class EditingForm extends Component {
   static propTypes = {
@@ -39,9 +42,10 @@ class EditingForm extends Component {
     }
   }
   handleWrite = (key, value) => {
-    this.setState({ [key]: value }, () => {
+    const text = value.slice(0, MAX_LENGTH[key])
+    this.setState({ [key]: text }, () => {
       config.controllers.attachmentsController.updateSelectedData({
-        [key]: value,
+        [key]: text,
       })
       this.autoGrow(key)
     })
@@ -75,7 +79,10 @@ class EditingForm extends Component {
           value={title}
           onChange={({ target: { value } }) => this.handleWrite("title", value)}
           height={titleHeight}
-        />{" "}
+        />
+        <MaxLengthContainer>
+          {title.length} / {MAX_LENGTH.title}
+        </MaxLengthContainer>
         <ContentInput
           key="content"
           ref={this.contentElement}
@@ -84,7 +91,10 @@ class EditingForm extends Component {
             this.handleWrite("content", value)
           }
           height={contentHeight}
-        />{" "}
+        />
+        <MaxLengthContainer>
+          {content.length} / {MAX_LENGTH.content}
+        </MaxLengthContainer>
       </Fragment>
     )
   }
