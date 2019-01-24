@@ -60,3 +60,10 @@ export const SliderWrapper = styled.div`
     transform: rotate(90deg);
   }
 `
+
+export const MaxLengthContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  color: white;
+`

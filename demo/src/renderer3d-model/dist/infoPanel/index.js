@@ -1,9 +1,9 @@
-import React, { PureComponent, createRef } from "react"
+import React, { PureComponent, Fragment } from "react"
 import styled from "styled-components"
 import { Overlay, Panel } from "../components/containers"
 import { Title, Text, SubTitle } from "../components/text"
-import { TitleInput, ContentInput } from "../components/form"
 import config from "../config"
+import EditingForm from "./EditingForm"
 
 const Row = styled.div`
   display: flex;
@@ -58,15 +58,9 @@ class InfoPanel extends PureComponent {
     show: false,
     title: "",
     content: "",
+    uuid: "",
     editing: config.object.editing,
     replacing: config.object.replacing,
-    titleHeight: 10,
-    contentHeight: 10,
-  }
-  constructor(props) {
-    super(props)
-    this.titleElement = createRef()
-    this.contentElement = createRef()
   }
   componentDidMount() {
     config.object._editing.subscribe(() => {
@@ -76,25 +70,20 @@ class InfoPanel extends PureComponent {
       this.setState({ replacing: config.object.replacing })
     })
   }
-  showPanel = ({ title, content }) => {
+  showPanel = ({ title, content, uuid }) => {
     this.setState(() => ({
       show: true,
       title,
       content,
+      uuid,
     }))
-    this.prepareForm()
-  }
-  prepareForm = () => {
-    if (!this.state.editing) return
-    this.autoGrow("title")
-    this.autoGrow("content")
-    this.titleElement.current.focus()
   }
   hidePanel = () => {
     this.setState(() => ({
       show: false,
       title: "",
       content: "",
+      uuid: "",
     }))
   }
   handleChangeDefaultLook = () => {
@@ -111,68 +100,30 @@ class InfoPanel extends PureComponent {
   handleToogleReplace = () => {
     config.object.replacing = !config.object.replacing
   }
-  handleWrite = (key, value) => {
-    this.setState({ [key]: value }, () => {
-      config.controllers.attachmentsController.updateSelectedData({
-        [key]: value,
-      })
-      this.autoGrow(key)
-    })
-  }
-  autoGrow(key) {
-    this.setState(
-      {
-        [`${key}Height`]: 5,
-      },
-      () => {
-        this.setState({
-          [`${key}Height`]: this[`${key}Element`].current.scrollHeight,
-        })
-      }
-    )
-  }
   handleMoveAttachment({ x, y, z }) {
     config.controllers.attachmentsController.moveSelectedObject({ x, y, z })
   }
   render() {
-    const {
-      show,
-      title,
-      content,
-      editing,
-      replacing,
-      titleHeight,
-      contentHeight,
-    } = this.state
+    const { show, title, content, editing, replacing, uuid } = this.state
     return (
       <Overlay hidden={!show} width="300px">
         <Panel>
-          {!editing
-            ? [
-                <Title key="title">{title}</Title>,
-                <Text key="content">{content}</Text>,
-              ]
-            : [
-                <TitleInput
-                  key="title"
-                  ref={this.titleElement}
-                  value={title}
-                  onChange={({ target: { value } }) =>
-                    this.handleWrite("title", value)
-                  }
-                  height={titleHeight}
-                />,
-                <ContentInput
-                  key="content"
-                  ref={this.contentElement}
-                  value={content}
-                  onChange={({ target: { value } }) =>
-                    this.handleWrite("content", value)
-                  }
-                  height={contentHeight}
-                />,
-                <hr key="divider" />,
-                <Row key="options">
+          {!editing ? (
+            <Fragment>
+              <Title>{title}</Title>
+              <Text>{content}</Text>
+            </Fragment>
+          ) : (
+            show && (
+              <Fragment>
+                <EditingForm
+                  title={title}
+                  content={content}
+                  show={show}
+                  uuid={uuid}
+                />
+                <hr />
+                <Row>
                   <Button onClick={this.handleChangeDefaultLook}>
                     <svg viewBox="0 0 60 60" width="30px" height="30px">
                       <path d="M40.693,17.777H36v-5c0-1.654-1.346-3-3-3H1c-0.552,0-1,0.447-1,1s0.448,1,1,1h32c0.551,0,1,0.448,1,1v5H3.307   C1.483,17.777,0,19.261,0,21.084v25.387c0,1.823,1.483,3.307,3.307,3.307h37.386c1.824,0,3.307-1.483,3.307-3.307V21.084   C44,19.261,42.517,17.777,40.693,17.777z" />
@@ -201,7 +152,7 @@ class InfoPanel extends PureComponent {
                       <path d="M343.567,21.043h-88.535V4.305c0-2.377-1.927-4.305-4.305-4.305h-92.971c-2.377,0-4.304,1.928-4.304,4.305v16.737H64.916    c-7.125,0-12.9,5.776-12.9,12.901V74.47h304.451V33.944C356.467,26.819,350.692,21.043,343.567,21.043z" />
                     </svg>
                   </Button>
-                </Row>,
+                </Row>
                 <Column key="dx-move">
                   <Row>
                     <SubTitle>Posición</SubTitle>
@@ -253,8 +204,10 @@ class InfoPanel extends PureComponent {
                       </Button>
                     </Column>
                   </Row>
-                </Column>,
-              ]}
+                </Column>
+              </Fragment>
+            )
+          )}
         </Panel>
       </Overlay>
     )
