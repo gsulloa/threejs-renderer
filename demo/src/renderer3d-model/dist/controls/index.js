@@ -13,23 +13,27 @@ class Controls extends PureComponent {
         Config.object.onMouseMove = ["rotate", "move"].filter(
           option => option !== Config.object.onMouseMove
         )[0]
-        this.setState({ rotate: { ...this.state.rotate, selected: !this.state.rotate.selected }})
-      },
-      selected: Config.object.onMouseMove === "rotate",
-    },
-    addLock: {
-      title: <AddPin width={30} height={30} />,
-      onClick: () => {
-        const state = Config.object.add
-        Config.object.add = !state
         this.setState({
-          addLock: {
-            ...this.state.addLock,
-            selected: state,
+          rotate: {
+            ...this.state.rotate,
+            selected: !this.state.rotate.selected,
           },
         })
       },
-      selected: !Config.object.add,
+      selected: Config.object.onMouseMove === "rotate",
+    },
+    adding: {
+      title: <AddPin width={30} height={30} />,
+      onClick: () => {
+        Config.object.add = !Config.object.add
+        this.setState({
+          adding: {
+            ...this.state.adding,
+            selected: Config.object.add,
+          },
+        })
+      },
+      selected: Config.object.add,
     },
     changeInitial: {
       title: <SavePosition width={30} height={30} />,
@@ -89,7 +93,7 @@ class Controls extends PureComponent {
     }
   }
   render() {
-    const { options, addLock, changeInitial, fullScreen, rotate } = this.state
+    const { options, adding, changeInitial, fullScreen, rotate } = this.state
     return (
       <BottomEndOverlay>
         <VerticalSlider
@@ -104,10 +108,10 @@ class Controls extends PureComponent {
         {Config.object.editing && [
           <CircleButton
             key="add-lock"
-            onClick={addLock.onClick}
-            selected={addLock.selected}
+            onClick={adding.onClick}
+            selected={adding.selected}
           >
-            {addLock.title}
+            {adding.title}
           </CircleButton>,
           <CircleButton key="reset-initial" onClick={changeInitial.onClick}>
             {changeInitial.title}

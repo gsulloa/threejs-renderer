@@ -22,19 +22,18 @@ class Controls extends PureComponent {
       },
       selected: Config.object.onMouseMove === "rotate",
     },
-    addLock: {
+    adding: {
       title: <AddPin width={30} height={30} />,
       onClick: () => {
-        const state = Config.object.add
-        Config.object.add = !state
+        Config.object.add = !Config.object.add
         this.setState({
-          addLock: {
-            ...this.state.addLock,
-            selected: state,
+          adding: {
+            ...this.state.adding,
+            selected: Config.object.add,
           },
         })
       },
-      selected: !Config.object.add,
+      selected: Config.object.add,
     },
     changeInitial: {
       title: <SavePosition width={30} height={30} />,
@@ -94,7 +93,7 @@ class Controls extends PureComponent {
     }
   }
   render() {
-    const { options, addLock, changeInitial, fullScreen, rotate } = this.state
+    const { options, adding, changeInitial, fullScreen, rotate } = this.state
     return (
       <BottomEndOverlay>
         <VerticalSlider
@@ -109,10 +108,10 @@ class Controls extends PureComponent {
         {Config.object.editing && [
           <CircleButton
             key="add-lock"
-            onClick={addLock.onClick}
-            selected={addLock.selected}
+            onClick={adding.onClick}
+            selected={adding.selected}
           >
-            {addLock.title}
+            {adding.title}
           </CircleButton>,
           <CircleButton key="reset-initial" onClick={changeInitial.onClick}>
             {changeInitial.title}
