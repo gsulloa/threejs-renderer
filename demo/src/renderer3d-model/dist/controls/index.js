@@ -145,9 +145,7 @@ class Controls extends PureComponent {
           {rotate.title}
         </CircleButton>
 
-        <CircleButton onClick={visible.onClick}>
-          {visible.title}
-        </CircleButton>
+        <CircleButton onClick={visible.onClick}>{visible.title}</CircleButton>
         <CircleButton onClick={fullScreen.onClick}>
           {fullScreen.title}
         </CircleButton>

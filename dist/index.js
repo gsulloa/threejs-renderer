@@ -292,7 +292,8 @@ var Renderer3D = function Renderer3D(_ref) {
     var _object$data = object.data,
         screenPosition = _object$data.screenPosition,
         title = _object$data.title,
-        content = _object$data.content;
+        content = _object$data.content,
+        uuid = object.uuid;
 
     if (screenPosition) {
       _config.default.controllers.objectController.look(screenPosition);
@@ -302,7 +303,8 @@ var Renderer3D = function Renderer3D(_ref) {
 
     _this.infoPanel.showPanel({
       title: title,
-      content: content
+      content: content,
+      uuid: uuid
     });
   });
   (0, _defineProperty2.default)(this, "resetControls", function () {

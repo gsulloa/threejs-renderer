@@ -33,7 +33,15 @@ var _default = {
       })
     },
     scale: 5,
-    visibility: true,
+    _visibility: new _rxjs.BehaviorSubject(true),
+
+    get visibility() {
+      return this._visibility.value;
+    },
+
+    set visibility(val) {
+      this._visibility.next(val);
+    },
 
     set defaultColor(color) {
       this.color.default = color;
