@@ -5,14 +5,26 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SliderWrapper = exports.Panel = exports.LoadingBar = exports.BottomEndOverlay = exports.EndOverlay = exports.CenteredOverlay = exports.Overlay = void 0;
+exports.MaxLengthContainer = exports.SliderWrapper = exports.Panel = exports.LoadingBar = exports.BottomEndOverlay = exports.EndOverlay = exports.CenteredOverlay = exports.Overlay = void 0;
 
 var _taggedTemplateLiteral2 = _interopRequireDefault(require("@babel/runtime/helpers/taggedTemplateLiteral"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
+var _constants = require("../constants");
+
+function _templateObject9() {
+  var data = (0, _taggedTemplateLiteral2.default)(["\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  color: white;\n"]);
+
+  _templateObject9 = function _templateObject9() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject8() {
-  var data = (0, _taggedTemplateLiteral2.default)(["\n  display: inline-block;\n  width: 20px;\n  height: 150px;\n  padding: 0;\n  input {\n    width: 150px;\n    height: 20px;\n    margin: -175px;\n    transform-origin: 100px 100px;\n    transform: rotate(90deg);\n  }\n"]);
+  var data = (0, _taggedTemplateLiteral2.default)(["\n  display: inline-block;\n  color: ", "\n  background: ", "\n  width: 50px;\n  height: 170px;\n  border-radius: 7px;\n  padding: 0;\n  margin: 10px;\n  div {\n    width: 170px;\n    height: 20px;\n    margin: 10px -163px;\n    transform-origin: 100px 100px;\n    transform: rotate(90deg);\n    \n  }\n  input {\n    appearance: none;\n    background: ", ";\n    height: 3px;\n    width: 150px;\n    outline: none;\n    &::-webkit-slider-thumb {\n      appearance: none;\n      width: 14px;\n      height: 32px;\n      background: ", ";\n      border: 3px ", " solid;\n      border-radius: 7px;\n      cursor: pointer;\n    }\n    \n    &::-moz-range-thumb {\n      appearance: none;\n      width: 14px;\n      height: 32px;\n      background: ", ";\n      border: 3px ", " solid;\n      border-radius: 7px;\n      cursor: pointer;\n    }\n  }\n"]);
 
   _templateObject8 = function _templateObject8() {
     return data;
@@ -22,7 +34,7 @@ function _templateObject8() {
 }
 
 function _templateObject7() {
-  var data = (0, _taggedTemplateLiteral2.default)(["\n  width: 100%;\n  height: 100%;\n  background: rgba(255, 255, 255, 0.2);\n  padding: 0 15px;\n  overflow-y: auto;\n  position: relative;\n  pointer-events: none;\n"]);
+  var data = (0, _taggedTemplateLiteral2.default)(["\n  width: 100%;\n  height: 100%;\n  background: rgba(255, 255, 255, 0.4);\n  padding: 0 15px;\n  overflow-y: auto;\n  position: relative;\n  pointer-events: none;\n"]);
 
   _templateObject7 = function _templateObject7() {
     return data;
@@ -42,7 +54,7 @@ function _templateObject6() {
 }
 
 function _templateObject5() {
-  var data = (0, _taggedTemplateLiteral2.default)(["\n  justify-content: flex-end;\n  flex-flow: row nowrap;\n"]);
+  var data = (0, _taggedTemplateLiteral2.default)(["\n  justify-content: flex-end;\n  flex-flow: column nowrap;\n"]);
 
   _templateObject5 = function _templateObject5() {
     return data;
@@ -113,6 +125,10 @@ var Panel = _styledComponents.default.div(_templateObject7());
 
 exports.Panel = Panel;
 
-var SliderWrapper = _styledComponents.default.div(_templateObject8());
+var SliderWrapper = _styledComponents.default.div(_templateObject8(), _constants.WHITE, _constants.GRAY, _constants.WHITE, _constants.GRAY, _constants.WHITE, _constants.GRAY, _constants.WHITE);
 
 exports.SliderWrapper = SliderWrapper;
+
+var MaxLengthContainer = _styledComponents.default.div(_templateObject9());
+
+exports.MaxLengthContainer = MaxLengthContainer;

@@ -27,7 +27,7 @@ var _config = _interopRequireDefault(require("../config"));
 
 var _log = require("../utils/log");
 
-var _font = _interopRequireDefault(require("./font"));
+var _font = _interopRequireDefault(require("../assets/font/font"));
 
 var AttachmentsController =
 /*#__PURE__*/
@@ -285,9 +285,7 @@ function () {
         attachment.scale.set(scale, scale, scale);
       });
     });
-    (0, _defineProperty2.default)(this, "updateVisible", function () {
-      var visibility = _config.default.attachment.visibility;
-
+    (0, _defineProperty2.default)(this, "updateVisible", function (visibility) {
       _this.attachments.children.forEach(function (attachment) {
         attachment.visible = visibility;
       });
@@ -322,6 +320,8 @@ function () {
         offsetY: offsetY / ratio
       });
     });
+
+    _config.default.attachment._visibility.subscribe(this.updateVisible);
   }
 
   (0, _createClass2.default)(AttachmentsController, [{

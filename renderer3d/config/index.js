@@ -14,7 +14,13 @@ export default {
       selected: new MeshBasicMaterial({ color: "#fff" }),
     },
     scale: 5,
-    visibility: true,
+    _visibility: new BehaviorSubject(true),
+    get visibility() {
+      return this._visibility.value
+    },
+    set visibility(val) {
+      this._visibility.next(val)
+    },
     set defaultColor(color) {
       this.color.default = color
       this.material.default.color.set(new Color(color))

@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import Config from "../config"
 import { devlogerror } from "../utils/log"
-import font from "./font"
+import font from "../assets/font/font"
 import config from "../config"
 
 class AttachmentsController {
@@ -44,6 +44,7 @@ class AttachmentsController {
         offsetY: offsetY / ratio,
       })
     })
+    Config.attachment._visibility.subscribe(this.updateVisible)
   }
 
   get hovereds() {
@@ -287,8 +288,7 @@ class AttachmentsController {
     })
   }
 
-  updateVisible = () => {
-    const { visibility } = Config.attachment
+  updateVisible = visibility => {
     this.attachments.children.forEach(attachment => {
       attachment.visible = visibility
     })
