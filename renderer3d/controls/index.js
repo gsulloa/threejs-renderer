@@ -3,25 +3,25 @@ import { BottomEndOverlay } from "../components/containers"
 import { CircleButton } from "../components/button"
 import { VerticalSlider } from "../components/form"
 import Config from "../config"
-import { AddPin, MoveUpDown, Move360, SavePosition } from "../assets/icons"
+import { AddPin, Move360, SavePosition } from "../assets/icons"
 
 class Controls extends PureComponent {
   state = {
-    options: [
-      {
-        title: <MoveUpDown width={30} height={30} />,
-        onClick: () => {
-          Config.object.onMouseMove = "move"
-        },
+    rotate: {
+      title: <Move360 width={30} height={30} />,
+      onClick: () => {
+        Config.object.onMouseMove = ["rotate", "move"].filter(
+          option => option !== Config.object.onMouseMove
+        )[0]
+        this.setState({
+          rotate: {
+            ...this.state.rotate,
+            selected: !this.state.rotate.selected,
+          },
+        })
       },
-      {
-        title: <Move360 width={30} height={30} />,
-        onClick: () => {
-          Config.object.onMouseMove = "rotate"
-        },
-        selected: true,
-      },
-    ],
+      selected: Config.object.onMouseMove === "rotate",
+    },
     addLock: {
       title: <AddPin width={30} height={30} />,
       onClick: () => {
@@ -94,7 +94,7 @@ class Controls extends PureComponent {
     }
   }
   render() {
-    const { options, addLock, changeInitial, fullScreen } = this.state
+    const { options, addLock, changeInitial, fullScreen, rotate } = this.state
     return (
       <BottomEndOverlay>
         <VerticalSlider
@@ -118,15 +118,12 @@ class Controls extends PureComponent {
             {changeInitial.title}
           </CircleButton>,
         ]}
-        {options.map((option, i) => (
-          <CircleButton
-            key={i}
-            onClick={() => this.handleClick(option)}
-            selected={option.selected}
-          >
-            {option.title}
-          </CircleButton>
-        ))}
+        <CircleButton
+          onClick={rotate.onClick}
+          selected={Config.object.onMouseMove === "rotate"}
+        >
+          {rotate.title}
+        </CircleButton>
         <CircleButton onClick={fullScreen.onClick}>
           {fullScreen.title}
         </CircleButton>
