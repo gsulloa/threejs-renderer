@@ -93,16 +93,16 @@ class InfoPanel extends PureComponent {
                 <hr />
                 <Row>
                   <Button onClick={this.handleChangeDefaultLook}>
-                    <SavePosition width={30} height={30}/>
+                    <SavePosition width={30} height={30} />
                   </Button>
                   <Button
                     onClick={this.handleToogleReplace}
                     selected={replacing}
                   >
-                    <NewTarget width={30} height={30}/>
+                    <NewTarget width={30} height={30} />
                   </Button>
                   <Button onClick={this.handleRemoveAttachment}>
-                    <Trash width={30} height={30}/>
+                    <Trash width={30} height={30} />
                   </Button>
                 </Row>
                 <Column key="dx-move">
