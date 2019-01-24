@@ -3,7 +3,13 @@ import { BottomEndOverlay } from "../components/containers"
 import { CircleButton } from "../components/button"
 import { VerticalSlider } from "../components/form"
 import Config from "../config"
-import { AddPin, Move360, SavePosition } from "../assets/icons"
+import {
+  AddPin,
+  Move360,
+  SavePosition,
+  ViewPin,
+  NoViewPin,
+} from "../assets/icons"
 
 class Controls extends PureComponent {
   state = {
@@ -34,6 +40,12 @@ class Controls extends PureComponent {
         })
       },
       selected: Config.object.add,
+    },
+    visible: {
+      title: <ViewPin width={30} height={30} />,
+      onClick: () => {
+        Config.attachment.visibility = !Config.attachment.visibility
+      },
     },
     changeInitial: {
       title: <SavePosition width={30} height={30} />,
@@ -67,6 +79,15 @@ class Controls extends PureComponent {
     Config.orbit._position.subscribe(({ z: zoom }) => {
       this.setState({ zoom })
     })
+    Config.attachment._visibility.subscribe(visibility => {
+      const Component = visibility ? ViewPin : NoViewPin
+      this.setState({
+        visible: {
+          ...this.state.visible,
+          title: <Component width={30} height={30} />,
+        },
+      })
+    })
   }
   handleClick = ({ title: optionTitle, onClick }) => {
     const index = this.state.options.findIndex(
@@ -93,7 +114,7 @@ class Controls extends PureComponent {
     }
   }
   render() {
-    const { options, adding, changeInitial, fullScreen, rotate } = this.state
+    const { visible, adding, changeInitial, fullScreen, rotate } = this.state
     return (
       <BottomEndOverlay>
         <VerticalSlider
@@ -122,6 +143,10 @@ class Controls extends PureComponent {
           selected={Config.object.onMouseMove === "rotate"}
         >
           {rotate.title}
+        </CircleButton>
+
+        <CircleButton onClick={visible.onClick}>
+          {visible.title}
         </CircleButton>
         <CircleButton onClick={fullScreen.onClick}>
           {fullScreen.title}

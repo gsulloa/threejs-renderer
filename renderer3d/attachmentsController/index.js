@@ -44,6 +44,7 @@ class AttachmentsController {
         offsetY: offsetY / ratio,
       })
     })
+    Config.attachment._visibility.subscribe(this.updateVisible)
   }
 
   get hovereds() {
@@ -287,8 +288,7 @@ class AttachmentsController {
     })
   }
 
-  updateVisible = () => {
-    const { visibility } = Config.attachment
+  updateVisible = visibility => {
     this.attachments.children.forEach(attachment => {
       attachment.visible = visibility
     })
