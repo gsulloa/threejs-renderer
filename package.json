@@ -1,6 +1,6 @@
 {
   "name": "renderer3d-model",
-  "version": "1.2.5",
+  "version": "1.2.7",
   "private": false,
   "main": "dist",
   "author": "Gabriel Ulloa <gsulloa@uc.cl>",
@@ -20,7 +20,7 @@
     "three-obj-mtl-loader": "^1.0.3"
   },
   "scripts": {
-    "build": "babel renderer3d -d dist && cp -rf renderer3d/assets dist",
+    "build": " cp -rf renderer3d/assets dist && babel renderer3d -d dist",
     "build:dev": "mkdir -p demo/src/renderer3d-model/dist && cp -rf renderer3d/* demo/src/renderer3d-model/dist",
     "lint": "eslint ./renderer3d",
     "lint:fix": "yarn lint --fix",
