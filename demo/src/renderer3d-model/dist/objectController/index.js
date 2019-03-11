@@ -129,41 +129,27 @@ class ObjectController {
   handleTouchStart = e => {
     const touch = e.touches[0]
     this.previousMousePosition = { x: touch.clientX, y: touch.clientY }
-    switch (e.touches.length) {
-      case 1:
-        this.controlOption = CONTROL_OPTIONS.DRAGGING
-        break
-      case 2:
-        this.controlOption = CONTROL_OPTIONS.MOVING
-        break
-      default:
-        break
-    }
+    this.controlOption = CONTROL_OPTIONS.LEFT_CLICK
   }
 
   handleTouchMove = e => {
-    const { object, camera } = this
+    const {
+      touches: [{ clientX: offsetX, clientY: offsetY }],
+    } = e
+    const deltaMove = this.deltaMove({ offsetX, offsetY })
     switch (this.controlOption) {
-      case CONTROL_OPTIONS.DRAGGING: {
-        e.preventDefault()
-        const touch = e.touches[0]
-        const touchPosition = { offsetX: touch.clientX, offsetY: touch.clientY }
-        const deltaMove = this.deltaMove(touchPosition)
-        this.rotateObject({ deltaMove, object })
-        this.previousMousePosition = { x: touch.clientX, y: touch.clientY }
-        break
-      }
-      case CONTROL_OPTIONS.MOVING: {
-        e.preventDefault()
-        const touch = e.touches[0]
-        const touchPosition = { offsetX: touch.clientX, offsetY: touch.clientY }
-        const deltaMove = this.deltaMove(touchPosition)
-        this.moveCamera({ deltaMove, camera })
-        this.previousMousePosition = { x: touch.clientX, y: touch.clientY }
+      case CONTROL_OPTIONS.LEFT_CLICK: {
+        this[Config.object.onMouseMove]({
+          deltaMove,
+        })
         break
       }
       default:
         break
+    }
+    this.previousMousePosition = {
+      x: offsetX,
+      y: offsetY,
     }
   }
 
