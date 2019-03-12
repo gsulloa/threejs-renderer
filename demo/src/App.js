@@ -30,7 +30,7 @@ class App extends Component {
       infoPanel: this.infoPanel.current,
       container: this.render3d.current,
       configGui: this.configGui.current,
-      editable: true,
+      editable: false,
       initial: {
         orbit: {
           position: {
@@ -306,15 +306,14 @@ class App extends Component {
             onChange={({ target: { value: url } }) => this.setState({ url })}
           />
         </form>
-        <div style={{ height: 800, width: 1200 }}>
+        <div style={{ width: "100%", height: "100%", position: "absolute" }}>
           <div
             ref={this.render3d}
             style={{ width: "100%", height: "100%", position: "relative" }}
           >
             <Loading ref={this.loading} />
             <InfoPanel ref={this.infoPanel} />
-            <ConfigGui ref={this.configGui} />
-            <Controls />
+            <Controls showFullscreen={false} />
           </div>
         </div>
       </div>

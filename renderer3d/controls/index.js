@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react"
-import { BottomEndOverlay } from "../components/containers"
+import t from "prop-types"
+import { BottomEndOverlay, Col } from "../components/containers"
 import { CircleButton } from "../components/button"
 import { VerticalSlider } from "../components/form"
 import Config from "../config"
@@ -12,6 +13,12 @@ import {
 } from "../assets/icons"
 
 class Controls extends PureComponent {
+  static propTypes = {
+    showFullscreen: t.bool,
+  }
+  static defaultProps = {
+    showFullscreen: true,
+  }
   state = {
     rotate: {
       title: <Move360 width={30} height={30} />,
@@ -115,6 +122,7 @@ class Controls extends PureComponent {
   }
   render() {
     const { visible, adding, changeInitial, fullScreen, rotate } = this.state
+    const { showFullscreen } = this.props
     return (
       <BottomEndOverlay>
         <VerticalSlider
@@ -126,29 +134,33 @@ class Controls extends PureComponent {
           min={100}
           max={800}
         />
-        {Config.object.editing && [
+        <Col wrap>
+          {Config.object.editing && [
+            <CircleButton
+              key="add-lock"
+              onClick={adding.onClick}
+              selected={adding.selected}
+            >
+              {adding.title}
+            </CircleButton>,
+            <CircleButton key="reset-initial" onClick={changeInitial.onClick}>
+              {changeInitial.title}
+            </CircleButton>,
+          ]}
           <CircleButton
-            key="add-lock"
-            onClick={adding.onClick}
-            selected={adding.selected}
+            onClick={rotate.onClick}
+            selected={Config.object.onMouseMove === "rotate"}
           >
-            {adding.title}
-          </CircleButton>,
-          <CircleButton key="reset-initial" onClick={changeInitial.onClick}>
-            {changeInitial.title}
-          </CircleButton>,
-        ]}
-        <CircleButton
-          onClick={rotate.onClick}
-          selected={Config.object.onMouseMove === "rotate"}
-        >
-          {rotate.title}
-        </CircleButton>
+            {rotate.title}
+          </CircleButton>
 
-        <CircleButton onClick={visible.onClick}>{visible.title}</CircleButton>
-        <CircleButton onClick={fullScreen.onClick}>
-          {fullScreen.title}
-        </CircleButton>
+          <CircleButton onClick={visible.onClick}>{visible.title}</CircleButton>
+          {showFullscreen && (
+            <CircleButton onClick={fullScreen.onClick}>
+              {fullScreen.title}
+            </CircleButton>
+          )}
+        </Col>
       </BottomEndOverlay>
     )
   }

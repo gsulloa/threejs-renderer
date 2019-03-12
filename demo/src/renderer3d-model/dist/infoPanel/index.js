@@ -71,10 +71,15 @@ class InfoPanel extends PureComponent {
   handleMoveAttachment({ x, y, z }) {
     config.controllers.attachmentsController.moveSelectedObject({ x, y, z })
   }
+  handleClose = () => {
+    this.hidePanel()
+    config.controllers.attachmentsController.deselectObjects()
+    config.controllers.objectController.resetControls()
+  }
   render() {
     const { show, title, content, editing, replacing, uuid } = this.state
     return (
-      <Overlay hidden={!show} width="300px">
+      <Overlay hidden={!show} width="300px" smWidth="100%">
         <Panel>
           {!editing ? (
             <Fragment>
@@ -160,6 +165,7 @@ class InfoPanel extends PureComponent {
               </Fragment>
             )
           )}
+          <Button onClick={this.handleClose}>Cerrar</Button>
         </Panel>
       </Overlay>
     )

@@ -272,11 +272,14 @@ class AttachmentsController {
     })
   }
 
-  selectObject = object => {
+  deselectObjects = () => {
     this.selecteds.forEach(attachment => {
       attachment.state = "default"
       attachment.material = Config.attachment.material.default
     })
+  }
+  selectObject = object => {
+    this.deselectObjects()
     object.state = "selected"
     object.material = Config.attachment.material.selected
   }

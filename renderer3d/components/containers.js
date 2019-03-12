@@ -9,6 +9,14 @@ export const Overlay = styled.div`
   * {
     pointer-events: auto;
   }
+  ${({ smWidth }) =>
+    smWidth
+      ? `
+    @media (max-width: 768px) {
+      width: ${smWidth};
+    }
+  `
+      : ""}
 `
 
 const FlexOverlay = styled(Overlay)`
@@ -27,7 +35,22 @@ export const EndOverlay = styled(FlexOverlay)`
 
 export const BottomEndOverlay = styled(EndOverlay)`
   justify-content: flex-end;
-  flex-flow: column nowrap;
+  flex-flow: column wrap;
+  @media (max-height: 500px) {
+    flex-direction: row;
+  }
+`
+
+const Div = styled.div`
+  display: flex;
+  flex-wrap: ${({ wrap }) => (wrap ? "" : "no")}wrap;
+`
+
+export const Col = styled(Div)`
+  flex-direction: column;
+`
+export const Row = styled(Div)`
+  flex-direction: row;
 `
 
 export const LoadingBar = styled.div`
