@@ -103,6 +103,8 @@ function () {
       var segments = 32;
       var geometry = new THREE.CircleGeometry(radius, segments, segments);
       var sphere = new THREE.Mesh(geometry, material.default);
+      var inner = new THREE.Mesh(new THREE.CircleGeometry(radius * 0.85, segments, segments), material.black);
+      sphere.add(inner);
       sphere.scale.set(scale, scale, scale);
       sphere.data = data;
       sphere.state = "default";
@@ -269,11 +271,14 @@ function () {
         });
       });
     });
-    (0, _defineProperty2.default)(this, "selectObject", function (object) {
+    (0, _defineProperty2.default)(this, "deselectObjects", function () {
       _this.selecteds.forEach(function (attachment) {
         attachment.state = "default";
         attachment.material = _config.default.attachment.material.default;
       });
+    });
+    (0, _defineProperty2.default)(this, "selectObject", function (object) {
+      _this.deselectObjects();
 
       object.state = "selected";
       object.material = _config.default.attachment.material.selected;
@@ -366,7 +371,8 @@ function () {
       if (!model) return;
       var number = this.id.next().value;
       var textMaterial = new THREE.MeshBasicMaterial({
-        color: "black"
+        color: "white",
+        transparent: true
       });
       var textShapes = this.textureFont.generateShapes(String(number + 1), 1);
       var textGeometry = new THREE.ShapeBufferGeometry(textShapes);

@@ -162,74 +162,37 @@ function () {
         x: touch.clientX,
         y: touch.clientY
       };
-
-      switch (e.touches.length) {
-        case 1:
-          _this.controlOption = CONTROL_OPTIONS.DRAGGING;
-          break;
-
-        case 2:
-          _this.controlOption = CONTROL_OPTIONS.MOVING;
-          break;
-
-        default:
-          break;
-      }
+      _this.controlOption = CONTROL_OPTIONS.LEFT_CLICK;
     });
     (0, _defineProperty2.default)(this, "handleTouchMove", function (e) {
-      var object = _this.object,
-          camera = _this.camera;
+      var _e$touches = (0, _slicedToArray2.default)(e.touches, 1),
+          _e$touches$ = _e$touches[0],
+          offsetX = _e$touches$.clientX,
+          offsetY = _e$touches$.clientY;
+
+      var deltaMove = _this.deltaMove({
+        offsetX: offsetX,
+        offsetY: offsetY
+      });
 
       switch (_this.controlOption) {
-        case CONTROL_OPTIONS.DRAGGING:
+        case CONTROL_OPTIONS.LEFT_CLICK:
           {
-            e.preventDefault();
-            var touch = e.touches[0];
-            var touchPosition = {
-              offsetX: touch.clientX,
-              offsetY: touch.clientY
-            };
-
-            var deltaMove = _this.deltaMove(touchPosition);
-
-            _this.rotateObject({
-              deltaMove: deltaMove,
-              object: object
+            _this[_config.default.object.onMouseMove]({
+              deltaMove: deltaMove
             });
 
-            _this.previousMousePosition = {
-              x: touch.clientX,
-              y: touch.clientY
-            };
-            break;
-          }
-
-        case CONTROL_OPTIONS.MOVING:
-          {
-            e.preventDefault();
-            var _touch = e.touches[0];
-            var _touchPosition = {
-              offsetX: _touch.clientX,
-              offsetY: _touch.clientY
-            };
-
-            var _deltaMove = _this.deltaMove(_touchPosition);
-
-            _this.moveCamera({
-              deltaMove: _deltaMove,
-              camera: camera
-            });
-
-            _this.previousMousePosition = {
-              x: _touch.clientX,
-              y: _touch.clientY
-            };
             break;
           }
 
         default:
           break;
       }
+
+      _this.previousMousePosition = {
+        x: offsetX,
+        y: offsetY
+      };
     });
     (0, _defineProperty2.default)(this, "rotateObject", function (vector) {
       _this.object.rotation.setFromVector3(vector);

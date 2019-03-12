@@ -103,6 +103,12 @@ class AttachmentsController {
     const segments = 32
     const geometry = new THREE.CircleGeometry(radius, segments, segments)
     const sphere = new THREE.Mesh(geometry, material.default)
+    const inner = new THREE.Mesh(
+      new THREE.CircleGeometry(radius * 0.85, segments, segments),
+      material.black
+    )
+
+    sphere.add(inner)
     sphere.scale.set(scale, scale, scale)
     sphere.data = data
     sphere.state = "default"
@@ -115,7 +121,10 @@ class AttachmentsController {
   addNumber({ model } = {}) {
     if (!model) return
     const number = this.id.next().value
-    const textMaterial = new THREE.MeshBasicMaterial({ color: "black" })
+    const textMaterial = new THREE.MeshBasicMaterial({
+      color: "white",
+      transparent: true,
+    })
     const textShapes = this.textureFont.generateShapes(String(number + 1), 1)
     const textGeometry = new THREE.ShapeBufferGeometry(textShapes)
     const text = new THREE.Mesh(textGeometry, textMaterial)

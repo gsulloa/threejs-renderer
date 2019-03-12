@@ -22,14 +22,24 @@ var _default = {
     },
     material: {
       default: new _three.MeshBasicMaterial({
-        color: "#fae",
-        opacity: 0.5
+        color: "#fff",
+        opacity: 0.8,
+        transparent: true
       }),
       hovered: new _three.MeshBasicMaterial({
-        color: "#33f"
+        color: "#ccc",
+        opacity: 0.8,
+        transparent: true
       }),
       selected: new _three.MeshBasicMaterial({
-        color: "#fff"
+        color: "#aaa",
+        opacity: 0.8,
+        transparent: true
+      }),
+      black: new _three.MeshBasicMaterial({
+        color: "#000",
+        opacity: 0.8,
+        transparent: true
       })
     },
     scale: 5,

@@ -131,6 +131,13 @@ function (_PureComponent) {
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), "handleToogleReplace", function () {
       _config.default.object.replacing = !_config.default.object.replacing;
     });
+    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), "handleClose", function () {
+      _this.hidePanel();
+
+      _config.default.controllers.attachmentsController.deselectObjects();
+
+      _config.default.controllers.objectController.resetControls();
+    });
     return _this;
   }
 
@@ -178,7 +185,8 @@ function (_PureComponent) {
           uuid = _this$state.uuid;
       return _react.default.createElement(_containers.Overlay, {
         hidden: !show,
-        width: "300px"
+        width: "300px",
+        smWidth: "100%"
       }, _react.default.createElement(_containers.Panel, null, !editing ? _react.default.createElement(_react.Fragment, null, _react.default.createElement(_text.Title, null, title), _react.default.createElement(_text.Text, null, content)) : show && _react.default.createElement(_react.Fragment, null, _react.default.createElement(_EditingForm.default, {
         title: title,
         content: content,
@@ -244,7 +252,9 @@ function (_PureComponent) {
             z: -1
           });
         }
-      }, _react.default.createElement("span", null, "-"))))))));
+      }, _react.default.createElement("span", null, "-")))))), _react.default.createElement(_button.InverseCircleButton, {
+        onClick: this.handleClose
+      }, "Cerrar")));
     }
   }]);
   return InfoPanel;

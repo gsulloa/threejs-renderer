@@ -29,6 +29,8 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
 var _containers = require("../components/containers");
 
 var _button = require("../components/button");
@@ -211,6 +213,7 @@ function (_PureComponent) {
           changeInitial = _this$state.changeInitial,
           fullScreen = _this$state.fullScreen,
           rotate = _this$state.rotate;
+      var showFullscreen = this.props.showFullscreen;
       return _react.default.createElement(_containers.BottomEndOverlay, null, _react.default.createElement(_form.VerticalSlider, {
         value: this.state.zoom,
         onChange: function onChange(_ref4) {
@@ -220,7 +223,9 @@ function (_PureComponent) {
         step: 20,
         min: 100,
         max: 800
-      }), _config.default.object.editing && [_react.default.createElement(_button.CircleButton, {
+      }), _react.default.createElement(_containers.Col, {
+        wrap: true
+      }, _config.default.object.editing && [_react.default.createElement(_button.CircleButton, {
         key: "add-lock",
         onClick: adding.onClick,
         selected: adding.selected
@@ -232,13 +237,19 @@ function (_PureComponent) {
         selected: _config.default.object.onMouseMove === "rotate"
       }, rotate.title), _react.default.createElement(_button.CircleButton, {
         onClick: visible.onClick
-      }, visible.title), _react.default.createElement(_button.CircleButton, {
+      }, visible.title), showFullscreen && _react.default.createElement(_button.CircleButton, {
         onClick: fullScreen.onClick
-      }, fullScreen.title));
+      }, fullScreen.title)));
     }
   }]);
   return Controls;
 }(_react.PureComponent);
 
+(0, _defineProperty2.default)(Controls, "propTypes", {
+  showFullscreen: _propTypes.default.bool
+});
+(0, _defineProperty2.default)(Controls, "defaultProps", {
+  showFullscreen: true
+});
 var _default = Controls;
 exports.default = _default;

@@ -65,6 +65,10 @@ class ModelLoader {
     const mtlLoader = new MTLLoader(loadingManager)
     const materials = mtlLoader.parse(mtl)
     materials.preload()
+    Object.values(materials.materials).forEach(material => {
+      material.opacity = 0.92
+      material.transparent = true
+    })
     return materials
   }
   loadOBJ = ({ materials, obj }) => {
