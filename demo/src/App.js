@@ -313,7 +313,7 @@ class App extends Component {
           >
             <Loading ref={this.loading} />
             <InfoPanel ref={this.infoPanel} />
-            <Controls showFullscreen={false} />
+            <Controls />
           </div>
         </div>
       </div>
