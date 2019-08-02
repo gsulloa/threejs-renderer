@@ -183,9 +183,10 @@ class Renderer3D {
     return object
   }
   handleReplaceSelected = ({ offsetX, offsetY }) => {
+    const ratio = Math.round(window.devicePixelRatio * 100) / 100
     const position = config.controllers.objectController.getPositionInObject({
-      offsetX,
-      offsetY,
+      offsetX: offsetX * ratio,
+      offsetY: offsetY * ratio,
       domElementHeight: this.renderer.domElement.height,
       domElementWidth: this.renderer.domElement.width,
     })
