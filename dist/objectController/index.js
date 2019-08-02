@@ -259,15 +259,15 @@ function () {
         z: z
       };
     });
-    (0, _defineProperty2.default)(this, "look", function (_ref10) {
-      var newPosition = _ref10.position,
+    (0, _defineProperty2.default)(this, "look", function () {
+      var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          newPosition = _ref10.position,
           newRotation = _ref10.rotation;
 
-      _this.smoothMoveCamera({
+      if (newPosition) _this.smoothMoveCamera({
         newPosition: newPosition
       });
-
-      _this.smoothRotateObjectTo({
+      if (newRotation) _this.smoothRotateObjectTo({
         newRotation: newRotation
       });
     });

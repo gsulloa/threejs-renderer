@@ -251,14 +251,7 @@ class App extends Component {
               title: "Etiqueta 12",
               content:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.",
-              screenPosition: {
-                rotation: {
-                  x: 1.4680390373879195,
-                  y: -0.049372252196620114,
-                  z: 2.8308733671899837,
-                },
-                position: { x: -54, y: -35, z: 290 },
-              },
+              screenPosition: {},
             },
           },
         ],

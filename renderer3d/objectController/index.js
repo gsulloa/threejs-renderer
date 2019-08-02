@@ -215,9 +215,9 @@ class ObjectController {
     Config.orbit.position = { x: -x + prevX, y: y + prevY, z }
   }
 
-  look = ({ position: newPosition, rotation: newRotation }) => {
-    this.smoothMoveCamera({ newPosition })
-    this.smoothRotateObjectTo({ newRotation })
+  look = ({ position: newPosition, rotation: newRotation } = {}) => {
+    if (newPosition) this.smoothMoveCamera({ newPosition })
+    if (newRotation) this.smoothRotateObjectTo({ newRotation })
   }
   smoothMoveCamera = ({ newPosition }) => {
     const positionCoords = { ...Config.orbit.position }

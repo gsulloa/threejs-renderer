@@ -177,7 +177,6 @@ class Renderer3D {
     if (object) {
       this.lookObject(object)
     } else if (object !== null) {
-      // this.resetControls()
       this.infoPanel.hidePanel()
     }
     return object
