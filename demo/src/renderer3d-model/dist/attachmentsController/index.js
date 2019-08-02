@@ -4,6 +4,7 @@ import { devlogerror } from "../utils/log"
 import font from "../assets/font/font"
 import config from "../config"
 
+window.a = config
 class AttachmentsController {
   constructor({
     model,
@@ -136,7 +137,7 @@ class AttachmentsController {
   replaceAllNumbers = () => {
     this.id = this.number()
     this.attachments.children.forEach(attachment => {
-      const [number] = attachment.children
+      const [, number] = attachment.children
       attachment.remove(number)
       this.addNumber({ model: attachment })
     })
