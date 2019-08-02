@@ -56,9 +56,14 @@ class AttachmentsController {
   }
 
   filterByState = state => {
-    return this.attachments.children.filter(
-      attachment => attachment.state === state
-    )
+    return [
+      ...this.attachments.children.filter(
+        attachment => attachment.state === state
+      ),
+      ...this.attachments.children
+        .map(({ reference }) => reference)
+        .filter(attachment => attachment.state === state),
+    ]
   };
 
   *number() {
@@ -74,9 +79,14 @@ class AttachmentsController {
   addAttachment = ({ position, model }) => {
     if (position && model) {
       let { x, y, z } = position
-      const transparentModel = new THREE.Mesh()
-      transparentModel.visible = false
+      const geometry = new THREE.SphereGeometry(1, 64, 64)
+
+      const { material } = Config.attachment
+      const transparentModel = new THREE.Mesh(geometry, material.default)
+      transparentModel.visible = true
       transparentModel.position.copy({ x, y, z })
+      transparentModel.data = model.data
+      transparentModel.state = model.state
       this.model.add(transparentModel)
 
       const worldPosition = new THREE.Vector3().copy(
@@ -84,6 +94,7 @@ class AttachmentsController {
       )
       model.position.copy(worldPosition)
       model.reference = transparentModel
+      transparentModel.reference = model
       this.attachments.add(model)
       return model
     }
@@ -156,7 +167,10 @@ class AttachmentsController {
       )
       const raycaster = new THREE.Raycaster()
       raycaster.setFromCamera(vector, camera)
-      const intersects = raycaster.intersectObjects(attachments.children)
+      const intersects = raycaster.intersectObjects([
+        ...attachments.children,
+        ...attachments.children.map(({ reference }) => reference),
+      ])
       return intersects
     } catch (e) {
       devlogerror(e)
@@ -195,10 +209,7 @@ class AttachmentsController {
           return object
         }
         case "selected": {
-          object.state = "hovered"
-          object.material = Config.attachment.material.hovered
-
-          object.geometry.scale(1 / 1.2, 1 / 1.2, 1 / 1.2)
+          this.deselectObjects()
           return undefined
         }
         default:
@@ -296,6 +307,10 @@ class AttachmentsController {
     object.state = "selected"
     object.material = Config.attachment.material.selected
     object.geometry.scale(1.2, 1.2, 1.2)
+
+    object.reference.state = "selected"
+    object.reference.material = Config.attachment.material.selected
+    object.reference.geometry.scale(1.2, 1.2, 1.2)
   }
 
   updateScale = () => {
@@ -307,7 +322,8 @@ class AttachmentsController {
 
   updateVisible = visibility => {
     this.attachments.children.forEach(attachment => {
-      attachment.visible = visibility
+      attachment.visible = !!(visibility % 2)
+      attachment.reference.visible = visibility === 2
     })
   }
 }

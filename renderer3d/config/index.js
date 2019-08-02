@@ -23,7 +23,7 @@ export default {
       }),
     },
     scale: 5,
-    _visibility: new BehaviorSubject(true),
+    _visibility: new BehaviorSubject(1),
     get visibility() {
       return this._visibility.value
     },

@@ -10,6 +10,7 @@ import {
   SavePosition,
   ViewPin,
   NoViewPin,
+  NewTarget,
 } from "../assets/icons"
 
 class Controls extends PureComponent {
@@ -51,7 +52,7 @@ class Controls extends PureComponent {
     visible: {
       title: <ViewPin width={30} height={30} />,
       onClick: () => {
-        Config.attachment.visibility = !Config.attachment.visibility
+        Config.attachment.visibility = (Config.attachment.visibility + 1) % 3
       },
     },
     changeInitial: {
@@ -89,7 +90,7 @@ class Controls extends PureComponent {
       this.setState({ zoom })
     })
     Config.attachment._visibility.subscribe(visibility => {
-      const Component = visibility ? ViewPin : NoViewPin
+      const Component = [NoViewPin, ViewPin, NewTarget][visibility]
       this.setState({
         visible: {
           ...this.state.visible,
