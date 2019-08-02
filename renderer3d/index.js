@@ -153,9 +153,10 @@ class Renderer3D {
       config.object.editing &&
       !config.controllers.attachmentsController.selecteds.length
     ) {
+      const ratio = Math.round(window.devicePixelRatio * 100) / 100
       const position = objectController.getPositionInObject({
-        offsetX: e.offsetX,
-        offsetY: e.offsetY,
+        offsetX: e.offsetX * ratio,
+        offsetY: e.offsetY * ratio,
         domElementHeight: this.renderer.domElement.height,
         domElementWidth: this.renderer.domElement.width,
       })
