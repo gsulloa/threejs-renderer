@@ -87,6 +87,7 @@ class AttachmentsController {
       transparentModel.position.copy({ x, y, z })
       transparentModel.data = model.data
       transparentModel.state = model.state
+      transparentModel.isTransparentModel = true
       this.model.add(transparentModel)
 
       const worldPosition = new THREE.Vector3().copy(
@@ -274,6 +275,7 @@ class AttachmentsController {
 
   moveSelectedObject = ({ x = 0, y = 0, z = 0 }) => {
     this.selecteds.forEach(attachment => {
+      if (attachment.isTransparentModel) return
       const {
         reference: { position },
       } = attachment

@@ -88,6 +88,7 @@ function () {
         });
         transparentModel.data = model.data;
         transparentModel.state = model.state;
+        transparentModel.isTransparentModel = true;
 
         _this.model.add(transparentModel);
 
@@ -276,6 +277,7 @@ function () {
           z = _ref9$z === void 0 ? 0 : _ref9$z;
 
       _this.selecteds.forEach(function (attachment) {
+        if (attachment.isTransparentModel) return;
         var position = attachment.reference.position;
         position.x += x;
         position.y += y;
