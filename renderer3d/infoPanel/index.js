@@ -29,6 +29,7 @@ class InfoPanel extends PureComponent {
     uuid: "",
     editing: config.object.editing,
     replacing: config.object.replacing,
+    position: {},
   }
   componentDidMount() {
     config.object._editing.subscribe(() => {
@@ -38,12 +39,13 @@ class InfoPanel extends PureComponent {
       this.setState({ replacing: config.object.replacing })
     })
   }
-  showPanel = ({ title, content, uuid }) => {
+  showPanel = ({ title, content, uuid, position: { x, y, z } }) => {
     this.setState(() => ({
       show: true,
       title,
       content,
       uuid,
+      position: { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) },
     }))
   }
   hidePanel = () => {
@@ -52,6 +54,7 @@ class InfoPanel extends PureComponent {
       title: "",
       content: "",
       uuid: "",
+      position: {},
     }))
   }
   handleChangeDefaultLook = () => {
@@ -68,8 +71,16 @@ class InfoPanel extends PureComponent {
   handleToogleReplace = () => {
     config.object.replacing = !config.object.replacing
   }
-  handleMoveAttachment({ x, y, z }) {
+  handleMoveAttachment({ x = 0, y = 0, z = 0 }) {
     config.controllers.attachmentsController.moveSelectedObject({ x, y, z })
+    const { position } = this.state
+    this.setState({
+      position: {
+        x: position.x + x,
+        y: position.y + y,
+        z: position.z + z,
+      },
+    })
   }
   handleClose = () => {
     this.hidePanel()
@@ -77,7 +88,15 @@ class InfoPanel extends PureComponent {
     config.controllers.objectController.resetControls()
   }
   render() {
-    const { show, title, content, editing, replacing, uuid } = this.state
+    const {
+      show,
+      title,
+      content,
+      editing,
+      replacing,
+      uuid,
+      position: { x, y, z },
+    } = this.state
     return (
       <Overlay hidden={!show} width="300px" smWidth="100%">
         <Panel>
@@ -128,7 +147,7 @@ class InfoPanel extends PureComponent {
                       >
                         <span>+</span>
                       </Button>
-                      <Text>X</Text>
+                      <Text>X ({x})</Text>
                       <Button
                         size={30}
                         onClick={() => this.handleMoveAttachment({ x: -1 })}
@@ -143,7 +162,7 @@ class InfoPanel extends PureComponent {
                       >
                         <span>+</span>
                       </Button>
-                      <Text>Y</Text>
+                      <Text>Y ({y})</Text>
                       <Button
                         size={30}
                         onClick={() => this.handleMoveAttachment({ y: -1 })}
@@ -158,7 +177,7 @@ class InfoPanel extends PureComponent {
                       >
                         <span>+</span>
                       </Button>
-                      <Text>Z</Text>
+                      <Text>Z ({z})</Text>
                       <Button
                         size={30}
                         onClick={() => this.handleMoveAttachment({ z: -1 })}
