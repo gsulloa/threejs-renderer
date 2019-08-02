@@ -5,13 +5,37 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MaxLengthContainer = exports.SliderWrapper = exports.Panel = exports.LoadingBar = exports.Row = exports.Col = exports.BottomEndOverlay = exports.EndOverlay = exports.CenteredOverlay = exports.Overlay = void 0;
+exports.Tooltip = exports.MaxLengthContainer = exports.SliderWrapper = exports.Panel = exports.LoadingBar = exports.Row = exports.Col = exports.BottomEndOverlay = exports.EndOverlay = exports.CenteredOverlay = exports.Overlay = void 0;
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
 
 var _taggedTemplateLiteral2 = _interopRequireDefault(require("@babel/runtime/helpers/taggedTemplateLiteral"));
+
+var _react = _interopRequireDefault(require("react"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 var _constants = require("../constants");
+
+function _templateObject14() {
+  var data = (0, _taggedTemplateLiteral2.default)(["\n  position: relative;\n  pointer-events: none;\n  &:hover ", " {\n    opacity: 1;\n  }\n"]);
+
+  _templateObject14 = function _templateObject14() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject13() {
+  var data = (0, _taggedTemplateLiteral2.default)(["\n  opacity: 0;\n  min-width: 120px;\n  max-width: 300px;\n  background-color: black;\n  color: #fff;\n  text-align: center;\n  padding: 5px 0;\n  border-radius: 6px;\n  border: solid 1px white;\n  position: absolute;\n  z-index: 1;\n  left: -50%;\n  bottom: 80%;\n  transition: opacity 0.2s;\n  pointer-events: none;\n"]);
+
+  _templateObject13 = function _templateObject13() {
+    return data;
+  };
+
+  return data;
+}
 
 function _templateObject12() {
   var data = (0, _taggedTemplateLiteral2.default)(["\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  color: white;\n"]);
@@ -175,3 +199,16 @@ exports.SliderWrapper = SliderWrapper;
 var MaxLengthContainer = _styledComponents.default.div(_templateObject12());
 
 exports.MaxLengthContainer = MaxLengthContainer;
+
+var TooltipText = _styledComponents.default.span(_templateObject13());
+
+var TooltipContainer = _styledComponents.default.div(_templateObject14(), TooltipText);
+
+var Tooltip = function Tooltip(_ref4) {
+  var children = _ref4.children,
+      text = _ref4.text,
+      props = (0, _objectWithoutProperties2.default)(_ref4, ["children", "text"]);
+  return _react.default.createElement(TooltipContainer, null, _react.default.createElement(TooltipText, null, text), children);
+};
+
+exports.Tooltip = Tooltip;

@@ -99,7 +99,7 @@ function (_PureComponent) {
           height: 30
         }),
         onClick: function onClick() {
-          _config.default.attachment.visibility = !_config.default.attachment.visibility;
+          _config.default.attachment.visibility = (_config.default.attachment.visibility + 1) % 3;
         }
       },
       changeInitial: {
@@ -193,7 +193,7 @@ function (_PureComponent) {
       });
 
       _config.default.attachment._visibility.subscribe(function (visibility) {
-        var Component = visibility ? _icons.ViewPin : _icons.NoViewPin;
+        var Component = [_icons.NoViewPin, _icons.ViewPin, _icons.NewTarget][visibility];
 
         _this2.setState({
           visible: (0, _objectSpread2.default)({}, _this2.state.visible, {
@@ -228,21 +228,29 @@ function (_PureComponent) {
         max: 800
       }), _react.default.createElement(_containers.Col, {
         wrap: true
-      }, _config.default.object.editing && [_react.default.createElement(_button.CircleButton, {
-        key: "add-lock",
+      }, _config.default.object.editing && _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_containers.Tooltip, {
+        text: "Agregar marcador"
+      }, _react.default.createElement(_button.CircleButton, {
         onClick: adding.onClick,
         selected: adding.selected
-      }, adding.title), _react.default.createElement(_button.CircleButton, {
-        key: "reset-initial",
+      }, adding.title)), _react.default.createElement(_containers.Tooltip, {
+        text: "Guardar posici\xF3n inicial"
+      }, _react.default.createElement(_button.CircleButton, {
         onClick: changeInitial.onClick
-      }, changeInitial.title)], _react.default.createElement(_button.CircleButton, {
+      }, changeInitial.title))), _react.default.createElement(_containers.Tooltip, {
+        text: _config.default.object.onMouseMove === "rotate" ? "Desactivar modo rotación" : "Activar modo rotación"
+      }, _react.default.createElement(_button.CircleButton, {
         onClick: rotate.onClick,
         selected: _config.default.object.onMouseMove === "rotate"
-      }, rotate.title), _react.default.createElement(_button.CircleButton, {
+      }, rotate.title)), _react.default.createElement(_containers.Tooltip, {
+        text: "Cambiar tipo de visi\xF3n de marcadores"
+      }, _react.default.createElement(_button.CircleButton, {
         onClick: visible.onClick
-      }, visible.title), showFullscreen && _react.default.createElement(_button.CircleButton, {
+      }, visible.title)), showFullscreen && _react.default.createElement(_containers.Tooltip, {
+        text: "Modo pantalla completa"
+      }, _react.default.createElement(_button.CircleButton, {
         onClick: fullScreen.onClick
-      }, fullScreen.title)));
+      }, fullScreen.title))));
     }
   }]);
   return Controls;

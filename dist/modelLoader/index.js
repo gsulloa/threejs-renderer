@@ -95,7 +95,7 @@ function () {
       var materials = mtlLoader.parse(mtl);
       materials.preload();
       Object.values(materials.materials).forEach(function (material) {
-        material.opacity = 0.92;
+        material.opacity = 0.88;
         material.transparent = true;
       });
       return materials;

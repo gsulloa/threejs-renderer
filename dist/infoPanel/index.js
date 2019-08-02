@@ -88,19 +88,29 @@ function (_PureComponent) {
       content: "",
       uuid: "",
       editing: _config.default.object.editing,
-      replacing: _config.default.object.replacing
+      replacing: _config.default.object.replacing,
+      position: {}
     });
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), "showPanel", function (_ref) {
       var title = _ref.title,
           content = _ref.content,
-          uuid = _ref.uuid;
+          uuid = _ref.uuid,
+          _ref$position = _ref.position,
+          x = _ref$position.x,
+          y = _ref$position.y,
+          z = _ref$position.z;
 
       _this.setState(function () {
         return {
           show: true,
           title: title,
           content: content,
-          uuid: uuid
+          uuid: uuid,
+          position: {
+            x: Math.floor(x),
+            y: Math.floor(y),
+            z: Math.floor(z)
+          }
         };
       });
     });
@@ -110,7 +120,8 @@ function (_PureComponent) {
           show: false,
           title: "",
           content: "",
-          uuid: ""
+          uuid: "",
+          position: {}
         };
       });
     });
@@ -161,14 +172,26 @@ function (_PureComponent) {
   }, {
     key: "handleMoveAttachment",
     value: function handleMoveAttachment(_ref2) {
-      var x = _ref2.x,
-          y = _ref2.y,
-          z = _ref2.z;
+      var _ref2$x = _ref2.x,
+          x = _ref2$x === void 0 ? 0 : _ref2$x,
+          _ref2$y = _ref2.y,
+          y = _ref2$y === void 0 ? 0 : _ref2$y,
+          _ref2$z = _ref2.z,
+          z = _ref2$z === void 0 ? 0 : _ref2$z;
 
       _config.default.controllers.attachmentsController.moveSelectedObject({
         x: x,
         y: y,
         z: z
+      });
+
+      var position = this.state.position;
+      this.setState({
+        position: {
+          x: position.x + x,
+          y: position.y + y,
+          z: position.z + z
+        }
       });
     }
   }, {
@@ -182,7 +205,11 @@ function (_PureComponent) {
           content = _this$state.content,
           editing = _this$state.editing,
           replacing = _this$state.replacing,
-          uuid = _this$state.uuid;
+          uuid = _this$state.uuid,
+          _this$state$position = _this$state.position,
+          x = _this$state$position.x,
+          y = _this$state$position.y,
+          z = _this$state$position.z;
       return _react.default.createElement(_containers.Overlay, {
         hidden: !show,
         width: "300px",
@@ -192,23 +219,29 @@ function (_PureComponent) {
         content: content,
         show: show,
         uuid: uuid
-      }), _react.default.createElement("hr", null), _react.default.createElement(Row, null, _react.default.createElement(_button.InverseCircleButton, {
+      }), _react.default.createElement("hr", null), _react.default.createElement(Row, null, _react.default.createElement(_containers.Tooltip, {
+        text: "Guardar posici\xF3n inicial del marcador"
+      }, _react.default.createElement(_button.InverseCircleButton, {
         onClick: this.handleChangeDefaultLook
       }, _react.default.createElement(_icons.SavePosition, {
         width: 30,
         height: 30
-      })), _react.default.createElement(_button.InverseCircleButton, {
+      }))), _react.default.createElement(_containers.Tooltip, {
+        text: "Reposicionar marcador"
+      }, _react.default.createElement(_button.InverseCircleButton, {
         onClick: this.handleToogleReplace,
         selected: replacing
       }, _react.default.createElement(_icons.NewTarget, {
         width: 30,
         height: 30
-      })), _react.default.createElement(_button.InverseCircleButton, {
+      }))), _react.default.createElement(_containers.Tooltip, {
+        text: "Eliminar marcador"
+      }, _react.default.createElement(_button.InverseCircleButton, {
         onClick: this.handleRemoveAttachment
       }, _react.default.createElement(_icons.Trash, {
         width: 30,
         height: 30
-      }))), _react.default.createElement(Column, {
+      })))), _react.default.createElement(Column, {
         key: "dx-move"
       }, _react.default.createElement(Row, null, _react.default.createElement(_text.SubTitle, null, "Posici\xF3n")), _react.default.createElement(Row, null, _react.default.createElement(Column, null, _react.default.createElement(_button.InverseCircleButton, {
         size: 30,
@@ -217,7 +250,7 @@ function (_PureComponent) {
             x: 1
           });
         }
-      }, _react.default.createElement("span", null, "+")), _react.default.createElement(_text.Text, null, "X"), _react.default.createElement(_button.InverseCircleButton, {
+      }, _react.default.createElement("span", null, "+")), _react.default.createElement(_text.Text, null, "X (", x, ")"), _react.default.createElement(_button.InverseCircleButton, {
         size: 30,
         onClick: function onClick() {
           return _this3.handleMoveAttachment({
@@ -231,7 +264,7 @@ function (_PureComponent) {
             y: 1
           });
         }
-      }, _react.default.createElement("span", null, "+")), _react.default.createElement(_text.Text, null, "Y"), _react.default.createElement(_button.InverseCircleButton, {
+      }, _react.default.createElement("span", null, "+")), _react.default.createElement(_text.Text, null, "Y (", y, ")"), _react.default.createElement(_button.InverseCircleButton, {
         size: 30,
         onClick: function onClick() {
           return _this3.handleMoveAttachment({
@@ -245,7 +278,7 @@ function (_PureComponent) {
             z: 1
           });
         }
-      }, _react.default.createElement("span", null, "+")), _react.default.createElement(_text.Text, null, "Z"), _react.default.createElement(_button.InverseCircleButton, {
+      }, _react.default.createElement("span", null, "+")), _react.default.createElement(_text.Text, null, "Z (", z, ")"), _react.default.createElement(_button.InverseCircleButton, {
         size: 30,
         onClick: function onClick() {
           return _this3.handleMoveAttachment({

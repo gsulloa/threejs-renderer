@@ -15,6 +15,8 @@ var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/sli
 
 var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
 
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
+
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
@@ -28,6 +30,8 @@ var _config = _interopRequireDefault(require("../config"));
 var _log = require("../utils/log");
 
 var _font = _interopRequireDefault(require("../assets/font/font"));
+
+window.a = _config.default;
 
 var AttachmentsController =
 /*#__PURE__*/
@@ -51,50 +55,60 @@ function () {
 
     (0, _classCallCheck2.default)(this, AttachmentsController);
     (0, _defineProperty2.default)(this, "filterByState", function (state) {
-      return _this.attachments.children.filter(function (attachment) {
+      return [].concat((0, _toConsumableArray2.default)(_this.attachments.children.filter(function (attachment) {
         return attachment.state === state;
-      });
+      })), (0, _toConsumableArray2.default)(_this.attachments.children.map(function (_ref2) {
+        var reference = _ref2.reference;
+        return reference;
+      }).filter(function (attachment) {
+        return attachment.state === state;
+      })));
     });
     (0, _defineProperty2.default)(this, "findAttachmentIndex", function (model) {
       return _this.attachments.children.findIndex(function (a) {
         return a === model;
       });
     });
-    (0, _defineProperty2.default)(this, "addAttachment", function (_ref2) {
-      var position = _ref2.position,
-          model = _ref2.model;
+    (0, _defineProperty2.default)(this, "addAttachment", function (_ref3) {
+      var position = _ref3.position,
+          model = _ref3.model;
 
       if (position && model) {
         var x = position.x,
             y = position.y,
             z = position.z;
-        var transparentModel = new THREE.Mesh();
-        transparentModel.visible = false;
+        var geometry = new THREE.SphereGeometry(1, 64, 64);
+        var material = _config.default.attachment.material;
+        var transparentModel = new THREE.Mesh(geometry, material.default);
+        transparentModel.visible = true;
         transparentModel.position.copy({
           x: x,
           y: y,
           z: z
         });
+        transparentModel.data = model.data;
+        transparentModel.state = model.state;
 
         _this.model.add(transparentModel);
 
         var worldPosition = new THREE.Vector3().copy(_this.model.localToWorld(new THREE.Vector3(x, y, z)));
         model.position.copy(worldPosition);
         model.reference = transparentModel;
+        transparentModel.reference = model;
 
         _this.attachments.add(model);
 
         return model;
       }
     });
-    (0, _defineProperty2.default)(this, "addSphere", function (_ref3) {
-      var position = _ref3.position,
-          _ref3$data = _ref3.data,
-          data = _ref3$data === void 0 ? {
+    (0, _defineProperty2.default)(this, "addSphere", function (_ref4) {
+      var position = _ref4.position,
+          _ref4$data = _ref4.data,
+          data = _ref4$data === void 0 ? {
         title: "Change me!",
         content: "Change me description!",
         screenPosition: (0, _objectSpread2.default)({}, _config.default.orbit)
-      } : _ref3$data;
+      } : _ref4$data;
       var withCallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       var _Config$attachment = _config.default.attachment,
           scale = _Config$attachment.scale,
@@ -125,8 +139,8 @@ function () {
       _this.id = _this.number();
 
       _this.attachments.children.forEach(function (attachment) {
-        var _attachment$children = (0, _slicedToArray2.default)(attachment.children, 1),
-            number = _attachment$children[0];
+        var _attachment$children = (0, _slicedToArray2.default)(attachment.children, 2),
+            number = _attachment$children[1];
 
         attachment.remove(number);
 
@@ -135,9 +149,9 @@ function () {
         });
       });
     });
-    (0, _defineProperty2.default)(this, "intersectAttachments", function (_ref4) {
-      var offsetX = _ref4.offsetX,
-          offsetY = _ref4.offsetY;
+    (0, _defineProperty2.default)(this, "intersectAttachments", function (_ref5) {
+      var offsetX = _ref5.offsetX,
+          offsetY = _ref5.offsetY;
       var domElementHeight = _this.domElement.height * 100 / Math.round(window.devicePixelRatio * 100);
       var domElementWidth = _this.domElement.width * 100 / Math.round(window.devicePixelRatio * 100);
 
@@ -147,15 +161,18 @@ function () {
         var vector = new THREE.Vector2(offsetX / domElementWidth * 2 - 1, -(offsetY / domElementHeight) * 2 + 1);
         var raycaster = new THREE.Raycaster();
         raycaster.setFromCamera(vector, camera);
-        var intersects = raycaster.intersectObjects(attachments.children);
+        var intersects = raycaster.intersectObjects([].concat((0, _toConsumableArray2.default)(attachments.children), (0, _toConsumableArray2.default)(attachments.children.map(function (_ref6) {
+          var reference = _ref6.reference;
+          return reference;
+        }))));
         return intersects;
       } catch (e) {
         (0, _log.devlogerror)(e);
       }
     });
-    (0, _defineProperty2.default)(this, "setHovereds", function (_ref5) {
-      var offsetX = _ref5.offsetX,
-          offsetY = _ref5.offsetY;
+    (0, _defineProperty2.default)(this, "setHovereds", function (_ref7) {
+      var offsetX = _ref7.offsetX,
+          offsetY = _ref7.offsetY;
 
       var intersects = _this.intersectAttachments({
         offsetX: offsetX,
@@ -177,9 +194,9 @@ function () {
         });
       }
     });
-    (0, _defineProperty2.default)(this, "selectAttachment", function (_ref6) {
-      var offsetX = _ref6.offsetX,
-          offsetY = _ref6.offsetY;
+    (0, _defineProperty2.default)(this, "selectAttachment", function (_ref8) {
+      var offsetX = _ref8.offsetX,
+          offsetY = _ref8.offsetY;
 
       var intersects = _this.intersectAttachments({
         offsetX: offsetX,
@@ -200,8 +217,8 @@ function () {
 
           case "selected":
             {
-              object.state = "hovered";
-              object.material = _config.default.attachment.material.hovered;
+              _this.deselectObjects();
+
               return undefined;
             }
 
@@ -250,13 +267,13 @@ function () {
         if (_this.callbacks.updateAttachmentData) _this.callbacks.updateAttachmentData(_this.findAttachmentIndex(attachment), attachment.data);
       });
     });
-    (0, _defineProperty2.default)(this, "moveSelectedObject", function (_ref7) {
-      var _ref7$x = _ref7.x,
-          x = _ref7$x === void 0 ? 0 : _ref7$x,
-          _ref7$y = _ref7.y,
-          y = _ref7$y === void 0 ? 0 : _ref7$y,
-          _ref7$z = _ref7.z,
-          z = _ref7$z === void 0 ? 0 : _ref7$z;
+    (0, _defineProperty2.default)(this, "moveSelectedObject", function (_ref9) {
+      var _ref9$x = _ref9.x,
+          x = _ref9$x === void 0 ? 0 : _ref9$x,
+          _ref9$y = _ref9.y,
+          y = _ref9$y === void 0 ? 0 : _ref9$y,
+          _ref9$z = _ref9.z,
+          z = _ref9$z === void 0 ? 0 : _ref9$z;
 
       _this.selecteds.forEach(function (attachment) {
         var position = attachment.reference.position;
@@ -275,6 +292,7 @@ function () {
       _this.selecteds.forEach(function (attachment) {
         attachment.state = "default";
         attachment.material = _config.default.attachment.material.default;
+        attachment.geometry.scale(1 / 1.2, 1 / 1.2, 1 / 1.2);
       });
     });
     (0, _defineProperty2.default)(this, "selectObject", function (object) {
@@ -282,6 +300,10 @@ function () {
 
       object.state = "selected";
       object.material = _config.default.attachment.material.selected;
+      object.geometry.scale(1.2, 1.2, 1.2);
+      object.reference.state = "selected";
+      object.reference.material = _config.default.attachment.material.selected;
+      object.reference.geometry.scale(1.2, 1.2, 1.2);
     });
     (0, _defineProperty2.default)(this, "updateScale", function () {
       var scale = _config.default.attachment.scale;
@@ -292,7 +314,8 @@ function () {
     });
     (0, _defineProperty2.default)(this, "updateVisible", function (visibility) {
       _this.attachments.children.forEach(function (attachment) {
-        attachment.visible = visibility;
+        attachment.visible = !!(visibility % 2);
+        attachment.reference.visible = visibility === 2;
       });
     });
     this.id = this.number();
@@ -316,9 +339,9 @@ function () {
     window.addEventListener("resize", function () {
       ratio = Math.round(window.devicePixelRatio * 100) / 100 / initialRatio;
     });
-    document.addEventListener("mousemove", function (_ref8) {
-      var offsetX = _ref8.offsetX,
-          offsetY = _ref8.offsetY;
+    document.addEventListener("mousemove", function (_ref10) {
+      var offsetX = _ref10.offsetX,
+          offsetY = _ref10.offsetY;
 
       _this.setHovereds({
         offsetX: offsetX / ratio,
@@ -365,8 +388,8 @@ function () {
   }, {
     key: "addNumber",
     value: function addNumber() {
-      var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          model = _ref9.model;
+      var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          model = _ref11.model;
 
       if (!model) return;
       var number = this.id.next().value;

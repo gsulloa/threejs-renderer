@@ -22,28 +22,20 @@ var _default = {
     },
     material: {
       default: new _three.MeshBasicMaterial({
-        color: "#fff",
-        opacity: 0.8,
-        transparent: true
+        color: "#fff"
       }),
       hovered: new _three.MeshBasicMaterial({
-        color: "#ccc",
-        opacity: 0.8,
-        transparent: true
+        color: "#700"
       }),
       selected: new _three.MeshBasicMaterial({
-        color: "#aaa",
-        opacity: 0.8,
-        transparent: true
+        color: "#f00"
       }),
       black: new _three.MeshBasicMaterial({
-        color: "#000",
-        opacity: 0.8,
-        transparent: true
+        color: "#000"
       })
     },
     scale: 5,
-    _visibility: new _rxjs.BehaviorSubject(true),
+    _visibility: new _rxjs.BehaviorSubject(1),
 
     get visibility() {
       return this._visibility.value;

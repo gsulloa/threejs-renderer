@@ -239,9 +239,10 @@ var Renderer3D = function Renderer3D(_ref) {
     var object = _this.handleAttachmentSelect(e);
 
     if (_config.default.object.add && object === null && _config.default.object.editing && !_config.default.controllers.attachmentsController.selecteds.length) {
+      var ratio = Math.round(window.devicePixelRatio * 100) / 100;
       var position = objectController.getPositionInObject({
-        offsetX: e.offsetX,
-        offsetY: e.offsetY,
+        offsetX: e.offsetX * ratio,
+        offsetY: e.offsetY * ratio,
         domElementHeight: _this.renderer.domElement.height,
         domElementWidth: _this.renderer.domElement.width
       });
@@ -278,10 +279,11 @@ var Renderer3D = function Renderer3D(_ref) {
   (0, _defineProperty2.default)(this, "handleReplaceSelected", function (_ref8) {
     var offsetX = _ref8.offsetX,
         offsetY = _ref8.offsetY;
+    var ratio = Math.round(window.devicePixelRatio * 100) / 100;
 
     var position = _config.default.controllers.objectController.getPositionInObject({
-      offsetX: offsetX,
-      offsetY: offsetY,
+      offsetX: offsetX * ratio,
+      offsetY: offsetY * ratio,
       domElementHeight: _this.renderer.domElement.height,
       domElementWidth: _this.renderer.domElement.width
     });
@@ -293,7 +295,8 @@ var Renderer3D = function Renderer3D(_ref) {
         screenPosition = _object$data.screenPosition,
         title = _object$data.title,
         content = _object$data.content,
-        uuid = object.uuid;
+        uuid = object.uuid,
+        position = object.position;
 
     if (screenPosition) {
       _config.default.controllers.objectController.look(screenPosition);
@@ -304,7 +307,8 @@ var Renderer3D = function Renderer3D(_ref) {
     _this.infoPanel.showPanel({
       title: title,
       content: content,
-      uuid: uuid
+      uuid: uuid,
+      position: position
     });
   });
   (0, _defineProperty2.default)(this, "resetControls", function () {
