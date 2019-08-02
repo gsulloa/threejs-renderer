@@ -11,23 +11,15 @@ export default {
     material: {
       default: new MeshBasicMaterial({
         color: "#fff",
-        opacity: 0.8,
-        transparent: true,
       }),
       hovered: new MeshBasicMaterial({
         color: "#700",
-        opacity: 0.8,
-        transparent: true,
       }),
       selected: new MeshBasicMaterial({
         color: "#f00",
-        opacity: 0.8,
-        transparent: true,
       }),
       black: new MeshBasicMaterial({
         color: "#000",
-        opacity: 0.8,
-        transparent: true,
       }),
     },
     scale: 5,
