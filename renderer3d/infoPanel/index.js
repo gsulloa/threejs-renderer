@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from "react"
 import styled from "styled-components"
-import { Overlay, Panel } from "../components/containers"
+import { Overlay, Panel, Tooltip } from "../components/containers"
 import { Title, Text, SubTitle } from "../components/text"
 import { InverseCircleButton as Button } from "../components/button"
 import config from "../config"
@@ -97,18 +97,24 @@ class InfoPanel extends PureComponent {
                 />
                 <hr />
                 <Row>
-                  <Button onClick={this.handleChangeDefaultLook}>
-                    <SavePosition width={30} height={30} />
-                  </Button>
-                  <Button
-                    onClick={this.handleToogleReplace}
-                    selected={replacing}
-                  >
-                    <NewTarget width={30} height={30} />
-                  </Button>
-                  <Button onClick={this.handleRemoveAttachment}>
-                    <Trash width={30} height={30} />
-                  </Button>
+                  <Tooltip text="Guardar posición inicial del marcador">
+                    <Button onClick={this.handleChangeDefaultLook}>
+                      <SavePosition width={30} height={30} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip text="Reposicionar marcador">
+                    <Button
+                      onClick={this.handleToogleReplace}
+                      selected={replacing}
+                    >
+                      <NewTarget width={30} height={30} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip text="Eliminar marcador">
+                    <Button onClick={this.handleRemoveAttachment}>
+                      <Trash width={30} height={30} />
+                    </Button>
+                  </Tooltip>
                 </Row>
                 <Column key="dx-move">
                   <Row>

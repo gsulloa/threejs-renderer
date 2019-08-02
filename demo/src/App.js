@@ -30,7 +30,7 @@ class App extends Component {
       infoPanel: this.infoPanel.current,
       container: this.render3d.current,
       configGui: this.configGui.current,
-      editable: false,
+      editable: true,
       initial: {
         orbit: {
           position: {

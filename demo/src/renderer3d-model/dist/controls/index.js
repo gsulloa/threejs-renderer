@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react"
 import t from "prop-types"
-import { BottomEndOverlay, Col } from "../components/containers"
+import { BottomEndOverlay, Col, Tooltip } from "../components/containers"
 import { CircleButton } from "../components/button"
 import { VerticalSlider } from "../components/form"
 import Config from "../config"
@@ -137,30 +137,48 @@ class Controls extends PureComponent {
           max={800}
         />
         <Col wrap>
-          {Config.object.editing && [
-            <CircleButton
-              key="add-lock"
-              onClick={adding.onClick}
-              selected={adding.selected}
-            >
-              {adding.title}
-            </CircleButton>,
-            <CircleButton key="reset-initial" onClick={changeInitial.onClick}>
-              {changeInitial.title}
-            </CircleButton>,
-          ]}
-          <CircleButton
-            onClick={rotate.onClick}
-            selected={Config.object.onMouseMove === "rotate"}
+          {Config.object.editing && (
+            <>
+              <Tooltip text={"Agregar marcador"}>
+                <CircleButton
+                  onClick={adding.onClick}
+                  selected={adding.selected}
+                >
+                  {adding.title}
+                </CircleButton>
+              </Tooltip>
+              <Tooltip text="Guardar posición inicial">
+                <CircleButton onClick={changeInitial.onClick}>
+                  {changeInitial.title}
+                </CircleButton>
+              </Tooltip>
+            </>
+          )}
+          <Tooltip
+            text={
+              Config.object.onMouseMove === "rotate"
+                ? "Desactivar modo rotación"
+                : "Activar modo rotación"
+            }
           >
-            {rotate.title}
-          </CircleButton>
-
-          <CircleButton onClick={visible.onClick}>{visible.title}</CircleButton>
-          {showFullscreen && (
-            <CircleButton onClick={fullScreen.onClick}>
-              {fullScreen.title}
+            <CircleButton
+              onClick={rotate.onClick}
+              selected={Config.object.onMouseMove === "rotate"}
+            >
+              {rotate.title}
             </CircleButton>
+          </Tooltip>
+          <Tooltip text="Cambiar tipo de visión de marcadores">
+            <CircleButton onClick={visible.onClick}>
+              {visible.title}
+            </CircleButton>
+          </Tooltip>
+          {showFullscreen && (
+            <Tooltip text="Modo pantalla completa">
+              <CircleButton onClick={fullScreen.onClick}>
+                {fullScreen.title}
+              </CircleButton>
+            </Tooltip>
           )}
         </Col>
       </BottomEndOverlay>

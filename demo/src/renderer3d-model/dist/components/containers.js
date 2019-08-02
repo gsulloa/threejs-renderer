@@ -1,3 +1,4 @@
+import React from "react"
 import styled from "styled-components"
 import { GRAY, WHITE } from "../constants"
 
@@ -122,3 +123,38 @@ export const MaxLengthContainer = styled.div`
   justify-content: flex-end;
   color: white;
 `
+
+const TooltipText = styled.span`
+  opacity: 0;
+  min-width: 120px;
+  max-width: 300px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  border: solid 1px white;
+  position: absolute;
+  z-index: 1;
+  left: -50%;
+  bottom: 80%;
+  transition: opacity 0.2s;
+  pointer-events: none;
+`
+
+const TooltipContainer = styled.div`
+  position: relative;
+  pointer-events: none;
+  &:hover ${TooltipText} {
+    opacity: 1;
+  }
+`
+
+export const Tooltip = ({ children, text, ...props }) => {
+  return (
+    <TooltipContainer>
+      <TooltipText>{text}</TooltipText>
+      {children}
+    </TooltipContainer>
+  )
+}
