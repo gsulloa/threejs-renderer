@@ -196,6 +196,8 @@ class AttachmentsController {
         case "selected": {
           object.state = "hovered"
           object.material = Config.attachment.material.hovered
+
+          object.geometry.scale(1 / 1.2, 1 / 1.2, 1 / 1.2)
           return undefined
         }
         default:
@@ -285,12 +287,14 @@ class AttachmentsController {
     this.selecteds.forEach(attachment => {
       attachment.state = "default"
       attachment.material = Config.attachment.material.default
+      attachment.geometry.scale(1 / 1.2, 1 / 1.2, 1 / 1.2)
     })
   }
   selectObject = object => {
     this.deselectObjects()
     object.state = "selected"
     object.material = Config.attachment.material.selected
+    object.geometry.scale(1.2, 1.2, 1.2)
   }
 
   updateScale = () => {

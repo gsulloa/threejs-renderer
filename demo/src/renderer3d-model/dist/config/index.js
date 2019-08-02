@@ -15,12 +15,12 @@ export default {
         transparent: true,
       }),
       hovered: new MeshBasicMaterial({
-        color: "#ccc",
+        color: "#700",
         opacity: 0.8,
         transparent: true,
       }),
       selected: new MeshBasicMaterial({
-        color: "#aaa",
+        color: "#f00",
         opacity: 0.8,
         transparent: true,
       }),
