@@ -269,8 +269,6 @@ var Renderer3D = function Renderer3D(_ref) {
     if (object) {
       _this.lookObject(object);
     } else if (object !== null) {
-      _this.resetControls();
-
       _this.infoPanel.hidePanel();
     }
 
@@ -300,8 +298,6 @@ var Renderer3D = function Renderer3D(_ref) {
 
     if (screenPosition) {
       _config.default.controllers.objectController.look(screenPosition);
-    } else {
-      _this.resetControls();
     }
 
     _this.infoPanel.showPanel({

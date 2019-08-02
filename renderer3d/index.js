@@ -177,7 +177,6 @@ class Renderer3D {
     if (object) {
       this.lookObject(object)
     } else if (object !== null) {
-      this.resetControls()
       this.infoPanel.hidePanel()
     }
     return object
@@ -201,8 +200,6 @@ class Renderer3D {
     } = object
     if (screenPosition) {
       config.controllers.objectController.look(screenPosition)
-    } else {
-      this.resetControls()
     }
     this.infoPanel.showPanel({ title, content, uuid, position })
   }
