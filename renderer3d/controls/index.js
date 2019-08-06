@@ -11,6 +11,7 @@ import {
   ViewPin,
   NoViewPin,
   NewTarget,
+  Opacity,
 } from "../assets/icons"
 
 class Controls extends PureComponent {
@@ -54,6 +55,10 @@ class Controls extends PureComponent {
       onClick: () => {
         Config.attachment.visibility = (Config.attachment.visibility + 1) % 3
       },
+    },
+
+    opacity: {
+      active: Config.object.opacityMode,
     },
     changeInitial: {
       title: <SavePosition width={30} height={30} />,
@@ -124,7 +129,14 @@ class Controls extends PureComponent {
     }
   }
   render() {
-    const { visible, adding, changeInitial, fullScreen, rotate } = this.state
+    const {
+      visible,
+      adding,
+      changeInitial,
+      fullScreen,
+      rotate,
+      opacity,
+    } = this.state
     const { showFullscreen } = this.props
     return (
       <BottomEndOverlay>
@@ -172,6 +184,19 @@ class Controls extends PureComponent {
           <Tooltip text="Cambiar tipo de visión de marcadores">
             <CircleButton onClick={visible.onClick}>
               {visible.title}
+            </CircleButton>
+          </Tooltip>
+          <Tooltip text="Cambiar opacidad del modelo" selected={opacity.active}>
+            <CircleButton
+              onClick={() => {
+                Config.object.opacityMode = !Config.object.opacityMode
+                this.setState({
+                  opacity: { active: !this.state.opacity.active },
+                })
+              }}
+              selected={this.state.opacity.active}
+            >
+              <Opacity width="30" height="30" />
             </CircleButton>
           </Tooltip>
           {showFullscreen && (

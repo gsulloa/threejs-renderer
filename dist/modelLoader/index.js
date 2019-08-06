@@ -29,10 +29,14 @@ var _jszip = _interopRequireDefault(require("jszip"));
 
 var _axios = _interopRequireDefault(require("axios"));
 
+var _config = _interopRequireDefault(require("../config"));
+
 var ModelLoader =
 /*#__PURE__*/
 function () {
   function ModelLoader(_ref) {
+    var _this = this;
+
     var loading = _ref.loading;
     (0, _classCallCheck2.default)(this, ModelLoader);
     (0, _defineProperty2.default)(this, "readContent",
@@ -94,10 +98,13 @@ function () {
       var mtlLoader = new _threeObjMtlLoader.MTLLoader(loadingManager);
       var materials = mtlLoader.parse(mtl);
       materials.preload();
-      Object.values(materials.materials).forEach(function (material) {
-        material.opacity = 0.88;
+      _this.materials = Object.values(materials.materials);
+
+      _this.materials.forEach(function (material) {
+        material.opacity = _config.default.object.opacityMode ? 0.7 : 1;
         material.transparent = true;
       });
+
       return materials;
     });
     (0, _defineProperty2.default)(this, "loadOBJ", function (_ref4) {
@@ -108,6 +115,12 @@ function () {
       return objLoader.parse(obj);
     });
     this.loading = loading;
+
+    _config.default.object._opacityMode.subscribe(function (opacityMode) {
+      if (_this.materials) _this.materials.forEach(function (material) {
+        return material.opacity = opacityMode ? 0.7 : 1;
+      });
+    });
   }
 
   (0, _createClass2.default)(ModelLoader, [{
@@ -179,7 +192,7 @@ function () {
       var _getFiles = (0, _asyncToGenerator2.default)(
       /*#__PURE__*/
       _regenerator.default.mark(function _callee3(_ref6) {
-        var _this = this;
+        var _this2 = this;
 
         var url, file, blob, _ref7, files, readedFiles;
 
@@ -211,7 +224,7 @@ function () {
                       name = _ref9[0],
                       zipObject = _ref9[1];
 
-                  return _this.readContent(name, zipObject);
+                  return _this2.readContent(name, zipObject);
                 }));
 
               case 11:

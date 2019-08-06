@@ -80,7 +80,7 @@ function () {
         var geometry = new THREE.SphereGeometry(1, 64, 64);
         var material = _config.default.attachment.material;
         var transparentModel = new THREE.Mesh(geometry, material.default);
-        transparentModel.visible = true;
+        transparentModel.visible = false;
         transparentModel.position.copy({
           x: x,
           y: y,
@@ -98,6 +98,8 @@ function () {
         transparentModel.reference = model;
 
         _this.attachments.add(model);
+
+        _this.updateVisible(_config.default.attachment.visibility, [model]);
 
         return model;
       }
@@ -244,16 +246,28 @@ function () {
     });
     (0, _defineProperty2.default)(this, "removeSelectedAttachment", function () {
       _this.selecteds.forEach(function (attachment) {
-        if (_this.callbacks.removeAttachment) _this.callbacks.removeAttachment(_this.findAttachmentIndex(attachment));
+        var _ref9 = attachment.isTransparentModel ? [attachment, attachment.reference] : [attachment.reference, attachment],
+            _ref10 = (0, _slicedToArray2.default)(_ref9, 2),
+            transparent = _ref10[0],
+            withNumber = _ref10[1];
 
-        _this.attachments.remove(attachment);
+        if (_this.callbacks.removeAttachment) _this.callbacks.removeAttachment(_this.findAttachmentIndex(withNumber));
+
+        _this.model.remove(transparent);
+
+        _this.attachments.remove(withNumber);
       });
     });
     (0, _defineProperty2.default)(this, "replaceSelected", function (vector) {
       _this.selecteds.forEach(function (attachment) {
-        attachment.reference.position.copy(vector);
-        attachment.position.copy(_this.model.localToWorld(new THREE.Vector3().copy(vector)));
-        if (_this.callbacks.updateAttachmentPosition) _this.callbacks.updateAttachmentPosition(_this.findAttachmentIndex(attachment), {
+        var _ref11 = attachment.isTransparentModel ? [attachment, attachment.reference] : [attachment.reference, attachment],
+            _ref12 = (0, _slicedToArray2.default)(_ref11, 2),
+            transparent = _ref12[0],
+            withNumber = _ref12[1];
+
+        transparent.position.copy(vector);
+        withNumber.position.copy(_this.model.localToWorld(new THREE.Vector3().copy(vector)));
+        if (_this.callbacks.updateAttachmentPosition) _this.callbacks.updateAttachmentPosition(_this.findAttachmentIndex(withNumber), {
           x: vector.x,
           y: vector.y,
           z: vector.z
@@ -268,13 +282,13 @@ function () {
         if (_this.callbacks.updateAttachmentData) _this.callbacks.updateAttachmentData(_this.findAttachmentIndex(attachment), attachment.data);
       });
     });
-    (0, _defineProperty2.default)(this, "moveSelectedObject", function (_ref9) {
-      var _ref9$x = _ref9.x,
-          x = _ref9$x === void 0 ? 0 : _ref9$x,
-          _ref9$y = _ref9.y,
-          y = _ref9$y === void 0 ? 0 : _ref9$y,
-          _ref9$z = _ref9.z,
-          z = _ref9$z === void 0 ? 0 : _ref9$z;
+    (0, _defineProperty2.default)(this, "moveSelectedObject", function (_ref13) {
+      var _ref13$x = _ref13.x,
+          x = _ref13$x === void 0 ? 0 : _ref13$x,
+          _ref13$y = _ref13.y,
+          y = _ref13$y === void 0 ? 0 : _ref13$y,
+          _ref13$z = _ref13.z,
+          z = _ref13$z === void 0 ? 0 : _ref13$z;
 
       _this.selecteds.forEach(function (attachment) {
         if (attachment.isTransparentModel) return;
@@ -315,7 +329,8 @@ function () {
       });
     });
     (0, _defineProperty2.default)(this, "updateVisible", function (visibility) {
-      _this.attachments.children.forEach(function (attachment) {
+      var attachments = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _this.attachments.children;
+      attachments.forEach(function (attachment) {
         attachment.visible = !!(visibility % 2);
         attachment.reference.visible = visibility === 2;
       });
@@ -341,9 +356,9 @@ function () {
     window.addEventListener("resize", function () {
       ratio = Math.round(window.devicePixelRatio * 100) / 100 / initialRatio;
     });
-    document.addEventListener("mousemove", function (_ref10) {
-      var offsetX = _ref10.offsetX,
-          offsetY = _ref10.offsetY;
+    document.addEventListener("mousemove", function (_ref14) {
+      var offsetX = _ref14.offsetX,
+          offsetY = _ref14.offsetY;
 
       _this.setHovereds({
         offsetX: offsetX / ratio,
@@ -390,8 +405,8 @@ function () {
   }, {
     key: "addNumber",
     value: function addNumber() {
-      var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          model = _ref11.model;
+      var _ref15 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          model = _ref15.model;
 
       if (!model) return;
       var number = this.id.next().value;

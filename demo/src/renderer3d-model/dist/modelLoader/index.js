@@ -2,10 +2,17 @@ import { Box3, Object3D, LoadingManager } from "three"
 import { OBJLoader, MTLLoader } from "three-obj-mtl-loader"
 import JSZip from "jszip"
 import axios from "axios"
+import config from "../config"
 
 class ModelLoader {
   constructor({ loading }) {
     this.loading = loading
+    config.object._opacityMode.subscribe(opacityMode => {
+      if (this.materials)
+        this.materials.forEach(
+          material => (material.opacity = opacityMode ? 0.7 : 1)
+        )
+    })
   }
 
   async load({ url }) {
@@ -65,8 +72,9 @@ class ModelLoader {
     const mtlLoader = new MTLLoader(loadingManager)
     const materials = mtlLoader.parse(mtl)
     materials.preload()
-    Object.values(materials.materials).forEach(material => {
-      material.opacity = 0.88
+    this.materials = Object.values(materials.materials)
+    this.materials.forEach(material => {
+      material.opacity = config.object.opacityMode ? 0.7 : 1
       material.transparent = true
     })
     return materials

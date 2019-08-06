@@ -108,6 +108,16 @@ var _default = {
       this._replacing.next(val);
     },
 
+    _opacityMode: new _rxjs.BehaviorSubject(false),
+
+    get opacityMode() {
+      return this._opacityMode.getValue();
+    },
+
+    set opacityMode(val) {
+      this._opacityMode.next(val);
+    },
+
     add: false
   },
   orbit: {

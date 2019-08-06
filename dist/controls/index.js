@@ -102,6 +102,9 @@ function (_PureComponent) {
           _config.default.attachment.visibility = (_config.default.attachment.visibility + 1) % 3;
         }
       },
+      opacity: {
+        active: _config.default.object.opacityMode
+      },
       changeInitial: {
         title: _react.default.createElement(_icons.SavePosition, {
           width: 30,
@@ -215,7 +218,8 @@ function (_PureComponent) {
           adding = _this$state.adding,
           changeInitial = _this$state.changeInitial,
           fullScreen = _this$state.fullScreen,
-          rotate = _this$state.rotate;
+          rotate = _this$state.rotate,
+          opacity = _this$state.opacity;
       var showFullscreen = this.props.showFullscreen;
       return _react.default.createElement(_containers.BottomEndOverlay, null, _react.default.createElement(_form.VerticalSlider, {
         value: this.state.zoom,
@@ -246,7 +250,24 @@ function (_PureComponent) {
         text: "Cambiar tipo de visi\xF3n de marcadores"
       }, _react.default.createElement(_button.CircleButton, {
         onClick: visible.onClick
-      }, visible.title)), showFullscreen && _react.default.createElement(_containers.Tooltip, {
+      }, visible.title)), _react.default.createElement(_containers.Tooltip, {
+        text: "Cambiar opacidad del modelo",
+        selected: opacity.active
+      }, _react.default.createElement(_button.CircleButton, {
+        onClick: function onClick() {
+          _config.default.object.opacityMode = !_config.default.object.opacityMode;
+
+          _this3.setState({
+            opacity: {
+              active: !_this3.state.opacity.active
+            }
+          });
+        },
+        selected: this.state.opacity.active
+      }, _react.default.createElement(_icons.Opacity, {
+        width: "30",
+        height: "30"
+      }))), showFullscreen && _react.default.createElement(_containers.Tooltip, {
         text: "Modo pantalla completa"
       }, _react.default.createElement(_button.CircleButton, {
         onClick: fullScreen.onClick
