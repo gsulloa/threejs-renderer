@@ -83,7 +83,7 @@ class AttachmentsController {
 
       const { material } = Config.attachment
       const transparentModel = new THREE.Mesh(geometry, material.default)
-      transparentModel.visible = true
+      transparentModel.visible = false
       transparentModel.position.copy({ x, y, z })
       transparentModel.data = model.data
       transparentModel.state = model.state
@@ -97,6 +97,7 @@ class AttachmentsController {
       model.reference = transparentModel
       transparentModel.reference = model
       this.attachments.add(model)
+      this.updateVisible(Config.attachment.visibility, [model])
       return model
     }
   }
@@ -234,21 +235,28 @@ class AttachmentsController {
 
   removeSelectedAttachment = () => {
     this.selecteds.forEach(attachment => {
+      const [transparent, withNumber] = attachment.isTransparentModel
+        ? [attachment, attachment.reference]
+        : [attachment.reference, attachment]
       if (this.callbacks.removeAttachment)
-        this.callbacks.removeAttachment(this.findAttachmentIndex(attachment))
-      this.attachments.remove(attachment)
+        this.callbacks.removeAttachment(this.findAttachmentIndex(withNumber))
+      this.model.remove(transparent)
+      this.attachments.remove(withNumber)
     })
   }
 
   replaceSelected = vector => {
     this.selecteds.forEach(attachment => {
-      attachment.reference.position.copy(vector)
-      attachment.position.copy(
+      const [transparent, withNumber] = attachment.isTransparentModel
+        ? [attachment, attachment.reference]
+        : [attachment.reference, attachment]
+      transparent.position.copy(vector)
+      withNumber.position.copy(
         this.model.localToWorld(new THREE.Vector3().copy(vector))
       )
       if (this.callbacks.updateAttachmentPosition)
         this.callbacks.updateAttachmentPosition(
-          this.findAttachmentIndex(attachment),
+          this.findAttachmentIndex(withNumber),
           {
             x: vector.x,
             y: vector.y,
@@ -322,8 +330,8 @@ class AttachmentsController {
     })
   }
 
-  updateVisible = visibility => {
-    this.attachments.children.forEach(attachment => {
+  updateVisible = (visibility, attachments = this.attachments.children) => {
+    attachments.forEach(attachment => {
       attachment.visible = !!(visibility % 2)
       attachment.reference.visible = visibility === 2
     })
