@@ -77,7 +77,7 @@ export default {
     set replacing(val) {
       this._replacing.next(val)
     },
-    _opacityMode: new BehaviorSubject(false),
+    _opacityMode: new BehaviorSubject(0),
     get opacityMode() {
       return this._opacityMode.getValue()
     },

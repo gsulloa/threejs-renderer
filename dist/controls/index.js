@@ -103,7 +103,7 @@ function (_PureComponent) {
         }
       },
       opacity: {
-        active: _config.default.object.opacityMode
+        number: [100, 70, 90][_config.default.object.opacityMode]
       },
       changeInitial: {
         title: _react.default.createElement(_icons.SavePosition, {
@@ -255,19 +255,30 @@ function (_PureComponent) {
         selected: opacity.active
       }, _react.default.createElement(_button.CircleButton, {
         onClick: function onClick() {
-          _config.default.object.opacityMode = !_config.default.object.opacityMode;
+          _config.default.object.opacityMode = [_config.default.object.opacityMode + 1] % 3;
 
           _this3.setState({
             opacity: {
-              active: !_this3.state.opacity.active
+              number: [100, 70, 90][_config.default.object.opacityMode]
             }
           });
-        },
-        selected: this.state.opacity.active
+        }
       }, _react.default.createElement(_icons.Opacity, {
         width: "30",
         height: "30"
-      }))), showFullscreen && _react.default.createElement(_containers.Tooltip, {
+      }), _react.default.createElement("div", {
+        style: {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontWeight: "1000"
+        }
+      }, _react.default.createElement("span", null, this.state.opacity.number)))), showFullscreen && _react.default.createElement(_containers.Tooltip, {
         text: "Modo pantalla completa"
       }, _react.default.createElement(_button.CircleButton, {
         onClick: fullScreen.onClick

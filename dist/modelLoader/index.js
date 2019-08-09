@@ -118,7 +118,7 @@ function () {
 
     _config.default.object._opacityMode.subscribe(function (opacityMode) {
       if (_this.materials) _this.materials.forEach(function (material) {
-        return material.opacity = opacityMode ? 0.7 : 1;
+        return material.opacity = [1, 0.7, 0.9][opacityMode];
       });
     });
   }

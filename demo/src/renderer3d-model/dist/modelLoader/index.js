@@ -10,7 +10,7 @@ class ModelLoader {
     config.object._opacityMode.subscribe(opacityMode => {
       if (this.materials)
         this.materials.forEach(
-          material => (material.opacity = opacityMode ? 0.7 : 1)
+          material => (material.opacity = [1, 0.7, 0.9][opacityMode])
         )
     })
   }

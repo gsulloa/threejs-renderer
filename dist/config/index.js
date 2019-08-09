@@ -108,7 +108,7 @@ var _default = {
       this._replacing.next(val);
     },
 
-    _opacityMode: new _rxjs.BehaviorSubject(false),
+    _opacityMode: new _rxjs.BehaviorSubject(0),
 
     get opacityMode() {
       return this._opacityMode.getValue();

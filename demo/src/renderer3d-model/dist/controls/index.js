@@ -58,7 +58,7 @@ class Controls extends PureComponent {
     },
 
     opacity: {
-      active: Config.object.opacityMode,
+      number: [100, 70, 90][Config.object.opacityMode],
     },
     changeInitial: {
       title: <SavePosition width={30} height={30} />,
@@ -189,14 +189,28 @@ class Controls extends PureComponent {
           <Tooltip text="Cambiar opacidad del modelo" selected={opacity.active}>
             <CircleButton
               onClick={() => {
-                Config.object.opacityMode = !Config.object.opacityMode
+                Config.object.opacityMode = [Config.object.opacityMode + 1] % 3
                 this.setState({
-                  opacity: { active: !this.state.opacity.active },
+                  opacity: { number: [100, 70, 90][Config.object.opacityMode] },
                 })
               }}
-              selected={this.state.opacity.active}
             >
               <Opacity width="30" height="30" />
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontWeight: "1000",
+                }}
+              >
+                <span>{this.state.opacity.number}</span>
+              </div>
             </CircleButton>
           </Tooltip>
           {showFullscreen && (
