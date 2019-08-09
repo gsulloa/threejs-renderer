@@ -41,16 +41,17 @@ class Loading extends PureComponent {
   }
 
   onStart = ({ title = "Downloading..." } = {}) => {
-    this.setState({ title })
+    this.setState({ title, showLoading: true })
     if (this.frameID !== null) return
     this.animateBar()
   }
 
   onLoad = function() {
-    this.setState({ percentComplete: 0 })
+    this.setState({ percentComplete: 0, showLoading: true })
     if (this.props.last) {
       this.setState({ showLoading: false })
       cancelAnimationFrame(this.frameID)
+      this.frameID = null
     }
   }
 

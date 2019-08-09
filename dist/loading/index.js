@@ -86,7 +86,8 @@ function (_PureComponent) {
           title = _ref$title === void 0 ? "Downloading..." : _ref$title;
 
       _this.setState({
-        title: title
+        title: title,
+        showLoading: true
       });
 
       if (_this.frameID !== null) return;
@@ -95,7 +96,8 @@ function (_PureComponent) {
     });
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), "onLoad", function () {
       this.setState({
-        percentComplete: 0
+        percentComplete: 0,
+        showLoading: true
       });
 
       if (this.props.last) {
@@ -103,6 +105,7 @@ function (_PureComponent) {
           showLoading: false
         });
         cancelAnimationFrame(this.frameID);
+        this.frameID = null;
       }
     });
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), "onError", function (e) {
