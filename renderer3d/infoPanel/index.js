@@ -39,13 +39,20 @@ class InfoPanel extends PureComponent {
       this.setState({ replacing: config.object.replacing })
     })
   }
-  showPanel = ({ title, content, uuid, position: { x, y, z } }) => {
+  showPanel = ({
+    title,
+    type = "text",
+    uuid,
+    position: { x, y, z },
+    ...data
+  }) => {
     this.setState(() => ({
       show: true,
       title,
-      content,
+      type,
       uuid,
       position: { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) },
+      ...data,
     }))
   }
   hidePanel = () => {
@@ -91,6 +98,7 @@ class InfoPanel extends PureComponent {
     const {
       show,
       title,
+      type,
       content,
       editing,
       replacing,
@@ -103,7 +111,7 @@ class InfoPanel extends PureComponent {
           {!editing ? (
             <Fragment>
               <Title>{title}</Title>
-              <Text>{content}</Text>
+              {type === "text" && <Text>{content}</Text>}
             </Fragment>
           ) : (
             show && (
@@ -113,6 +121,7 @@ class InfoPanel extends PureComponent {
                   content={content}
                   show={show}
                   uuid={uuid}
+                  type={type}
                 />
                 <hr />
                 <Row>

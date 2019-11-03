@@ -12,6 +12,7 @@ class EditingForm extends Component {
     title: PropTypes.string,
     content: PropTypes.string,
     show: PropTypes.bool,
+    type: PropTypes.string.isRequired,
   }
   static getDerivedStateFromProps(props, state) {
     return {
@@ -32,13 +33,15 @@ class EditingForm extends Component {
   titleElement = createRef()
   contentElement = createRef()
   componentDidMount() {
+    const { type } = this.props
     this.autoGrow("title")
-    this.autoGrow("content")
+    if (type === "text") this.autoGrow("content")
   }
   componentDidUpdate() {
+    const { type } = this.props
     if (!this.state.change) {
       this.autoGrow("title")
-      this.autoGrow("content")
+      if (type === "text") this.autoGrow("content")
     }
   }
   handleWrite = (key, value) => {
@@ -68,7 +71,7 @@ class EditingForm extends Component {
   }
 
   render() {
-    const { show } = this.props
+    const { show, type } = this.props
     if (!show) return null
     const { title, content, titleHeight, contentHeight } = this.state
     return (
@@ -83,18 +86,22 @@ class EditingForm extends Component {
         <MaxLengthContainer>
           {title.length} / {MAX_LENGTH.title}
         </MaxLengthContainer>
-        <ContentInput
-          key="content"
-          ref={this.contentElement}
-          value={content}
-          onChange={({ target: { value } }) =>
-            this.handleWrite("content", value)
-          }
-          height={contentHeight}
-        />
-        <MaxLengthContainer>
-          {content.length} / {MAX_LENGTH.content}
-        </MaxLengthContainer>
+        {type === "text" && (
+          <>
+            <ContentInput
+              key="content"
+              ref={this.contentElement}
+              value={content}
+              onChange={({ target: { value } }) =>
+                this.handleWrite("content", value)
+              }
+              height={contentHeight}
+            />
+            <MaxLengthContainer>
+              {content.length} / {MAX_LENGTH.content}
+            </MaxLengthContainer>
+          </>
+        )}
       </Fragment>
     )
   }
