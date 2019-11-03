@@ -285,10 +285,12 @@ class AttachmentsController {
 
   updateSelectedData = data => {
     this.selecteds.forEach(attachment => {
+      const type = attachment.data.type
       attachment.data = {
         ...attachment.data,
         ...data,
       }
+      if (type !== attachment.data.type) this.replaceAllNumbers()
       if (this.callbacks.updateAttachmentData)
         this.callbacks.updateAttachmentData(
           this.findAttachmentIndex(attachment),

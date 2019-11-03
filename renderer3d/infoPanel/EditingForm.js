@@ -18,6 +18,7 @@ class EditingForm extends Component {
     return {
       title: state.uuid === props.uuid ? state.title : props.title,
       content: state.uuid === props.uuid ? state.content : props.content,
+      type: state.uuid === props.uuid ? state.type : props.type,
       uuid: props.uuid,
       change: state.uuid === props.uuid,
     }
@@ -27,18 +28,19 @@ class EditingForm extends Component {
     contentHeight: 0,
     title: this.props.title,
     content: this.props.content,
+    type: this.props.type,
     uuid: this.props.uuid,
     change: true,
   }
   titleElement = createRef()
   contentElement = createRef()
   componentDidMount() {
-    const { type } = this.props
+    const { type } = this.state
     this.autoGrow("title")
     if (type === "text") this.autoGrow("content")
   }
   componentDidUpdate() {
-    const { type } = this.props
+    const { type } = this.state
     if (!this.state.change) {
       this.autoGrow("title")
       if (type === "text") this.autoGrow("content")
@@ -65,15 +67,16 @@ class EditingForm extends Component {
     )
   }
   growHeight(key) {
-    this.setState({
-      [`${key}Height`]: this[`${key}Element`].current.scrollHeight,
-    })
+    if (this[`${key}Element`])
+      this.setState({
+        [`${key}Height`]: this[`${key}Element`].current.scrollHeight,
+      })
   }
 
   render() {
-    const { show, type } = this.props
+    const { show } = this.props
     if (!show) return null
-    const { title, content, titleHeight, contentHeight } = this.state
+    const { title, content, titleHeight, contentHeight, type } = this.state
     return (
       <Fragment>
         <TitleInput
@@ -86,6 +89,13 @@ class EditingForm extends Component {
         <MaxLengthContainer>
           {title.length} / {MAX_LENGTH.title}
         </MaxLengthContainer>
+        <select
+          value={type}
+          onChange={({ target: { value } }) => this.handleWrite("type", value)}
+        >
+          <option value="text">Texto</option>
+          <option value="image">Imagen Microscópica</option>
+        </select>
         {type === "text" && (
           <>
             <ContentInput
