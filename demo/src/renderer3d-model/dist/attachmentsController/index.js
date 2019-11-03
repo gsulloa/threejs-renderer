@@ -134,6 +134,8 @@ class AttachmentsController {
 
   addNumber({ model } = {}) {
     if (!model) return
+    const { data: { type = "text" } = {} } = model
+    if (type !== "text") return this.addSprite({ model, type })
     const number = this.id.next().value
     const textMaterial = new THREE.MeshBasicMaterial({
       color: "white",
@@ -145,6 +147,20 @@ class AttachmentsController {
     text.position.x -= 0.5 * String(number + 1).length
     text.position.y -= 0.5
     model.add(text)
+  }
+  addSprite({ model, type } = {}) {
+    if (type === "image") {
+      const spriteMap = new THREE.TextureLoader().load(
+        require("../assets/icons/camera.png")
+      )
+      const spriteMaterial = new THREE.SpriteMaterial({
+        map: spriteMap,
+        color: 0xffffff,
+      })
+      const sprite = new THREE.Sprite(spriteMaterial)
+      model.add(sprite)
+      return
+    }
   }
 
   replaceAllNumbers = () => {

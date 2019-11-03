@@ -37,7 +37,7 @@ export const EndOverlay = styled(FlexOverlay)`
 export const BottomEndOverlay = styled(EndOverlay)`
   justify-content: flex-end;
   flex-flow: column wrap;
-  @media (max-height: 500px) {
+  @media (max-height: 620px) {
     flex-direction: row;
   }
 `

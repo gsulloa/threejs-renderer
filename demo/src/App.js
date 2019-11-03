@@ -55,6 +55,7 @@ class App extends Component {
               title: "Etiqueta 1",
               content:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.",
+              type: "image"
             },
           },
           {
