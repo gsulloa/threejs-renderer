@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from "react"
 import styled from "styled-components"
-import { Overlay, Panel, Tooltip } from "../components/containers"
+import { Overlay, Panel, Tooltip, Div } from "../components/containers"
 import { Title, Text, SubTitle } from "../components/text"
 import { InverseCircleButton as Button } from "../components/button"
 import config from "../config"
@@ -30,6 +30,7 @@ class InfoPanel extends PureComponent {
     editing: config.object.editing,
     replacing: config.object.replacing,
     position: {},
+    imageModal: true,
   }
   componentDidMount() {
     config.object._editing.subscribe(() => {
@@ -94,6 +95,9 @@ class InfoPanel extends PureComponent {
     config.controllers.attachmentsController.deselectObjects()
     config.controllers.objectController.resetControls()
   }
+  showImageModal = () => {
+    this.setState({ imageModal: true })
+  }
   render() {
     const {
       show,
@@ -104,104 +108,122 @@ class InfoPanel extends PureComponent {
       replacing,
       uuid,
       position: { x, y, z },
+      imageModal,
     } = this.state
     return (
-      <Overlay hidden={!show} width="300px" smWidth="100%">
-        <Panel>
-          {!editing ? (
-            <Fragment>
-              <Title>{title}</Title>
-              {type === "text" && <Text>{content}</Text>}
-            </Fragment>
-          ) : (
-            show && (
+      <>
+        {imageModal && (
+          <Overlay
+            width="100vw"
+            height="100vh"
+            zIndex={100}
+            center
+            background="rgba(0,0,0,0.6)"
+            onClick={() => this.setState({ imageModal: false })}
+          >
+            <Div background="#fff" width="80vw" height="80vh" padding="15px">
+              <p>{title}</p>
+            </Div>
+          </Overlay>
+        )}
+        <Overlay hidden={!show} width="300px" smWidth="100%">
+          <Panel>
+            {!editing ? (
               <Fragment>
-                <EditingForm
-                  title={title}
-                  content={content}
-                  show={show}
-                  uuid={uuid}
-                  type={type}
-                />
-                <hr />
-                <Row>
-                  <Tooltip text="Guardar posición inicial del marcador">
-                    <Button onClick={this.handleChangeDefaultLook}>
-                      <SavePosition width={30} height={30} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip text="Reposicionar marcador">
-                    <Button
-                      onClick={this.handleToogleReplace}
-                      selected={replacing}
-                    >
-                      <NewTarget width={30} height={30} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip text="Eliminar marcador">
-                    <Button onClick={this.handleRemoveAttachment}>
-                      <Trash width={30} height={30} />
-                    </Button>
-                  </Tooltip>
-                </Row>
-                <Column key="dx-move">
-                  <Row>
-                    <SubTitle>Posición</SubTitle>
-                  </Row>
-                  <Row>
-                    <Column>
-                      <Button
-                        size={30}
-                        onClick={() => this.handleMoveAttachment({ x: 1 })}
-                      >
-                        <span>+</span>
-                      </Button>
-                      <Text>X ({x})</Text>
-                      <Button
-                        size={30}
-                        onClick={() => this.handleMoveAttachment({ x: -1 })}
-                      >
-                        <span>-</span>
-                      </Button>
-                    </Column>
-                    <Column>
-                      <Button
-                        size={30}
-                        onClick={() => this.handleMoveAttachment({ y: 1 })}
-                      >
-                        <span>+</span>
-                      </Button>
-                      <Text>Y ({y})</Text>
-                      <Button
-                        size={30}
-                        onClick={() => this.handleMoveAttachment({ y: -1 })}
-                      >
-                        <span>-</span>
-                      </Button>
-                    </Column>
-                    <Column>
-                      <Button
-                        size={30}
-                        onClick={() => this.handleMoveAttachment({ z: 1 })}
-                      >
-                        <span>+</span>
-                      </Button>
-                      <Text>Z ({z})</Text>
-                      <Button
-                        size={30}
-                        onClick={() => this.handleMoveAttachment({ z: -1 })}
-                      >
-                        <span>-</span>
-                      </Button>
-                    </Column>
-                  </Row>
-                </Column>
+                <Title>{title}</Title>
+                {type === "text" && <Text>{content}</Text>}
               </Fragment>
-            )
-          )}
-          <Button onClick={this.handleClose}>Cerrar</Button>
-        </Panel>
-      </Overlay>
+            ) : (
+              show && (
+                <Fragment>
+                  <EditingForm
+                    title={title}
+                    content={content}
+                    show={show}
+                    uuid={uuid}
+                    type={type}
+                    showImageModal={this.showImageModal}
+                  />
+                  <hr />
+                  <Row>
+                    <Tooltip text="Guardar posición inicial del marcador">
+                      <Button onClick={this.handleChangeDefaultLook}>
+                        <SavePosition width={30} height={30} />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip text="Reposicionar marcador">
+                      <Button
+                        onClick={this.handleToogleReplace}
+                        selected={replacing}
+                      >
+                        <NewTarget width={30} height={30} />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip text="Eliminar marcador">
+                      <Button onClick={this.handleRemoveAttachment}>
+                        <Trash width={30} height={30} />
+                      </Button>
+                    </Tooltip>
+                  </Row>
+                  <Column key="dx-move">
+                    <Row>
+                      <SubTitle>Posición</SubTitle>
+                    </Row>
+                    <Row>
+                      <Column>
+                        <Button
+                          size={30}
+                          onClick={() => this.handleMoveAttachment({ x: 1 })}
+                        >
+                          <span>+</span>
+                        </Button>
+                        <Text>X ({x})</Text>
+                        <Button
+                          size={30}
+                          onClick={() => this.handleMoveAttachment({ x: -1 })}
+                        >
+                          <span>-</span>
+                        </Button>
+                      </Column>
+                      <Column>
+                        <Button
+                          size={30}
+                          onClick={() => this.handleMoveAttachment({ y: 1 })}
+                        >
+                          <span>+</span>
+                        </Button>
+                        <Text>Y ({y})</Text>
+                        <Button
+                          size={30}
+                          onClick={() => this.handleMoveAttachment({ y: -1 })}
+                        >
+                          <span>-</span>
+                        </Button>
+                      </Column>
+                      <Column>
+                        <Button
+                          size={30}
+                          onClick={() => this.handleMoveAttachment({ z: 1 })}
+                        >
+                          <span>+</span>
+                        </Button>
+                        <Text>Z ({z})</Text>
+                        <Button
+                          size={30}
+                          onClick={() => this.handleMoveAttachment({ z: -1 })}
+                        >
+                          <span>-</span>
+                        </Button>
+                      </Column>
+                    </Row>
+                  </Column>
+                </Fragment>
+              )
+            )}
+            <Button onClick={this.handleClose}>Cerrar</Button>
+          </Panel>
+        </Overlay>
+      </>
     )
   }
 }

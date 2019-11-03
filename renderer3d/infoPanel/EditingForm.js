@@ -3,6 +3,7 @@ import PropTypes from "prop-types"
 import { TitleInput, ContentInput } from "../components/form"
 import config from "../config"
 import { MaxLengthContainer } from "../components/containers"
+import { InverseCircleButton as Button } from "../components/button"
 
 const MAX_LENGTH = { title: 30, content: 300 }
 
@@ -74,7 +75,7 @@ class EditingForm extends Component {
   }
 
   render() {
-    const { show } = this.props
+    const { show, showImageModal } = this.props
     if (!show) return null
     const { title, content, titleHeight, contentHeight, type } = this.state
     return (
@@ -110,6 +111,11 @@ class EditingForm extends Component {
             <MaxLengthContainer>
               {content.length} / {MAX_LENGTH.content}
             </MaxLengthContainer>
+          </>
+        )}
+        {type === "image" && (
+          <>
+            <Button onClick={showImageModal}>Ver</Button>
           </>
         )}
       </Fragment>

@@ -6,10 +6,20 @@ export const Overlay = styled.div`
   position: absolute;
   width: ${({ width }) => (width ? width : "100%")};
   height: 100%;
-  pointer-events: none;
+  pointer-events: ${({ onClick }) => (onClick ? "auto" : "none")};
+  ${({ zIndex }) => (zIndex ? `z-index: ${zIndex};` : "")}
+  ${({ background }) => (background ? `background: ${background};` : "")}
   * {
     pointer-events: auto;
   }
+  ${({ center }) =>
+    center
+      ? `
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `
+      : ""}
   ${({ smWidth }) =>
     smWidth
       ? `
@@ -42,9 +52,13 @@ export const BottomEndOverlay = styled(EndOverlay)`
   }
 `
 
-const Div = styled.div`
+export const Div = styled.div`
   display: flex;
   flex-wrap: ${({ wrap }) => (wrap ? "" : "no")}wrap;
+  ${({ background }) => (background ? `background: ${background};` : "")}
+  ${({ width }) => (width ? `width: ${width};` : "")}
+  ${({ height }) => (height ? `height: ${height};` : "")}
+  ${({ padding }) => (padding ? `padding: ${padding};` : "")}
 `
 
 export const Col = styled(Div)`
