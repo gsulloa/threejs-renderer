@@ -1,6 +1,6 @@
 {
   "name": "renderer3d-model",
-  "version": "1.6.3",
+  "version": "1.6.6",
   "private": false,
   "main": "dist",
   "author": "Gabriel Ulloa <gsulloa@uc.cl>",

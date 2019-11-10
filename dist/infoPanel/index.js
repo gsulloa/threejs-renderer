@@ -143,11 +143,9 @@ function (_PureComponent) {
       _config.default.object.replacing = !_config.default.object.replacing;
     });
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), "handleClose", function () {
-      _this.hidePanel();
+      _this.hidePanel(); // config.controllers.attachmentsController.deselectObjects()
+      // config.controllers.objectController.resetControls()
 
-      _config.default.controllers.attachmentsController.deselectObjects();
-
-      _config.default.controllers.objectController.resetControls();
     });
     return _this;
   }

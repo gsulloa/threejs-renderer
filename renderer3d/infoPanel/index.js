@@ -84,8 +84,8 @@ class InfoPanel extends PureComponent {
   }
   handleClose = () => {
     this.hidePanel()
-    config.controllers.attachmentsController.deselectObjects()
-    config.controllers.objectController.resetControls()
+    // config.controllers.attachmentsController.deselectObjects()
+    // config.controllers.objectController.resetControls()
   }
   render() {
     const {

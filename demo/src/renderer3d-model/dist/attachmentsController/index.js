@@ -21,6 +21,7 @@ class AttachmentsController {
     },
   } = {}) {
     this.id = this.number()
+    this._id = this.number()
     this.callbacks = {
       addAttachment,
       removeAttachment,
@@ -88,7 +89,24 @@ class AttachmentsController {
       transparentModel.data = model.data
       transparentModel.state = model.state
       transparentModel.isTransparentModel = true
+
       this.model.add(transparentModel)
+
+      const number = this._id.next().value
+      const textMaterial = new THREE.MeshBasicMaterial({
+        color: "red",
+        transparent: true,
+      })
+      const textShapes = this.textureFont.generateShapes(String(number + 1), 10)
+      const textGeometry = new THREE.ShapeBufferGeometry(textShapes)
+      const text = new THREE.Mesh(textGeometry, textMaterial)
+
+      text.position.copy({ x, y, z })
+      text.rotateX(Math.PI / 2)
+      text.rotateZ(Math.PI)
+      text.visible = false
+      transparentModel.text = text
+      this.model.add(text)
 
       const worldPosition = new THREE.Vector3().copy(
         this.model.localToWorld(new THREE.Vector3(x, y, z))
@@ -144,6 +162,18 @@ class AttachmentsController {
     const text = new THREE.Mesh(textGeometry, textMaterial)
     text.position.x -= 0.5 * String(number + 1).length
     text.position.y -= 0.5
+    model.add(text)
+  }
+  _addNumber({ model } = {}) {
+    if (!model) return
+    const number = this._id.next().value
+    const textMaterial = new THREE.MeshBasicMaterial({
+      color: "black",
+      transparent: true,
+    })
+    const textShapes = this.textureFont.generateShapes(String(number + 1), 1)
+    const textGeometry = new THREE.ShapeBufferGeometry(textShapes)
+    const text = new THREE.Mesh(textGeometry, textMaterial)
     model.add(text)
   }
 
@@ -334,6 +364,7 @@ class AttachmentsController {
     attachments.forEach(attachment => {
       attachment.visible = !!(visibility % 2)
       attachment.reference.visible = visibility === 2
+      attachment.reference.text.visible = visibility == 2
     })
   }
 }
