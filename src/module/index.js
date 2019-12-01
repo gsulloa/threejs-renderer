@@ -57,6 +57,7 @@ class App extends Component {
               content:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.",
               type: "image",
+              imageUrl: "https://idea-files-s3.s3.us-east-2.amazonaws.com/new",
             },
           },
           {

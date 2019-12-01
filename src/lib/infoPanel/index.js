@@ -32,7 +32,8 @@ class InfoPanel extends PureComponent {
     editing: config.object.editing,
     replacing: config.object.replacing,
     position: {},
-    imageModal: true,
+    imageModal: false,
+    imageUrl: "",
   }
   componentDidMount() {
     config.object._editing.subscribe(() => {
@@ -47,6 +48,7 @@ class InfoPanel extends PureComponent {
     type = "text",
     uuid,
     position: { x, y, z },
+    imageUrl,
     ...data
   }) => {
     this.setState(() => ({
@@ -55,6 +57,7 @@ class InfoPanel extends PureComponent {
       type,
       uuid,
       position: { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) },
+      imageUrl,
       ...data,
     }))
   }
@@ -65,6 +68,7 @@ class InfoPanel extends PureComponent {
       content: "",
       uuid: "",
       position: {},
+      imageUrl: "",
     }))
   }
   handleChangeDefaultLook = () => {
@@ -111,7 +115,9 @@ class InfoPanel extends PureComponent {
       uuid,
       position: { x, y, z },
       imageModal,
+      imageUrl,
     } = this.state
+    console.log(this.state)
     return (
       <>
         <Modal
@@ -120,7 +126,7 @@ class InfoPanel extends PureComponent {
           ariaHideApp={false}
           style={{ overlay: { zIndex: 10000 } }}
         >
-          <ZoomableImage />
+          <ZoomableImage url={imageUrl} />
         </Modal>
         <Overlay hidden={!show} width="300px" smWidth="100%">
           <Panel>
