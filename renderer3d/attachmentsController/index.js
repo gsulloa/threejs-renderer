@@ -21,6 +21,7 @@ class AttachmentsController {
     },
   } = {}) {
     this.id = this.number()
+    this._id = this.number()
     this.callbacks = {
       addAttachment,
       removeAttachment,
@@ -58,7 +59,7 @@ class AttachmentsController {
   filterByState = state => {
     return [
       ...this.attachments.children.filter(
-        attachment => attachment.state === state
+        attachment => attachment.state === state,
       ),
       ...this.attachments.children
         .map(({ reference }) => reference)
@@ -88,10 +89,27 @@ class AttachmentsController {
       transparentModel.data = model.data
       transparentModel.state = model.state
       transparentModel.isTransparentModel = true
+
       this.model.add(transparentModel)
 
+      const number = this._id.next().value
+      const textMaterial = new THREE.MeshBasicMaterial({
+        color: "red",
+        transparent: true,
+      })
+      const textShapes = this.textureFont.generateShapes(String(number + 1), 10)
+      const textGeometry = new THREE.ShapeBufferGeometry(textShapes)
+      const text = new THREE.Mesh(textGeometry, textMaterial)
+
+      text.position.copy({ x, y, z })
+      text.rotateX(Math.PI / 2)
+      text.rotateZ(Math.PI)
+      text.visible = false
+      transparentModel.text = text
+      this.model.add(text)
+
       const worldPosition = new THREE.Vector3().copy(
-        this.model.localToWorld(new THREE.Vector3(x, y, z))
+        this.model.localToWorld(new THREE.Vector3(x, y, z)),
       )
       model.position.copy(worldPosition)
       model.reference = transparentModel
@@ -110,7 +128,7 @@ class AttachmentsController {
         screenPosition: { ...Config.orbit },
       },
     },
-    withCallback = true
+    withCallback = true,
   ) => {
     const { scale, material } = Config.attachment
     const radius = 1
@@ -119,7 +137,7 @@ class AttachmentsController {
     const sphere = new THREE.Mesh(geometry, material.default)
     const inner = new THREE.Mesh(
       new THREE.CircleGeometry(radius * 0.85, segments, segments),
-      material.black
+      material.black,
     )
 
     sphere.add(inner)
@@ -151,7 +169,7 @@ class AttachmentsController {
   addSprite({ model, type } = {}) {
     if (type === "image") {
       const spriteMap = new THREE.TextureLoader().load(
-        require("../assets/icons/camera.png")
+        require("../assets/icons/camera.png"),
       )
       const spriteMaterial = new THREE.SpriteMaterial({
         map: spriteMap,
@@ -181,7 +199,7 @@ class AttachmentsController {
       const { camera, attachments } = this
       const vector = new THREE.Vector2(
         (offsetX / domElementWidth) * 2 - 1,
-        -(offsetY / domElementHeight) * 2 + 1
+        -(offsetY / domElementHeight) * 2 + 1,
       )
       const raycaster = new THREE.Raycaster()
       raycaster.setFromCamera(vector, camera)
@@ -244,7 +262,7 @@ class AttachmentsController {
       if (this.callbacks.updateAttachmentDefaultScreen)
         this.callbacks.updateAttachmentDefaultScreen(
           this.findAttachmentIndex(attachment),
-          attachment.data.screenPosition
+          attachment.data.screenPosition,
         )
     })
   }
@@ -268,7 +286,7 @@ class AttachmentsController {
         : [attachment.reference, attachment]
       transparent.position.copy(vector)
       withNumber.position.copy(
-        this.model.localToWorld(new THREE.Vector3().copy(vector))
+        this.model.localToWorld(new THREE.Vector3().copy(vector)),
       )
       if (this.callbacks.updateAttachmentPosition)
         this.callbacks.updateAttachmentPosition(
@@ -277,7 +295,7 @@ class AttachmentsController {
             x: vector.x,
             y: vector.y,
             z: vector.z,
-          }
+          },
         )
     })
     config.object.replacing = false
@@ -294,7 +312,7 @@ class AttachmentsController {
       if (this.callbacks.updateAttachmentData)
         this.callbacks.updateAttachmentData(
           this.findAttachmentIndex(attachment),
-          attachment.data
+          attachment.data,
         )
     })
   }
@@ -309,7 +327,7 @@ class AttachmentsController {
       position.y += y
       position.z += z
       attachment.position.copy(
-        this.model.localToWorld(new THREE.Vector3().copy(position))
+        this.model.localToWorld(new THREE.Vector3().copy(position)),
       )
       if (this.callbacks.updateAttachmentPosition)
         this.callbacks.updateAttachmentPosition(
@@ -318,7 +336,7 @@ class AttachmentsController {
             x: position.x,
             y: position.y,
             z: position.z,
-          }
+          },
         )
     })
   }
@@ -352,6 +370,7 @@ class AttachmentsController {
     attachments.forEach(attachment => {
       attachment.visible = !!(visibility % 2)
       attachment.reference.visible = visibility === 2
+      attachment.reference.text.visible = visibility == 2
     })
   }
 }

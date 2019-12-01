@@ -92,6 +92,29 @@ function () {
 
         _this.model.add(transparentModel);
 
+        var number = _this._id.next().value;
+
+        var textMaterial = new THREE.MeshBasicMaterial({
+          color: "red",
+          transparent: true
+        });
+
+        var textShapes = _this.textureFont.generateShapes(String(number + 1), 10);
+
+        var textGeometry = new THREE.ShapeBufferGeometry(textShapes);
+        var text = new THREE.Mesh(textGeometry, textMaterial);
+        text.position.copy({
+          x: x,
+          y: y,
+          z: z
+        });
+        text.rotateX(Math.PI / 2);
+        text.rotateZ(Math.PI);
+        text.visible = false;
+        transparentModel.text = text;
+
+        _this.model.add(text);
+
         var worldPosition = new THREE.Vector3().copy(_this.model.localToWorld(new THREE.Vector3(x, y, z)));
         model.position.copy(worldPosition);
         model.reference = transparentModel;
@@ -333,9 +356,11 @@ function () {
       attachments.forEach(function (attachment) {
         attachment.visible = !!(visibility % 2);
         attachment.reference.visible = visibility === 2;
+        attachment.reference.text.visible = visibility == 2;
       });
     });
     this.id = this.number();
+    this._id = this.number();
     this.callbacks = {
       addAttachment: addAttachment,
       removeAttachment: removeAttachment,
@@ -419,6 +444,25 @@ function () {
       var text = new THREE.Mesh(textGeometry, textMaterial);
       text.position.x -= 0.5 * String(number + 1).length;
       text.position.y -= 0.5;
+      model.add(text);
+    }
+  }, {
+    key: "_addNumber",
+    value: function _addNumber() {
+      var _ref16 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          model = _ref16.model;
+
+      if (!model) return;
+
+      var number = this._id.next().value;
+
+      var textMaterial = new THREE.MeshBasicMaterial({
+        color: "black",
+        transparent: true
+      });
+      var textShapes = this.textureFont.generateShapes(String(number + 1), 1);
+      var textGeometry = new THREE.ShapeBufferGeometry(textShapes);
+      var text = new THREE.Mesh(textGeometry, textMaterial);
       model.add(text);
     }
   }, {
