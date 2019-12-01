@@ -27,11 +27,12 @@ module.exports = {
       trailingComma: "es5",
       semi: false,
     }],
-    semi: [0, 'never']
+    semi: [0, 'never'],
+    "no-useless-catch": 0
   },
   settings: {
     react: {
-      version: "16.5.2",
+      version: "16.12.0",
     }
   }
 };
