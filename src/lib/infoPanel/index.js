@@ -118,6 +118,7 @@ class InfoPanel extends PureComponent {
           isOpen={imageModal}
           onRequestClose={() => this.setState({ imageModal: false })}
           ariaHideApp={false}
+          style={{ overlay: { zIndex: 10000 } }}
         >
           <ZoomableImage />
         </Modal>
