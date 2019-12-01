@@ -1,11 +1,13 @@
 import React, { PureComponent, Fragment } from "react"
 import styled from "styled-components"
+import Modal from "react-modal"
 import { Overlay, Panel, Tooltip, Div } from "../components/containers"
 import { Title, Text, SubTitle } from "../components/text"
 import { InverseCircleButton as Button } from "../components/button"
 import config from "../config"
 import EditingForm from "./EditingForm"
 import { SavePosition, NewTarget, Trash } from "../assets/icons"
+import ZoomableImage from "../components/zoomableImage"
 
 const Row = styled.div`
   display: flex;
@@ -112,20 +114,13 @@ class InfoPanel extends PureComponent {
     } = this.state
     return (
       <>
-        {imageModal && (
-          <Overlay
-            width="100vw"
-            height="100vh"
-            zIndex={100}
-            center
-            background="rgba(0,0,0,0.6)"
-            onClick={() => this.setState({ imageModal: false })}
-          >
-            <Div background="#fff" width="80vw" height="80vh" padding="15px">
-              <p>{title}</p>
-            </Div>
-          </Overlay>
-        )}
+        <Modal
+          isOpen={imageModal}
+          onRequestClose={() => this.setState({ imageModal: false })}
+          ariaHideApp={false}
+        >
+          <ZoomableImage />
+        </Modal>
         <Overlay hidden={!show} width="300px" smWidth="100%">
           <Panel>
             {!editing ? (

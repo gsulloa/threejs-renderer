@@ -6,6 +6,7 @@ import Loading from "./renderer3d-model/dist/loading"
 import InfoPanel from "./renderer3d-model/dist/infoPanel"
 import ConfigGui from "./renderer3d-model/dist/config/gui"
 import Controls from "./renderer3d-model/dist/controls"
+import ZoomableImage from "./renderer3d-model/dist/components/zoomableImage"
 
 class App extends Component {
   state = {
@@ -55,7 +56,7 @@ class App extends Component {
               title: "Etiqueta 1",
               content:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ligula dapibus, tempor nunc in, interdum ante. Etiam luctus et.",
-              type: "image"
+              type: "image",
             },
           },
           {
@@ -282,35 +283,37 @@ class App extends Component {
 
   render() {
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-        }}
-      >
-        <form
-          onSubmit={e => {
-            e.preventDefault()
-            this.loadModel()
+      <>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
           }}
         >
-          <input
-            value={this.state.url}
-            onChange={({ target: { value: url } }) => this.setState({ url })}
-          />
-        </form>
-        <div style={{ width: "100%", height: "100%", position: "absolute" }}>
-          <div
-            ref={this.render3d}
-            style={{ width: "100%", height: "100%", position: "relative" }}
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+              this.loadModel()
+            }}
           >
-            <Loading ref={this.loading} />
-            <InfoPanel ref={this.infoPanel} />
-            <Controls />
+            <input
+              value={this.state.url}
+              onChange={({ target: { value: url } }) => this.setState({ url })}
+            />
+          </form>
+          <div style={{ width: "100%", height: "100%", position: "absolute" }}>
+            <div
+              ref={this.render3d}
+              style={{ width: "100%", height: "100%", position: "relative" }}
+            >
+              <Loading ref={this.loading} />
+              <InfoPanel ref={this.infoPanel} />
+              <Controls />
+            </div>
           </div>
         </div>
-      </div>
+      </>
     )
   }
 }

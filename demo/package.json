@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "leaflet": "^1.5.1",
+    "leaflet-minimap": "^3.6.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "react-leaflet": "^2.5.0",
+    "react-modal": "^3.11.1",
     "react-scripts": "2.1.2",
     "renderer3d-model": "^1.2.0"
   },
