@@ -36,7 +36,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint ./src",
     "lint:fix": "yarn lint --fix",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build && npm version patch"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
