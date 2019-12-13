@@ -4,9 +4,7 @@ import Renderer3D from "../lib"
 
 import Loading from "../lib/loading"
 import InfoPanel from "../lib/infoPanel"
-import ConfigGui from "../lib/config/gui"
 import Controls from "../lib/controls"
-import ZoomableImage from "../lib/components/zoomableImage"
 
 class App extends Component {
   state = {

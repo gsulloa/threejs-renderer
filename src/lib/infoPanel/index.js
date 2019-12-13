@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from "react"
 import styled from "styled-components"
 import Modal from "react-modal"
-import { Overlay, Panel, Tooltip, Div } from "../components/containers"
+import { Overlay, Panel, Tooltip } from "../components/containers"
 import { Title, Text, SubTitle } from "../components/text"
 import { InverseCircleButton as Button } from "../components/button"
 import config from "../config"
