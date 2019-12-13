@@ -19,6 +19,7 @@ class EditingForm extends Component {
     return {
       title: state.uuid === props.uuid ? state.title : props.title,
       content: state.uuid === props.uuid ? state.content : props.content,
+      imageUrl: state.uuid === props.uuid ? state.imageUrl : props.imageUrl,
       type: state.uuid === props.uuid ? state.type : props.type,
       uuid: props.uuid,
       change: state.uuid === props.uuid,
@@ -31,6 +32,7 @@ class EditingForm extends Component {
     content: this.props.content,
     type: this.props.type,
     uuid: this.props.uuid,
+    imageUrl: this.props.imageUrl,
     change: true,
   }
   titleElement = createRef()
@@ -56,6 +58,14 @@ class EditingForm extends Component {
       this.autoGrow(key)
     })
   }
+  handleSetImageUrl = imageUrl => {
+    this.setState({ imageUrl }, () => {
+      config.controllers.attachmentsController.updateSelectedData({
+        imageUrl,
+      })
+      if (this.props.onUpdateImageUrl) this.props.onUpdateImageUrl(imageUrl)
+    })
+  }
   autoGrow = key => {
     this.reduceHeight(key, () => this.growHeight(key))
   }
@@ -64,7 +74,7 @@ class EditingForm extends Component {
       {
         [`${key}Height`]: 5,
       },
-      cb
+      cb,
     )
   }
   growHeight(key) {
@@ -74,10 +84,21 @@ class EditingForm extends Component {
       })
   }
 
+  handleDeleteImageUrl = () => {
+    this.handleSetImageUrl(null)
+  }
+
   render() {
     const { show, showImageModal } = this.props
     if (!show) return null
-    const { title, content, titleHeight, contentHeight, type } = this.state
+    const {
+      title,
+      content,
+      titleHeight,
+      contentHeight,
+      type,
+      imageUrl,
+    } = this.state
     return (
       <Fragment>
         <TitleInput
@@ -115,7 +136,14 @@ class EditingForm extends Component {
         )}
         {type === "image" && (
           <>
-            <Button onClick={showImageModal}>Ver</Button>
+            {imageUrl ? (
+              <>
+                <Button onClick={showImageModal}>Ver</Button>
+                <Button onClick={this.handleDeleteImageUrl}>Eliminar</Button>
+              </>
+            ) : (
+              <Button onClick={showImageModal}>Subir</Button>
+            )}
           </>
         )}
       </Fragment>

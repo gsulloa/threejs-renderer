@@ -370,7 +370,7 @@ class AttachmentsController {
     attachments.forEach(attachment => {
       attachment.visible = !!(visibility % 2)
       attachment.reference.visible = visibility === 2
-      attachment.reference.text.visible = visibility == 2
+      attachment.reference.text.visible = visibility === 2
     })
   }
 }

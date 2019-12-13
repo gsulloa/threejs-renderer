@@ -117,7 +117,6 @@ class InfoPanel extends PureComponent {
       imageModal,
       imageUrl,
     } = this.state
-    console.log(this.state)
     return (
       <>
         <Modal
@@ -144,7 +143,9 @@ class InfoPanel extends PureComponent {
                     show={show}
                     uuid={uuid}
                     type={type}
+                    imageUrl={imageUrl}
                     showImageModal={this.showImageModal}
+                    onUpdateImageUrl={imageUrl => this.setState({ imageUrl })}
                   />
                   <hr />
                   <Row>
