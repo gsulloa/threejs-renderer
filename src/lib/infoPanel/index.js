@@ -146,6 +146,7 @@ class InfoPanel extends PureComponent {
                     imageUrl={imageUrl}
                     showImageModal={this.showImageModal}
                     onUpdateImageUrl={imageUrl => this.setState({ imageUrl })}
+                    onUploadImage={this.props.onUploadImage}
                   />
                   <hr />
                   <Row>

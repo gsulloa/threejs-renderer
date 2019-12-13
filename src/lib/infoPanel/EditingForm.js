@@ -87,6 +87,12 @@ class EditingForm extends Component {
   handleDeleteImageUrl = () => {
     this.handleSetImageUrl(null)
   }
+  handleUpload = () => {
+    if (this.props.onUploadImage)
+      this.props.onUploadImage(newImageUrl =>
+        this.handleSetImageUrl(newImageUrl),
+      )
+  }
 
   render() {
     const { show, showImageModal } = this.props
