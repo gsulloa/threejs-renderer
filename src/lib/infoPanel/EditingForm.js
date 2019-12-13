@@ -148,7 +148,7 @@ class EditingForm extends Component {
                 <Button onClick={this.handleDeleteImageUrl}>Eliminar</Button>
               </>
             ) : (
-              <Button onClick={showImageModal}>Subir</Button>
+              <Button onClick={this.handleUpload}>Subir</Button>
             )}
           </>
         )}
