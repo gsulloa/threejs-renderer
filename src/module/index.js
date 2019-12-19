@@ -1,6 +1,6 @@
 import React, { Component, createRef } from "react"
 
-import Renderer3D from "../lib"
+import Renderer3D, { Renderer2D } from "../lib"
 
 import Loading from "../lib/loading"
 import InfoPanel from "../lib/infoPanel"
@@ -8,7 +8,9 @@ import Controls from "../lib/controls"
 
 class App extends Component {
   state = {
-    url: "https://s3.us-east-2.amazonaws.com/idea-files-s3/1508165679197",
+    //url: "https://s3.us-east-2.amazonaws.com/idea-files-s3/1508165679197",
+    url:
+      "https://s3.us-east-2.amazonaws.com/idea-files-s3/gigapan/file.svs/0/0/0.jpg",
   }
   constructor(props) {
     super(props)
@@ -23,7 +25,7 @@ class App extends Component {
   }
 
   loadModel = () => {
-    this.renderer = new Renderer3D({
+    this.renderer = new Renderer2D({
       modelUrl: this.state.url,
       loading: this.loading.current,
       infoPanel: this.infoPanel.current,
