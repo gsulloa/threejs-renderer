@@ -1,10 +1,10 @@
 import * as THREE from "three"
 import TWEEN from "@tweenjs/tween.js"
-import ModelLoader from "./modelLoader"
-import ObjectController from "./objectController"
+import ModelLoader from "./modelLoader/imageLoader"
+import ObjectController from "./objectController/imageObjectController"
 import AttachmentsController from "./attachmentsController"
 import config from "./config"
-class Renderer3D {
+class Renderer2D {
   constructor({
     modelUrl,
     loading,
@@ -54,7 +54,7 @@ class Renderer3D {
 
     window.addEventListener("resize", () => this.onResize({ container }))
     document.addEventListener("fullscreenchange", () =>
-      this.onResize({ container })
+      this.onResize({ container }),
     )
   }
 
@@ -243,5 +243,4 @@ export { default as Loading } from "./loading"
 export { default as InfoPanel } from "./infoPanel"
 export { default as ConfigGui } from "./config/gui"
 export { default as Controls } from "./controls"
-export default Renderer3D
-export { default as Renderer2D } from "./Renderer2D"
+export default Renderer2D

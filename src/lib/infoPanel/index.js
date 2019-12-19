@@ -98,7 +98,7 @@ class InfoPanel extends PureComponent {
   }
   handleClose = () => {
     this.hidePanel()
-    // config.controllers.attachmentsController.deselectObjects()
+    config.controllers.attachmentsController.deselectObjects()
     // config.controllers.objectController.resetControls()
   }
   showImageModal = () => {
