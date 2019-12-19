@@ -25,7 +25,10 @@ class App extends Component {
   }
 
   loadModel = () => {
-    this.renderer = new Renderer2D({
+    const renderer = this.state.url.match(/\.(jpg|jpeg|png)$/i)
+      ? Renderer2D
+      : Renderer3D
+    this.renderer = new renderer({
       modelUrl: this.state.url,
       loading: this.loading.current,
       infoPanel: this.infoPanel.current,
