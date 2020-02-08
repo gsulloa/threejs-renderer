@@ -8,9 +8,9 @@ import Controls from "../lib/controls"
 
 class App extends Component {
   state = {
-    //url: "https://s3.us-east-2.amazonaws.com/idea-files-s3/1508165679197",
-    url:
-      "https://s3.us-east-2.amazonaws.com/idea-files-s3/gigapan/file.svs/0/0/0.jpg",
+    url: "https://s3.us-east-2.amazonaws.com/idea-files-s3/1508165679197",
+    // url:
+    //   "https://s3.us-east-2.amazonaws.com/idea-files-s3/gigapan/file.svs/0/0/0.jpg",
   }
   constructor(props) {
     super(props)

@@ -54,8 +54,11 @@ class Renderer3D {
 
     window.addEventListener("resize", () => this.onResize({ container }))
     document.addEventListener("fullscreenchange", () =>
-      this.onResize({ container })
+      this.onResize({ container }),
     )
+    container.addEventListener("touchmove", e => {
+      e.preventDefault()
+    })
   }
 
   prepareEnvironment = ({
