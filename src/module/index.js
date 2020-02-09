@@ -306,10 +306,10 @@ class App extends Component {
               onChange={({ target: { value: url } }) => this.setState({ url })}
             />
           </form>
-          <div style={{ width: "100%", height: "100%", position: "absolute" }}>
+          <div style={{ width: "90%", height: "90%", position: "absolute" }}>
             <div
               ref={this.render3d}
-              style={{ width: "100%", height: "100%", position: "relative" }}
+              style={{ width: "90%", height: "90%", position: "relative" }}
             >
               <Loading ref={this.loading} />
               <InfoPanel ref={this.infoPanel} />

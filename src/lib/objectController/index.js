@@ -99,6 +99,7 @@ class ObjectController {
   }
 
   handleMouseMove = e => {
+    if (navigator.userAgent.match(/(ipad|iphone)/i)) return null
     if (this.controlOption) {
       const deltaMove = this.deltaMove(e)
       switch (this.controlOption) {
@@ -164,8 +165,8 @@ class ObjectController {
         toRadians(deltaMove.y * delta),
         toRadians(deltaMove.x * delta),
         0,
-        "XYZ"
-      )
+        "XYZ",
+      ),
     )
     const quaternion = object.quaternion.clone()
     quaternion.multiplyQuaternions(deltaRotationQuaternion, object.quaternion)
@@ -188,7 +189,7 @@ class ObjectController {
     } = this
     const positions = this.attachments.children.map(attachment => {
       return model.localToWorld(
-        new THREE.Vector3().copy(attachment.reference.position)
+        new THREE.Vector3().copy(attachment.reference.position),
       )
     })
     this.attachments.children.forEach((attachment, i) => {
@@ -199,9 +200,11 @@ class ObjectController {
   moveCamera = ({ x, y, z }) => {
     const { position } = this.camera
     if (
-      [[x, position.x], [y, position.y], [z, position.z]].every(
-        ([next, prev]) => next === prev
-      )
+      [
+        [x, position.x],
+        [y, position.y],
+        [z, position.z],
+      ].every(([next, prev]) => next === prev)
     )
       return
     this.camera.position.x = x
@@ -210,6 +213,7 @@ class ObjectController {
   }
 
   move = ({ deltaMove }) => {
+    console.log({ deltaMove })
     const { x, y } = deltaMove
     const { x: prevX, y: prevY, z } = this.camera.position
     Config.orbit.position = { x: -x + prevX, y: y + prevY, z }
@@ -236,7 +240,7 @@ class ObjectController {
         newCoords[coord] = useShortDistance(rotationCords[coord], val)
         return newCoords
       },
-      {}
+      {},
     )
     new Tween(rotationCords)
       .to(shortDistanceCords, 1000)
@@ -266,7 +270,7 @@ class ObjectController {
     try {
       const vector = new THREE.Vector2(
         (offsetX / domElementWidth) * 2 - 1,
-        -(offsetY / domElementHeight) * 2 + 1
+        -(offsetY / domElementHeight) * 2 + 1,
       )
       const { camera, model } = this
       const raycaster = new THREE.Raycaster()
