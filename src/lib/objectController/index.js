@@ -57,6 +57,7 @@ class ObjectController {
   }
 
   mouseEventListener = ({ domElement }) => {
+    if (navigator.userAgent.match(/(ipad|iphone)/i)) return null
     domElement.addEventListener("mousedown", this.handleMouseDown)
     domElement.addEventListener("mousemove", this.handleMouseMove)
     domElement.addEventListener("mouseup", () => {
@@ -213,7 +214,6 @@ class ObjectController {
   }
 
   move = ({ deltaMove }) => {
-    console.log({ deltaMove })
     const { x, y } = deltaMove
     const { x: prevX, y: prevY, z } = this.camera.position
     Config.orbit.position = { x: -x + prevX, y: y + prevY, z }

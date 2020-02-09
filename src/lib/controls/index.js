@@ -13,6 +13,7 @@ import {
   NewTarget,
   Opacity,
 } from "../assets/icons"
+import "fullscreen-api-polyfill"
 
 class Controls extends PureComponent {
   static propTypes = {
@@ -26,7 +27,7 @@ class Controls extends PureComponent {
       title: <Move360 width={30} height={30} />,
       onClick: () => {
         Config.object.onMouseMove = ["rotate", "move"].filter(
-          option => option !== Config.object.onMouseMove
+          option => option !== Config.object.onMouseMove,
         )[0]
         this.setState({
           rotate: {
@@ -106,7 +107,7 @@ class Controls extends PureComponent {
   }
   handleClick = ({ title: optionTitle, onClick }) => {
     const index = this.state.options.findIndex(
-      ({ title }) => title === optionTitle
+      ({ title }) => title === optionTitle,
     )
     this.deselectAll()
     onClick()
@@ -213,7 +214,7 @@ class Controls extends PureComponent {
               </div>
             </CircleButton>
           </Tooltip>
-          {showFullscreen && (
+          {showFullscreen && !navigator.userAgent.match(/(ipad|iphone)/i) && (
             <Tooltip text="Modo pantalla completa">
               <CircleButton onClick={fullScreen.onClick}>
                 {fullScreen.title}
