@@ -62,6 +62,7 @@ class App extends Component {
               type: "image",
               imageUrl: "https://idea-files-s3.s3.us-east-2.amazonaws.com/new",
             },
+            id: "18eab676-1e86-49ce-b4a0-dadcb293d7b0",
           },
           {
             position: {

@@ -235,6 +235,7 @@ class Renderer3D {
     const attachments = this.attachments.children.map(attachment => ({
       ...attachment.data,
       position: attachment.reference.position,
+      id: attachment.siblingReferenceId,
     }))
     return {
       orbit,

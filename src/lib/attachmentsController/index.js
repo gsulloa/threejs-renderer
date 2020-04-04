@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { v4 as uuidGen } from "uuid"
 import Config from "../config"
 import { devlogerror } from "../utils/log"
 import font from "../assets/font/font"
@@ -127,6 +128,7 @@ class AttachmentsController {
         content: "Change me description!",
         screenPosition: { ...Config.orbit },
       },
+      id = uuidGen(),
     },
     withCallback = true,
   ) => {
@@ -139,10 +141,10 @@ class AttachmentsController {
       new THREE.CircleGeometry(radius * 0.85, segments, segments),
       material.black,
     )
-
     sphere.add(inner)
     sphere.scale.set(scale, scale, scale)
     sphere.data = data
+    sphere.siblingReferenceId = id
     sphere.state = "default"
     this.addNumber({ model: sphere })
     if (withCallback && this.callbacks.addAttachment && position)
