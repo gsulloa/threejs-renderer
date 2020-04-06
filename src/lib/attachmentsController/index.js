@@ -112,6 +112,7 @@ class AttachmentsController {
       const worldPosition = new THREE.Vector3().copy(
         this.model.localToWorld(new THREE.Vector3(x, y, z)),
       )
+      console.log(worldPosition, { x, y, z })
       model.position.copy(worldPosition)
       model.reference = transparentModel
       transparentModel.reference = model

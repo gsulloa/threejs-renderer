@@ -119,6 +119,7 @@ class Renderer2D {
       callbacks: this.callbacks,
     })
     this.renderer.domElement.addEventListener("click", this.handleMouseClick)
+    window.check = this.getCurrentState
   }
 
   render = ({ container }) => {
@@ -231,9 +232,10 @@ class Renderer2D {
     } = config
     const attachments = this.attachments.children.map(attachment => ({
       ...attachment.data,
-      position: attachment.reference.position,
+      position: attachment.position,
       id: attachment.siblingReferenceId,
     }))
+    debugger
     return {
       orbit,
       attachments,
