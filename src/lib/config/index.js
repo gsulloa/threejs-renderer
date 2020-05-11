@@ -30,6 +30,13 @@ export default {
     set visibility(val) {
       this._visibility.next(val)
     },
+    _showImages: new BehaviorSubject(true),
+    get showImages() {
+      return this._showImages.value
+    },
+    set showImages(val) {
+      this._showImages.next(!!val)
+    },
     set defaultColor(color) {
       this.color.default = color
       this.material.default.color.set(new Color(color))

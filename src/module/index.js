@@ -52,6 +52,7 @@ class App extends Component {
         attachments: [
           {
             data: {
+              type: "image",
               content: "Change me description!",
               title: "Morita",
               screen_position: {

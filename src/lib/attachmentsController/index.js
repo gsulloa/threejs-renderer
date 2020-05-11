@@ -5,7 +5,6 @@ import { devlogerror } from "../utils/log"
 import font from "../assets/font/font"
 import config from "../config"
 
-window.a = config
 class AttachmentsController {
   constructor({
     model,
@@ -48,6 +47,7 @@ class AttachmentsController {
       })
     })
     Config.attachment._visibility.subscribe(this.updateVisible)
+    Config.attachment._showImages.subscribe(() => this.updateVisible(undefined))
   }
 
   get hovereds() {
@@ -92,7 +92,6 @@ class AttachmentsController {
       transparentModel.isTransparentModel = true
 
       this.model.add(transparentModel)
-
       const number = this._id.next().value
       const textMaterial = new THREE.MeshBasicMaterial({
         color: "red",
@@ -112,7 +111,6 @@ class AttachmentsController {
       const worldPosition = new THREE.Vector3().copy(
         this.model.localToWorld(new THREE.Vector3(x, y, z)),
       )
-      console.log(worldPosition, { x, y, z })
       model.position.copy(worldPosition)
       model.reference = transparentModel
       transparentModel.reference = model
@@ -370,10 +368,20 @@ class AttachmentsController {
   }
 
   updateVisible = (visibility, attachments = this.attachments.children) => {
+    const newVisibility =
+      visibility !== undefined ? visibility : Config.attachment.visibility
+    const showImages = Config.attachment.showImages
     attachments.forEach(attachment => {
-      attachment.visible = !!(visibility % 2)
-      attachment.reference.visible = visibility === 2
-      attachment.reference.text.visible = visibility === 2
+      const type = ((attachment || {}).data || {}).type || "text"
+      attachment.visible =
+        !!(newVisibility % 2) &&
+        ((type === "image" && showImages) || type !== "image")
+      attachment.reference.visible =
+        newVisibility === 2 &&
+        ((type === "image" && showImages) || type !== "image")
+      attachment.reference.text.visible =
+        newVisibility === 2 &&
+        ((type === "image" && showImages) || type !== "image")
     })
   }
 }

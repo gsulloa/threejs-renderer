@@ -79,6 +79,7 @@ class Controls extends PureComponent {
       onClick: () => this.toggleFullscreen(),
     },
     zoom: 500,
+    showImages: true,
   }
 
   toggleFullscreen = () => {
@@ -102,6 +103,11 @@ class Controls extends PureComponent {
           ...this.state.visible,
           title: <Component width={30} height={30} />,
         },
+      })
+    })
+    Config.attachment._showImages.subscribe(show => {
+      this.setState({
+        showImages: show,
       })
     })
   }
@@ -137,6 +143,7 @@ class Controls extends PureComponent {
       fullScreen,
       rotate,
       opacity,
+      showImages,
     } = this.state
     const { showFullscreen } = this.props
     return (
@@ -212,6 +219,24 @@ class Controls extends PureComponent {
               >
                 <span>{this.state.opacity.number}</span>
               </div>
+            </CircleButton>
+          </Tooltip>
+
+          <Tooltip text={showImages ? "Ocultar imagenes" : "Mostrar Imagenes"}>
+            <CircleButton
+              onClick={() => {
+                Config.attachment.showImages = !this.state.showImages
+              }}
+            >
+              <img
+                src={
+                  showImages
+                    ? require("../assets/icons/camera.png")
+                    : require("../assets/icons/no_camera.png")
+                }
+                alt="show-camera-text"
+                style={{ width: 30 }}
+              />
             </CircleButton>
           </Tooltip>
           {showFullscreen && !navigator.userAgent.match(/(ipad|iphone)/i) && (
