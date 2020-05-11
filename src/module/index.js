@@ -8,9 +8,9 @@ import Controls from "../lib/controls"
 
 class App extends Component {
   state = {
-    // url: "https://s3.us-east-2.amazonaws.com/idea-files-s3/1508165679197",
-    url:
-      "http://d2gg5obs453f89.cloudfront.net/1586141746501IMG_20191222_170033.jpg",
+    url: "https://s3.us-east-2.amazonaws.com/idea-files-s3/1508165679197",
+    // url:
+    //   "http://d2gg5obs453f89.cloudfront.net/1586141746501IMG_20191222_170033.jpg",
   }
   constructor(props) {
     super(props)
@@ -19,6 +19,7 @@ class App extends Component {
     this.infoPanel = createRef()
     this.configGui = createRef()
     this.renderer = {}
+    window.a = this.getCurrentState
   }
   componentDidMount() {
     this.loadModel()
@@ -55,9 +56,9 @@ class App extends Component {
               title: "Morita",
               screen_position: {
                 position: {
-                  x: -106.81672249100465,
-                  y: 57.139690768365085,
-                  z: 1.9999999999999858,
+                  x: 0,
+                  y: 0,
+                  z: 0,
                 },
                 rotation: {
                   x: -1.0957577276479316,
@@ -180,7 +181,7 @@ class App extends Component {
     this.renderer.setCurrentAsInitial()
   }
   getCurrentState = () => {
-    this.renderer.getCurrentState()
+    return this.renderer.getCurrentState()
   }
 
   render() {

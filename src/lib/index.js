@@ -1,4 +1,6 @@
 import * as THREE from "three"
+import { VRButton } from "three/examples/jsm/webxr/VRButton"
+import { ARButton } from "three/examples/jsm/webxr/ARButton"
 import TWEEN from "@tweenjs/tween.js"
 import ModelLoader from "./modelLoader"
 import ObjectController from "./objectController"
@@ -23,6 +25,7 @@ class Renderer3D {
     } = {},
     editable = false,
   }) {
+    this.clock = new THREE.Clock()
     this.callbacks = {
       addAttachment,
       removeAttachment,
@@ -51,6 +54,8 @@ class Renderer3D {
     })
 
     this.render({ container })
+
+    this.addVR({ container })
 
     window.addEventListener("resize", () => this.onResize({ container }))
     document.addEventListener("fullscreenchange", () =>
@@ -130,6 +135,17 @@ class Renderer3D {
     container.appendChild(this.renderer.domElement)
   }
 
+  addVR = ({ container }) => {
+    const vrButton = VRButton.createButton(this.renderer)
+    vrButton.style.marginLeft = "80px"
+    container.appendChild(vrButton)
+
+    const arButton = ARButton.createButton(this.renderer)
+    arButton.style.marginLeft = "-80px"
+    container.appendChild(arButton)
+    this.renderer.xr.enabled = true
+  }
+
   onResize = ({ container }) => {
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(container.clientWidth, container.clientHeight)
@@ -138,7 +154,13 @@ class Renderer3D {
   }
 
   animate = () => {
-    requestAnimationFrame(this.animate)
+    this.renderer.setAnimationLoop(this.animate)
+    if (this.renderer.xr.isPresenting !== false) {
+      this.object.position.z = -150
+      this.object.rotation.z += 0.01
+      config.controllers.objectController.uptadeAttachmentsPosition()
+    }
+
     this.renderer.render(this.scene, this.camera)
     TWEEN.update()
   }
