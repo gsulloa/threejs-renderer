@@ -1,5 +1,6 @@
 import { Box3, Object3D, LoadingManager } from "three"
-import { OBJLoader, MTLLoader } from "three-obj-mtl-loader"
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader"
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import JSZip from "jszip"
 import axios from "axios"
 import config from "../config"
@@ -10,7 +11,7 @@ class ModelLoader {
     config.object._opacityMode.subscribe(opacityMode => {
       if (this.materials)
         this.materials.forEach(
-          material => (material.opacity = [1, 0.7, 0.9][opacityMode])
+          material => (material.opacity = [1, 0.7, 0.9][opacityMode]),
         )
     })
   }
@@ -43,8 +44,8 @@ class ModelLoader {
 
     const readedFiles = await Promise.all(
       Object.entries(files).map(([name, zipObject]) =>
-        this.readContent(name, zipObject)
-      )
+        this.readContent(name, zipObject),
+      ),
     )
 
     return readedFiles
@@ -57,7 +58,7 @@ class ModelLoader {
       name,
       ext,
       content: await file.async(
-        ext === "mtl" || ext === "obj" ? "text" : "uint8array"
+        ext === "mtl" || ext === "obj" ? "text" : "uint8array",
       ),
     }
   }
@@ -70,6 +71,7 @@ class ModelLoader {
       return NewUrl
     })
     const mtlLoader = new MTLLoader(loadingManager)
+
     const materials = mtlLoader.parse(mtl)
     materials.preload()
     this.materials = Object.values(materials.materials)
