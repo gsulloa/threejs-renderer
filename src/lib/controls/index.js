@@ -192,11 +192,13 @@ class Controls extends PureComponent {
               {rotate.title}
             </CircleButton>
           </Tooltip>
-          <Tooltip text="Cambiar tipo de visión de marcadores">
-            <CircleButton onClick={visible.onClick}>
-              {visible.title}
-            </CircleButton>
-          </Tooltip>
+          {!this.props.hidePointView && (
+            <Tooltip text="Cambiar tipo de visión de marcadores">
+              <CircleButton onClick={visible.onClick}>
+                {visible.title}
+              </CircleButton>
+            </Tooltip>
+          )}
           <Tooltip text="Cambiar opacidad del modelo" selected={opacity.active}>
             <CircleButton
               onClick={() => {
