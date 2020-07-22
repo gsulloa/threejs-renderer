@@ -11,6 +11,7 @@ import {
   ViewPin,
   NoViewPin,
   NewTarget,
+  NewTargetNumber,
   Opacity,
 } from "../assets/icons"
 import "fullscreen-api-polyfill"
@@ -54,7 +55,7 @@ class Controls extends PureComponent {
     visible: {
       title: <ViewPin width={30} height={30} />,
       onClick: () => {
-        Config.attachment.visibility = (Config.attachment.visibility + 1) % 3
+        Config.attachment.visibility = (Config.attachment.visibility + 1) % 4
       },
     },
 
@@ -97,7 +98,9 @@ class Controls extends PureComponent {
       this.setState({ zoom })
     })
     Config.attachment._visibility.subscribe(visibility => {
-      const Component = [NoViewPin, ViewPin, NewTarget][visibility]
+      const Component = [NoViewPin, ViewPin, NewTargetNumber, NewTarget][
+        visibility
+      ]
       this.setState({
         visible: {
           ...this.state.visible,

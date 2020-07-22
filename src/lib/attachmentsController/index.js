@@ -373,14 +373,18 @@ class AttachmentsController {
     const showImages = Config.attachment.showImages
     attachments.forEach(attachment => {
       const type = ((attachment || {}).data || {}).type || "text"
+      // Circle with number inside
       attachment.visible =
-        !!(newVisibility % 2) &&
+        [1].includes(newVisibility) &&
         ((type === "image" && showImages) || type !== "image")
+      // Reference point
       attachment.reference.visible =
-        newVisibility === 2 &&
+        [2, 3].includes(newVisibility) &&
         ((type === "image" && showImages) || type !== "image")
+
+      // Reference point text
       attachment.reference.text.visible =
-        newVisibility === 2 &&
+        [2].includes(newVisibility) &&
         ((type === "image" && showImages) || type !== "image")
     })
   }
