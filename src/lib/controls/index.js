@@ -227,23 +227,27 @@ class Controls extends PureComponent {
             </CircleButton>
           </Tooltip>
 
-          <Tooltip text={showImages ? "Ocultar imagenes" : "Mostrar Imagenes"}>
-            <CircleButton
-              onClick={() => {
-                Config.attachment.showImages = !this.state.showImages
-              }}
+          {!this.props.hidePointView && (
+            <Tooltip
+              text={showImages ? "Ocultar imagenes" : "Mostrar Imagenes"}
             >
-              <img
-                src={
-                  showImages
-                    ? require("../assets/icons/camera.png")
-                    : require("../assets/icons/no_camera.png")
-                }
-                alt="show-camera-text"
-                style={{ width: 30 }}
-              />
-            </CircleButton>
-          </Tooltip>
+              <CircleButton
+                onClick={() => {
+                  Config.attachment.showImages = !this.state.showImages
+                }}
+              >
+                <img
+                  src={
+                    showImages
+                      ? require("../assets/icons/camera.png")
+                      : require("../assets/icons/no_camera.png")
+                  }
+                  alt="show-camera-text"
+                  style={{ width: 30 }}
+                />
+              </CircleButton>
+            </Tooltip>
+          )}
           {showFullscreen && !navigator.userAgent.match(/(ipad|iphone)/i) && (
             <Tooltip text="Modo pantalla completa">
               <CircleButton onClick={fullScreen.onClick}>

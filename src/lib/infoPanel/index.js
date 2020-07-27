@@ -23,6 +23,16 @@ const Column = styled.div`
   align-items: center;
 `
 
+const getUrlParams = () => {
+  const currentSearch = new URLSearchParams(
+    window.location.search.replace("?", ""),
+  )
+  const params = {}
+  currentSearch.forEach((val, key) => {
+    params[key] = val
+  })
+  return params
+}
 class InfoPanel extends PureComponent {
   state = {
     show: false,
@@ -117,6 +127,9 @@ class InfoPanel extends PureComponent {
       imageModal,
       imageUrl,
     } = this.state
+
+    const { viewOption } = getUrlParams()
+    if (viewOption) return null
     return (
       <>
         <Modal
