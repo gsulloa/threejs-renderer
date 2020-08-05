@@ -1,6 +1,6 @@
 {
   "name": "renderer3d-model",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "files": [
