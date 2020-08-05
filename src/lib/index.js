@@ -148,16 +148,18 @@ class Renderer3D {
     arButton.style.opacity = 0
     container.appendChild(arButton)
     this.renderer.xr.enabled = true
-    navigator.xr.isSessionSupported("immersive-vr").then(can => {
-      if (can) {
-        vrButton.style.opacity = 1
-      }
-    })
-    navigator.xr.isSessionSupported("immersive-ar").then(can => {
-      if (can) {
-        arButton.style.opacity = 1
-      }
-    })
+    if (navigator.xr && navigator.xr.isSessionSupported) {
+      navigator.xr.isSessionSupported("immersive-vr").then(can => {
+        if (can) {
+          vrButton.style.opacity = 1
+        }
+      })
+      navigator.xr.isSessionSupported("immersive-ar").then(can => {
+        if (can) {
+          arButton.style.opacity = 1
+        }
+      })
+    }
   }
 
   onResize = ({ container }) => {
