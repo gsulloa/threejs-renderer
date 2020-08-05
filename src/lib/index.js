@@ -139,20 +139,24 @@ class Renderer3D {
     const vrButton = VRButton.createButton(this.renderer)
     vrButton.style.marginLeft = "80px"
     vrButton.style.display = "none"
+    vrButton.style.opacity = 0
     container.appendChild(vrButton)
 
     const arButton = ARButton.createButton(this.renderer)
     arButton.style.marginLeft = "-80px"
     arButton.style.display = "none"
+    arButton.style.opacity = 0
     container.appendChild(arButton)
     this.renderer.xr.enabled = true
     navigator.xr.isSessionSupported("immersive-vr").then(can => {
-      if (can) return
-      vrButton.style.opacity = 0
+      if (can) {
+        vrButton.style.opacity = 1
+      }
     })
     navigator.xr.isSessionSupported("immersive-ar").then(can => {
-      if (can) return
-      arButton.style.opacity = 0
+      if (can) {
+        arButton.style.opacity = 1
+      }
     })
   }
 
